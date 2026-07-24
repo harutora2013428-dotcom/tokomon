@@ -1,0 +1,110 @@
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
+}
+
+header{
+    background:#d32f2f;
+    color:white;
+    text-align:center;
+    padding:18px;
+    font-size:28px;
+    font-weight:bold;
+}
+
+nav{
+    background:white;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    border-bottom:1px solid #ccc;
+}
+
+nav a{
+    padding:15px;
+    color:#d32f2f;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+nav a:hover{
+    background:#f5f5f5;
+}
+
+.container{
+    width:90%;
+    max-width:900px;
+    margin:20px auto;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+input{
+    width:100%;
+    padding:12px;
+    font-size:18px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+    margin-bottom:15px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    font-size:17px;
+    border:none;
+    border-radius:8px;
+    background:#d32f2f;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#b71c1c;
+}
+   
+/* 属性カラー */
+.attribute {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* おとこ属性 */
+.attribute-おとこ {
+    background-color: #008863;
+}
+
+
+/* ステータスバー */
+.status-bar {
+    width: 100%;
+    height: 20px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 5px 0 15px;
+}
+
+
+.status-fill {
+    height: 100%;
+    background: #008863;
+    border-radius: 10px;
+}
+
+
+.status-name {
+    font-weight: bold;
+}
