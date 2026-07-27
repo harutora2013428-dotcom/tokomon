@@ -1586,6 +1586,19 @@ ${item.effect}
 </div>
 `;
 
+const prevButton = document.getElementById("prevItem");
+const nextButton = document.getElementById("nextItem");
+
+prevButton.onclick = () => {
+    const prev = items[(index - 1 + items.length) % items.length];
+    location.href = `item.html?id=${prev.id}`;
+};
+
+nextButton.onclick = () => {
+    const next = items[(index + 1) % items.length];
+    location.href = `item.html?id=${next.id}`;
+};
+
 }
 
 if(itemDetail){
