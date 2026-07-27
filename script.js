@@ -1161,12 +1161,12 @@ ${
 </div>
 
 <div class="move-info-row">
-<span class="move-info-name">まもる</span>
+<span class="move-info-name">守る</span>
 <span class="move-info-value">${
     move.protect === true
         ? "防がれる"
         : move.protect === false
-        ? "防がれない"
+        ? "貫通"
         : "-"
 }</span>
 </div>
