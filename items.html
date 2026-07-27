@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>持ち物一覧</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+持ち物一覧
+</header>
+
+<nav>
+<a href="index.html">🏠 ホーム</a>
+<a href="character.html">👤 キャラクター一覧</a>
+<a href="moves.html">⚔️ 技一覧</a>
+<a href="abilities.html">✨ 特性一覧</a>
+<a href="items.html">🎒 持ち物一覧</a>
+</nav>
+
+<div class="search-box">
+<input type="text" id="search" placeholder="検索">
+</div>
+
+<div class="filter-box">
+
+<select id="typeFilter">
+<option value="">すべて</option>
+<option value="共通">共通持ち物</option>
+<option value="専用">専用持ち物</option>
+</select>
+
+<select id="categoryFilter">
+<option value="">すべて</option>
+<option value="攻撃">攻撃系</option>
+<option value="防御">防御系</option>
+<option value="Zクリスタル">Zクリスタル</option>
+</select>
+
+</div>
+
+<div id="itemList"></div>
+
+<script src="items.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ダメージ計算機</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>ダメージ計算機</h1>
+
+<!-- 攻撃側 -->
+
+<div class="card">
+
+<h2>攻撃側</h2>
+
+<label>キャラクター</label>
+<button id="attackerCharacterButton" class="selectButton">
+キャラクターを選択
+</button>
+
+<label>技</label>
+<button id="moveButton" class="selectButton">
+技を選択
+</button>
+
+<label>特性</label>
+<button id="attackerAbilityButton" class="selectButton">
+特性を選択
+</button>
+
+<label>持ち物</label>
+<button id="attackerItemButton" class="selectButton">
+持ち物を選択
+</button>
+
+<hr>
+
+<h3 id="attackStatName">攻撃</h3>
+
+<div class="statValue" id="attackStatValue">
+0
+</div>
+
+<label>努力値</label>
+
+<div class="stepBox">
+
+<button id="attackEVMinus">−</button>
+
+<span id="attackEV">0</span>
+
+<button id="attackEVPlus">＋</button>
+
+</div>
+
+<label>ランク</label>
+
+<div class="stepBox">
+
+<button id="attackRankMinus">−</button>
+
+<span id="attackRank">0</span>
+
+<button id="attackRankPlus">＋</button>
+
+</div>
+
+</div>
+
+<!-- 防御側 -->
+
+<div class="card">
+
+<h2>防御側</h2>
+
+<label>キャラクター</label>
+<button id="defenderCharacterButton" class="selectButton">
+キャラクターを選択
+</button>
+
+<label>特性</label>
+<button id="defenderAbilityButton" class="selectButton">
+特性を選択
+</button>
+
+<label>持ち物</label>
+<button id="defenderItemButton" class="selectButton">
+持ち物を選択
+</button>
+
+<hr>
+
+<h3 id="defenseStatName">防御</h3>
+
+<div class="statValue" id="defenseStatValue">
+0
+</div>
+
+<label>努力値</label>
+
+<div class="stepBox">
+
+<button id="defenseEVMinus">−</button>
+
+<span id="defenseEV">0</span>
+
+<button id="defenseEVPlus">＋</button>
+
+</div>
+
+<label>ランク</label>
+
+<div class="stepBox">
+
+<button id="defenseRankMinus">−</button>
+
+<span id="defenseRank">0</span>
+
+<button id="defenseRankPlus">＋</button>
+
+</div>
+
+</div>
+
+<!-- 戦闘条件 -->
+
+<div class="card">
+
+<h2>条件</h2>
+
+<label><input type="checkbox" id="critical"> 会心</label>
+<br><br>
+
+<label><input type="checkbox" id="wall"> 壁</label>
+<br><br>
+
+<label><input type="checkbox" id="charge"> 充電</label>
+
+</div>
+
+<!-- 結果 -->
+
+<div class="card">
+
+<h2>結果</h2>
+
+<h3 id="damage">-</h3>
+
+<p id="damageRate">-</p>
+
+<p id="damageCount">-</p>
+
+</div>
+
+<!-- 共通検索モーダル -->
+
+<div id="searchModal" class="modal">
+
+<div class="modalBox">
+
+<div class="modalHeader">
+
+<input
+id="searchInput"
+type="text"
+placeholder="検索">
+
+<button id="closeModal">✕</button>
+
+</div>
+
+<div id="searchList"></div>
+
+</div>
+
+</div>
+
+<script src="characters.js"></script>
+<script src="moves.js"></script>
+<script src="abilities.js"></script>
+<script src="items.js"></script>
+<script src="damage.js"></script>
+
+</body>
+
+</html>

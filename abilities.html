@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>キャラクター詳細</title>
-
+<title>特性一覧</title>
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
 <header>
-キャラクター詳細
+特性一覧
 </header>
 
 <nav>
@@ -25,20 +21,31 @@
 <a href="items.html">🎒 持ち物一覧</a>
 </nav>
 
+<div class="search-box">
+<input type="text" id="search" placeholder="検索">
+</div>
 
-<div class="container">
+<div class="filter-box">
 
-<div id="detail"></div>
+<select id="typeFilter">
+<option value="">すべて</option>
+<option value="共通">共通特性</option>
+<option value="専用">専用特性</option>
+</select>
+
+<select id="categoryFilter">
+<option value="">すべて</option>
+<option value="攻撃">攻撃系</option>
+<option value="防御">防御系</option>
+<option value="補助">補助系</option>
+</select>
 
 </div>
 
+<div id="abilityList"></div>
 
-<script src="characters.js"></script>
 <script src="abilities.js"></script>
-<script src="moves.js"></script>
-<script src="typeChart.js"></script>
 <script src="script.js"></script>
 
 </body>
-
 </html>

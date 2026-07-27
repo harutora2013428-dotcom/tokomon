@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>キャラクター一覧</title>
+<title>技一覧</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-キャラクター一覧
+技一覧
 </header>
 
 <nav>
@@ -25,16 +25,16 @@
 
 <input
 type="text"
-id="search"
-placeholder="キャラクター名を検索">
+id="moveSearch"
+placeholder="検索">
 
 <div class="filter-box">
 
 <select id="typeFilter">
-<option value="">すべての属性</option>
+<option value="">全ての属性</option>
 <option value="おとこ">おとこ</option>
-<option value="炎">炎</option>
 <option value="無">無</option>
+<option value="炎">炎</option>
 <option value="水">水</option>
 <option value="雷">雷</option>
 <option value="風">風</option>
@@ -50,25 +50,35 @@ placeholder="キャラクター名を検索">
 <option value="虹">虹</option>
 </select>
 
+<select id="categoryFilter">
+<option value="">全ての分類</option>
+<option value="物理">物理</option>
+<option value="特殊">特殊</option>
+<option value="変化">変化</option>
+</select>
+
+<select id="kindFilter">
+<option value="">全ての種類</option>
+<option value="通常">通常</option>
+<option value="奥義">奥義</option>
+<option value="Z技">Z技</option>
+</select>
+
 <select id="sort">
-    <option value="id">No順</option>
-    <option value="name">名前順</option>
-    <option value="hp">HP順</option>
-    <option value="attack">攻撃順</option>
-    <option value="defense">防御順</option>
-    <option value="spAttack">特攻順</option>
-    <option value="spDefense">特防順</option>
-    <option value="speed">速度順</option>
+<option value="id">No順</option>
+<option value="name">名前順</option>
+<option value="power">威力順</option>
+<option value="accuracy">命中順</option>
+<option value="pp">PP順</option>
 </select>
 
 </div>
 
-<div id="character-list"></div>
+<div id="move-list"></div>
 
 </div>
 
-<script src="characters.js"></script>
-<script src="typeChart.js"></script>
+<script src="moves.js"></script>
 <script src="script.js"></script>
 
 </body>
