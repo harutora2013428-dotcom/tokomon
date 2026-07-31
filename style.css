@@ -1652,3 +1652,13 @@ border:1px solid #31456d;
 .randomCard{
     width:auto;
 }
+
+.attribute,
+.move-kind-tag,
+.move-category-tag{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    top:-3px;
+}

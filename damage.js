@@ -499,19 +499,17 @@ function drawCharacterList(list){
         const card = document.createElement("div");
         card.className = "character-card";
 
-        const type = character.attribute[0];
+        const types = createTypeBadges(character.attribute);
 
-        card.innerHTML = `
-            <div class="character-header">
-                ${character.name}
-            </div>
+card.innerHTML = `
+    <div class="character-header">
+        ${character.name}
+    </div>
 
-            <div class="character-body">
-                <span class="attribute attribute-${type}">
-                    ${type}
-                </span>
-            </div>
-        `;
+    <div class="character-body">
+        ${types}
+    </div>
+`;
 
         card.onclick = ()=>{
 
