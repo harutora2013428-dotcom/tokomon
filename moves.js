@@ -335,7 +335,7 @@ const moves = [
   kana:"ぶらっどむーんるいんれい",
   type:["ブラッド"],
   category:"特殊",
-  power:150,
+  power:130,
   accuracy:100,
   pp:5,
   target:"相手単体",
