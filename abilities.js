@@ -40,6 +40,72 @@ const abilities = [
 },
 
 {
+    id:5,
+
+    name:"会心の満月",
+    kana:"かいしんのまんげつ",
+    type:"専用",
+    category:"攻撃",
+    effect: `
+月技が40%の確率で会心になる。
+`
+},
+
+{
+    id:6,
+
+    name:"レインボルト",
+    kana:"れいんぼると",
+    type:"専用",
+    damage: true,
+    category:"攻撃",
+    effect: `
+虹技と雷技の威力が1.2倍になる。
+`
+},
+
+{
+    id:8,
+
+    name:"ブラッドデビル",
+    kana:"ぶらっどでびる",
+    type:"専用",
+    category:"補助",
+    effect:`
+場に出た時に発動する。<br>
+相手全員の攻撃を1段階下げ、出血状態にする。
+`
+},
+
+{
+    id:11,
+
+    name:"絶対的忠誠心",
+    kana:"ぜったいてきちゅうせいしん",
+    type:"専用",
+    damage: true,
+    category:"攻撃",
+    effect:`
+東葉が味方にいる場合、自身と東葉の全ての技の威力が1.5倍になる。<br>
+ただし、東葉が相手にいる場合、東葉に与えるダメージが半分になる。
+`
+},
+
+{
+    id:13,
+
+    name:"クリスタルブレード",
+    kana:"くりすたるぶれーど",
+    type:"専用",
+    damage: true,
+    category:"攻撃",
+    effect:`
+物理技の威力が1.2倍になり、
+40%の確率で相手を出血状態にする。
+`
+},
+
+{
     id:101,
     name:"悪戯心",
     kana:"いたずらごころ",
@@ -55,6 +121,7 @@ const abilities = [
     name:"エレキスキン",
     kana:"えれきすきん",
     type:"共通",
+    damage: true,
     category:"攻撃",
     effect:`
 自身の無属性の技が雷属性になり、威力が1.2倍になる。
@@ -102,6 +169,7 @@ const abilities = [
     name:"斬れ味",
     kana:"きれあじ",
     type:"共通",
+    damage: true,
     category:"攻撃",
     effect:`
 物理攻撃の威力が1.3倍になる。
@@ -146,6 +214,7 @@ const abilities = [
     name:"持久力",
     kana:"じきゅうりょく",
     type:"共通",
+    damage: true,
     category:"防御",
     effect:`
 技のダメージを受けると、防御が1段階上がる。
@@ -157,6 +226,7 @@ const abilities = [
     name:"スカイスキン",
     kana:"すかいすきん",
     type:"共通",
+    damage: true,
     category:"攻撃",
     effect:`
 自身の無属性の技が風属性になり、威力が1.2倍になる。
@@ -190,6 +260,7 @@ const abilities = [
     name:"テクニシャン",
     kana:"てくにしゃん",
     type:"共通",
+    damage: true,
     category:"攻撃",
     effect:`
 威力が60以下の技の威力が1.5倍になる。
@@ -212,6 +283,7 @@ const abilities = [
     name:"浮遊",
     kana:"ふゆう",
     type:"共通",
+    damage: true,
     category:"防御",
     effect:`
 大地属性の技を受けない。
@@ -223,6 +295,7 @@ const abilities = [
     name:"フリーズスキン",
     kana:"ふりーずすきん",
     type:"共通",
+    damage: true,
     category:"攻撃",
     effect:`
 自身の無属性の技が氷属性になり、威力が1.2倍になる。
@@ -246,6 +319,7 @@ const abilities = [
     name:"マルチアーマー",
     kana:"まるちあーまー",
     type:"共通",
+    damage: true,
     category:"防御",
     effect:`
 自身の残りHPが最大値の時、受けるダメージが半減される。

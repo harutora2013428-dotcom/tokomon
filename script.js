@@ -550,7 +550,9 @@ if(state){
     move.name.toLowerCase().includes(keyword) ||
     move.kana.toLowerCase().includes(keyword) ||
     move.effect.toLowerCase().includes(keyword) ||
-                move.type.toLowerCase().includes(keyword) ||
+                move.type.some(type =>
+    type.toLowerCase().includes(keyword)
+)
                 move.category.toLowerCase().includes(keyword) ||
                 move.kind.toLowerCase().includes(keyword);
 
@@ -761,10 +763,14 @@ function displayMoves(moveList){
 
 <div class="move-item"
      data-name="${move.name.toLowerCase()}"
-     data-type="${move.type}"
+     data-type="${move.type.join(",")}"
      data-category="${move.category}"
      data-power="${move.power}"
-     data-accuracy="${move.accuracy}"
+     data-accuracy=${
+    move.accuracy === 101
+        ? "必中"
+        : move.accuracy
+}
      data-pp="${move.pp}">
 
 <a href="#"
@@ -920,7 +926,7 @@ move.effect.toLowerCase().includes(keyword)
         // 属性
         if(typeFilter.value !== ""){
             list = list.filter(move =>
-                move.type === typeFilter.value
+                move.type.includes(typeFilter.value)
             );
         }
 
@@ -1082,9 +1088,7 @@ move.kind==="奥義"
 
 <div class="move-tags">
 
-    <span class="attribute attribute-${move.type}">
-        ${move.type}
-    </span>
+  ${createTypeBadges(move.type)}
 
     <span class="move-kind-tag move-kind-${move.kind}">
     ${move.kind}

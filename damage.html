@@ -32,6 +32,44 @@
 技を選択
 </button>
 
+<div id="hitCountBox" style="display:none;">
+  <label for="hitCount">ヒット回数</label>
+<select id="hitCount" class="selectBox"></select>
+</div>
+
+<div id="assistPowerBox" style="display:none;">
+    <label for="assistPower">技威力</label>
+   <select id="assistPower" class="selectBox"></select>
+</div>
+
+<div id="categorySelect" class="categorySelect" style="display:none;">
+
+<div class="categoryTitle">
+分類
+</div>
+
+<div class="categoryButtons">
+
+<button
+id="physicalButton"
+class="categoryButton active">
+
+⚔ 物理
+
+</button>
+
+<button
+id="specialButton"
+class="categoryButton">
+
+✨ 特殊
+
+</button>
+
+</div>
+
+</div>
+
 <label>特性</label>
 <button id="attackerAbilityButton" class="selectButton">
 特性を選択
@@ -99,6 +137,26 @@
 
 <hr>
 
+<h3>HP</h3>
+
+<div class="statValue" id="hpStatValue">
+0
+</div>
+
+<label>努力値</label>
+
+<div class="stepBox">
+
+    <button id="hpEVMinus">−</button>
+
+    <span id="hpEV">0</span>
+
+    <button id="hpEVPlus">＋</button>
+
+</div>
+
+<hr>
+
 <h3 id="defenseStatName">防御</h3>
 
 <div class="statValue" id="defenseStatValue">
@@ -131,33 +189,91 @@
 
 </div>
 
-<!-- 戦闘条件 -->
+<h3>：条件</h3>
 
-<div class="card">
+<div class="condition">
 
-<h2>条件</h2>
+    <label>バトル形式</label>
+    <div class="battleType">
+<button class="battleButton single active" data-type="single">シングル</button>
 
-<label><input type="checkbox" id="critical"> 会心</label>
-<br><br>
+<button class="battleButton double" data-type="double">ダブル</button>
 
-<label><input type="checkbox" id="wall"> 壁</label>
-<br><br>
+<button class="battleButton triple" data-type="triple">トリプル</button>
+    </div>
 
-<label><input type="checkbox" id="charge"> 充電</label>
-
+    <div class="conditionItem">
+    <label>
+        <input type="checkbox" id="critical">
+        会心
+    </label>
 </div>
 
-<!-- 結果 -->
+    <div class="conditionItem">
+    <label>
+        <input type="checkbox" id="burn">
+        炎上
+    </label>
+</div>
 
-<div class="card">
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="wall">
+        壁
+    </label>
+</div>
 
-<h2>結果</h2>
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="charge">
+        充電
+    </label>
+</div>
 
-<h3 id="damage">-</h3>
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="rainbowAura">
+        レインボーオーラ
+    </label>
+</div>
 
-<p id="damageRate">-</p>
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="bigBang">
+        ビッグバン
+    </label>
+</div>
 
-<p id="damageCount">-</p>
+    <div class="conditionItem">
+    <label>
+        <input type="checkbox" id="eternalCurse">
+        永遠の呪い
+    </label>
+</div>
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="stealthRock">
+        ステルスグランド
+    </label>
+</div>
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="protectBreak">
+        守る貫通（1/4ダメージ）
+    </label>
+</div>
+
+<div class="spikesRow">
+    <label for="spikes">撒菱</label>
+    <select id="spikes">
+            <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+</div>
 
 </div>
 
@@ -184,10 +300,187 @@ placeholder="検索">
 
 </div>
 
-<script src="characters.js"></script>
+</div>
+
+<div class="bottomSpace"></div>
+
+<div id="resultBar">
+
+    <div id="damageBar">
+        <div id="damageBarFill"></div>
+    </div>
+
+    <div id="resultInfo">
+
+        <div id="resultText">
+            <span id="barDamage">-</span>
+            <span id="barRate">-</span>
+        </div>
+
+        <div id="resultBottom">
+
+            <span id="barCount">-</span>
+
+            <button id="detailButton">
+                詳細
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="detailModal" class="detailModal">
+  
+  <div class="detailContent">
+  
+  <div class="detailHeader">
+
+    <h2>ダメージ詳細</h2>
+
+    <button id="closeDetail">✕</button>
+
+</div>
+
+    <div class="detailBody">
+      
+      <div class="detailCard">
+
+    <h3>ダメージ</h3>
+
+    <div class="damageDetail">
+
+        <div class="damageValue" id="detailDamage">
+            -
+        </div>
+
+        <div class="damageRate" id="detailRate">
+            -
+        </div>
+
+        <div class="damageCount" id="detailCount">
+            -
+        </div>
+
+    </div>
+
+</div>
+  
+  <div class="detailCard">
+    <h3>⚔ 攻撃側</h3>
+
+    <div class="detailRow">
+        <span>キャラクター</span>
+        <span id="detailAttacker"></span>
+    </div>
+    
+        <div class="detailRow">
+        <span>属性</span>
+        <span id="detailType"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>技</span>
+        <span id="detailMove"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>特性</span>
+        <span id="detailAbility"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>持ち物</span>
+        <span id="detailItem"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>攻撃/特攻</span>
+        <span id="detailAttack"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>技属性</span>
+        <span id="detailMoveType"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>威力</span>
+        <span id="detailPower"></span>
+    </div>
+    
+    </div>
+    
+    <div class="detailCard">
+
+    <h3>🛡 防御側</h3>
+
+    <div class="detailRow">
+        <span>キャラクター</span>
+        <span id="detailDefender"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>属性</span>
+        <span id="detailDefenderType"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>特性</span>
+        <span id="detailDefenderAbility"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>持ち物</span>
+        <span id="detailDefenderItem"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>HP</span>
+        <span id="detailDefenderHP"></span>
+    </div>
+
+    <div class="detailRow">
+        <span>防御/特防</span>
+        <span id="detailDefense"></span>
+    </div>
+
+</div>
+
+<div class="detailCard">
+
+    <h3>ダメージ補正</h3>
+
+    <div id="modifierList">
+
+        <div style="color:#888;text-align:center;">
+            補正なし
+        </div>
+        
+                </div>
+                
+                                </div>
+                
+                <div class="detailCard">
+    <h3>ダメージ分布</h3>
+
+   <div id="randomGrid" class="randomGrid"></div>
+</div>
+
+    </div>
+    
+    </div>
+
+</div>
+
+</div>
+
+    <script src="characters.js"></script>
 <script src="moves.js"></script>
 <script src="abilities.js"></script>
 <script src="items.js"></script>
+<script src="typeChart.js"></script>
 <script src="damage.js"></script>
 
 </body>

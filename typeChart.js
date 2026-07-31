@@ -127,23 +127,30 @@ const typeChart = {
 
 };
 
-function getTypeEffectiveness(moveType, defenderTypes) {
+function getTypeEffectiveness(moveTypes, defenderTypes) {
 
-    // 単属性でも複合属性でも対応
+    if (!Array.isArray(moveTypes)) {
+        moveTypes = [moveTypes];
+    }
+
     if (!Array.isArray(defenderTypes)) {
         defenderTypes = [defenderTypes];
     }
 
     let rate = 1;
 
-    defenderTypes.forEach(type => {
+    moveTypes.forEach(moveType => {
 
-        if (
-            typeChart[moveType] &&
-            typeChart[moveType][type] !== undefined
-        ) {
-            rate *= typeChart[moveType][type];
-        }
+        defenderTypes.forEach(defenderType => {
+
+            if (
+                typeChart[moveType] &&
+                typeChart[moveType][defenderType] !== undefined
+            ) {
+                rate *= typeChart[moveType][defenderType];
+            }
+
+        });
 
     });
 
