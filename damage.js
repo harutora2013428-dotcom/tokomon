@@ -1229,6 +1229,7 @@ if(battleType === "double"){
         selectedMove.target === "2体"
     ){
         hitDamage *= 0.75;
+addModifier("範囲攻撃", 0.75);
     }
 
 }else if(battleType === "triple"){
@@ -1238,6 +1239,7 @@ if(battleType === "double"){
         selectedMove.target === "自分以外"
     ){
         hitDamage *= 0.75;
+addModifier("範囲攻撃", 0.75);
     }
 
 }

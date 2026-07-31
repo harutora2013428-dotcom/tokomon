@@ -520,18 +520,20 @@ nextButton.onclick = () => {
     const moveKindFilter = document.getElementById("moveKindFilter");
     const moveSort = document.getElementById("moveSort");
 
-const state = loadListState("characterDetail");
+let state = loadListState("characterDetail");
+
+if(state && state.characterId !== id){
+    sessionStorage.removeItem("characterDetail");
+    state = null;
+}
 
 if(state){
 
     moveSearch.value = state.search;
 
     if(moveTypeFilter) moveTypeFilter.value = state.type;
-
     if(moveCategoryFilter) moveCategoryFilter.value = state.category;
-
     if(moveKindFilter) moveKindFilter.value = state.kind;
-
     if(moveSort) moveSort.value = state.sort;
 
 }
@@ -617,6 +619,8 @@ if(filtered.length === 0){
 
     
     saveListState("characterDetail",{
+
+    characterId: getCharacterId(),
 
     search: moveSearch.value,
 
@@ -841,12 +845,16 @@ function openMove(id){
     if(moveTypeFilter){
 
         saveListState("characterDetail",{
-            search: moveSearch.value,
-            type: moveTypeFilter.value,
-            category: moveCategoryFilter.value,
-            kind: moveKindFilter.value,
-            sort: moveSort.value
-        });
+
+    characterId: getCharacterId(),
+
+    search: moveSearch.value,
+    type: moveTypeFilter.value,
+    category: moveCategoryFilter.value,
+    kind: moveKindFilter.value,
+    sort: moveSort.value
+
+});
 
     }
 
@@ -882,12 +890,20 @@ function openAbility(id){
     const moveSort = document.getElementById("moveSort");
 
     saveListState("characterDetail",{
-        search: moveSearch.value,
-        type: moveTypeFilter.value,
-        category: moveCategoryFilter.value,
-        kind: moveKindFilter.value,
-        sort: moveSort.value
-    });
+
+    characterId: getCharacterId(),
+
+    search: moveSearch.value,
+
+    type: moveTypeFilter.value,
+
+    category: moveCategoryFilter.value,
+
+    kind: moveKindFilter.value,
+
+    sort: moveSort.value
+
+});
 
     location.href = `ability.html?id=${id}`;
 
