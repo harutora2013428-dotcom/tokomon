@@ -267,6 +267,49 @@ if (
 
 }
 
+const deathCountBox = document.getElementById("deathCountBox");
+const deathCount = document.getElementById("deathCount");
+
+if (
+    selectedMove.name === "お墓参り" ||
+    selectedMove.name === "アポカリプスヘルブレイク"
+) {
+
+    deathCountBox.style.display = "";
+
+    deathCount.innerHTML = "";
+
+    for (let i = 0; i <= 11; i++) {
+
+        deathCount.innerHTML += `
+            <option value="${i}">${i}体</option>
+        `;
+
+    }
+
+} else {
+
+    deathCountBox.style.display = "none";
+
+}
+
+const hexOption =
+document.getElementById("hexOption");
+
+const hexBoost =
+document.getElementById("hexBoost");
+
+if (selectedMove.name === "祟り目") {
+
+    hexOption.style.display = "block";
+
+} else {
+
+    hexOption.style.display = "none";
+    hexBoost.checked = false;
+
+}
+
         if(move.category === "不明"){
 
     categorySelect.style.display = "block";
@@ -293,6 +336,66 @@ if (
 
         searchModal.style.display="none";
         document.body.style.overflow="";
+        updateScreen();
+
+    };
+
+    searchList.appendChild(card);
+
+}
+
+function addNoneItemButton(){
+
+    const card = document.createElement("div");
+    card.className = "moveCard";
+
+    card.innerHTML = `
+        <div class="moveName">なし</div>
+    `;
+
+    card.onclick = () => {
+
+        if(itemSide === "attack"){
+            selectedAttackItem = null;
+            attackerItemButton.textContent = "持ち物を選択";
+        }else{
+            selectedDefenseItem = null;
+            defenderItemButton.textContent = "持ち物を選択";
+        }
+
+        searchModal.style.display = "none";
+        document.body.style.overflow = "";
+
+        updateScreen();
+
+    };
+
+    searchList.appendChild(card);
+
+}
+
+function addNoneAbilityButton(){
+
+    const card = document.createElement("div");
+    card.className = "moveCard";
+
+    card.innerHTML = `
+        <div class="moveName">なし</div>
+    `;
+
+    card.onclick = () => {
+
+        if(abilitySide === "attack"){
+            selectedAttackAbility = null;
+            attackerAbilityButton.textContent = "特性を選択";
+        }else{
+            selectedDefenseAbility = null;
+            defenderAbilityButton.textContent = "特性を選択";
+        }
+
+        searchModal.style.display = "none";
+        document.body.style.overflow = "";
+
         updateScreen();
 
     };
@@ -470,19 +573,21 @@ const otherAbilities = abilities.filter(ability =>
 );
 
     const title1 = document.createElement("h3");
-    title1.textContent = "★ 持っている特性";
-    searchList.appendChild(title1);
+title1.textContent = "★ 持っている特性";
+searchList.appendChild(title1);
 
-    specialAbilities.forEach(addAbilityButton);
+specialAbilities.forEach(addAbilityButton);
 
-    const hr = document.createElement("hr");
-    searchList.appendChild(hr);
+const hr = document.createElement("hr");
+searchList.appendChild(hr);
 
-    const title2 = document.createElement("h3");
-    title2.textContent = "その他の特性";
-    searchList.appendChild(title2);
+const title2 = document.createElement("h3");
+title2.textContent = "その他の特性";
+searchList.appendChild(title2);
 
-    otherAbilities.forEach(addAbilityButton);
+addNoneAbilityButton();
+
+otherAbilities.forEach(addAbilityButton);
 
 }
 
@@ -553,7 +658,9 @@ function drawItemList(){
 
     searchList.appendChild(title);
 
-    list.forEach(addItemButton);
+addNoneItemButton();
+
+list.forEach(addItemButton);
 
 }
 
@@ -973,27 +1080,30 @@ console.log(selectedDefenseAbility);
         
         console.log(selectedMove.type);
         
+        
+        const isPhysical = attackType === "attack";
+const isSpecial = attackType === "spAttack";
 
 let attack =
 attacker.character.status[attackType] +
 attacker.ev * 5;
 
 // 拘りソード
-if(
+if (
     selectedAttackItem?.name === "拘りソード" &&
-    selectedMove.category === "物理"
+    isPhysical
 ){
     attack *= 1.5;
-addModifier("拘りソード", 1.5);
+    addModifier("拘りソード", 1.5);
 }
 
 // 拘りステッキ
-if(
+if (
     selectedAttackItem?.name === "拘りステッキ" &&
-    selectedMove.category === "特殊"
+    isSpecial
 ){
     attack *= 1.5;
-addModifier("拘りステッキ", 1.5);
+    addModifier("拘りステッキ", 1.5);
 }
 
         let defense =
@@ -1020,13 +1130,13 @@ if(
         // 突撃チョッキ
 if(
     selectedDefenseItem?.name === "突撃チョッキ" &&
-    selectedMove.category === "特殊"
+    isSpecial
 ){
     defense *= 1.5;
 addModifier("突撃チョッキ", 0.66);
 }
 
-        let power;
+let power;
 
 if (
     selectedMove.name === "アシストパワー" ||
@@ -1035,10 +1145,37 @@ if (
 
     power = Number(document.getElementById("assistPower").value);
 
+} else if (
+    selectedMove.name === "お墓参り"
+) {
+
+    const death =
+    Number(document.getElementById("deathCount").value);
+
+    power = 50 + death * 50;
+
+} else if (
+    selectedMove.name === "アポカリプスヘルブレイク"
+) {
+
+    const death =
+    Number(document.getElementById("deathCount").value);
+
+    power = 150 + death * 50;
+
 } else {
 
     power = selectedMove.power;
 
+}
+
+// 祟り目
+if (
+    selectedMove.name === "祟り目" &&
+    document.getElementById("hexBoost").checked
+) {
+    power *= 2;
+    addModifier("祟り目", 2);
 }
         let moveType = selectedMove.type;
 
@@ -1054,7 +1191,7 @@ addModifier("テクニシャン", 1.5);
 // クリスタルブレード
 if (
     selectedAttackAbility?.name === "クリスタルブレード" &&
-    selectedMove.category === "物理"
+    isPhysical
 ){
     power *= 1.2;
 addModifier("クリスタルブレード", 1.2);
@@ -1071,10 +1208,21 @@ addModifier("絶対的忠誠心", 1.5);
 // 斬れ味
 if(
     selectedAttackAbility?.name === "斬れ味" &&
-    selectedMove.category === "物理"
+    isPhysical
 ){
     power *= 1.3;
 addModifier("斬れ味", 1.3);
+}
+
+//アビスメテオ
+if(
+    selectedMove.name === "アビスメテオ" &&
+    selectedDefenseItem
+){
+
+    power *= 1.5;
+    addModifier("アビスメテオ", 1.5);
+
 }
 
 // エレキスキン
@@ -1235,6 +1383,8 @@ addModifier("範囲攻撃", 0.75);
     if(
         selectedMove.target === "相手全体" ||
         selectedMove.target === "自分以外"
+        ||
+        selectedMove.target === "2体"
     ){
         hitDamage *= 0.75;
 addModifier("範囲攻撃", 0.75);
@@ -1299,7 +1449,7 @@ addModifier("命の珠", 1.3);
 // 炎上
 if (
     document.getElementById("burn").checked &&
-    selectedMove.category === "物理"
+    isPhysical
 ) {
     hitDamage *= 0.5;
 addModifier("炎上", 0.5);
@@ -1309,6 +1459,18 @@ addModifier("炎上", 0.5);
 if (document.getElementById("eternalCurse").checked) {
     hitDamage *= 0.8;
 addModifier("永遠の呪い", 0.8);
+}
+
+// 永遠の灯火
+if (document.getElementById("eternalFlame").checked) {
+    hitDamage *= 1.5;
+    addModifier("永遠の灯火", 1.5);
+}
+
+// 絶対的忠誠心
+if (document.getElementById("absoluteLoyalty").checked) {
+    hitDamage *= 1.5;
+    addModifier("絶対的忠誠心", 1.5);
 }
 
         
@@ -1363,7 +1525,7 @@ if (
 if (selectedDefenseAbility?.name === "持久力") {
 
     if (
-        selectedMove.category === "物理" &&
+        isPhysical &&
         defenseRankNow < 6
     ) {
         defenseRankNow++;
@@ -1454,7 +1616,7 @@ if (
         // 持久力
 if (
     selectedDefenseAbility?.name === "持久力" &&
-    selectedMove.category === "物理" &&
+    isPhysical &&
     defenseRankNow < 6
 ) {
     defenseRankNow++;
@@ -1661,7 +1823,9 @@ if(selectMode === "item"){
 
     searchList.appendChild(title);
 
-    result.forEach(addItemButton);
+addNoneItemButton();
+
+result.forEach(addItemButton);
 
     return;
 }
@@ -1829,6 +1993,8 @@ document.getElementById("hitCount").onchange = () => {
 //能力上昇火力
 document.getElementById("assistPower").onchange = updateScreen;
 
+document.getElementById("deathCount").onchange = updateScreen;
+
 const detailModal =
 document.getElementById("detailModal");
 
@@ -1924,3 +2090,16 @@ document.getElementById("burn").onchange = () => {
 document.getElementById("eternalCurse").onchange = () => {
     updateScreen();
 };
+
+//永遠の灯火
+document.getElementById("eternalFlame").onchange = () => {
+    updateScreen();
+};
+
+//絶対的忠誠心
+document.getElementById("absoluteLoyalty").onchange = () => {
+    updateScreen();
+};
+
+//祟り目
+document.getElementById("hexBoost").onchange = updateScreen;

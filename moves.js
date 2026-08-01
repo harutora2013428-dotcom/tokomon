@@ -128,6 +128,91 @@ const moves = [
 },
 
 {
+    id:7,
+    kind:"通常",
+    name:"雷壁",
+    kana:"らいへき",
+    type:["雷"],
+    category:"特殊",
+    power:35,
+    accuracy:90,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+4〜5ターンの間、毎ターン終了時に最大HPの1/8ダメージを与える。
+その間ゴースト属性以外のキャラクターは交代できない。
+`
+},
+
+{
+    id:8,
+    kind:"通常",
+    name:"ライジングブレイク",
+    kana:"らいじんぐぶれいく",
+    type:["雷"],
+    category:"物理",
+    power:90,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:`
+10%の確率で相手を麻痺状態にする。
+`
+},
+
+{
+    id:9,
+    kind:"通常",
+    name:"ステルスインパルス",
+    kana:"すてるすいんぱるす",
+    type:["雷"],
+    category:"特殊",
+    power:85,
+    accuracy:101,
+    pp:15,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+通常攻撃。
+`
+},
+
+{
+    id:10,
+    kind:"通常",
+    name:"秘宝の災い",
+    kana:"ひほうのわざわい",
+    type:["雷"],
+    category:"変化",
+    power:0,
+    accuracy:100,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+最後に受けたダメージを1.5倍にして相手へ返す。
+`
+},
+
+{
   id: 11,
   kind: "通常",
   name: "神速斬突・炎",
@@ -275,6 +360,91 @@ const moves = [
 },
 
 {
+    id:19,
+    kind:"通常",
+    name:"炎炎ノ斬撃",
+    kana:"えんえんのざんげき",
+    type:["炎"],
+    category:"物理",
+    power:80,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:`
+30%の確率で自身の攻撃を1段階上げる。
+10%の確率で相手を炎上状態にする。
+`
+},
+
+{
+    id:20,
+    kind:"通常",
+    name:"地獄の舞",
+    kana:"じごくのまい",
+    type:["炎"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:20,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+自身の攻撃と防御を1段階上げる。
+`
+},
+
+{
+    id:21,
+    kind:"通常",
+    name:"ファイヤートルネード",
+    kana:"ふぁいやーとるねーど",
+    type:["炎"],
+    category:"物理",
+    power:80,
+    accuracy:100,
+    pp:15,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+20%の確率で相手を炎上状態にする。
+`
+},
+
+{
+    id:22,
+    kind:"通常",
+    name:"ヘルファイアブレード",
+    kana:"へるふぁいあぶれーど",
+    type:["炎"],
+    category:"物理",
+    power:80,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:`
+相手が炎属性に耐性を持つ場合、威力が2倍になる。
+`
+},
+
+{
   id:23,
   kind:"通常",
   name:"青龍王",
@@ -344,7 +514,7 @@ const moves = [
   contact:false,
   protect:true,
   drain:50,
-  effect:"1ターン後に攻撃する。攻撃するまでの間、受けるダメージが1.3倍になる。自身の特攻を1段階上げる。相手を必ず出血状態にする。"
+  effect:"1ターン後に攻撃する。攻撃するまでの間、受けるダメージが1.3倍になる。自身の特攻を1段階上げる。相手を必ず出血させる。"
 },
 {
     id:35,
@@ -2296,10 +2466,32 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 通常攻撃。
+`
+},
+
+{
+    id:2002,
+    kind:"奥義",
+    name:"瞬間回雷撃",
+    kana:"しゅんかんかいらいげき",
+    type:["雷"],
+    category:"物理",
+    power:60,
+    hits:[1,3],
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:`
+相手を必ず麻痺状態にする。
 `
 },
 
@@ -2317,7 +2509,7 @@ id: 215,
     priority:0,
     critical:0,
     contact:true,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 特性『会心の満月』の効果を受ける。
@@ -2338,11 +2530,34 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 次使う虹技の威力が2倍になる。
 仲間全体の特防を1段階上げる。
+`
+},
+
+{
+    id:2005,
+    kind:"奥義",
+    name:"永遠の灯火",
+    kana:"えいえんのともしび",
+    type:["炎"],
+    category:"物理",
+    power:130,
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:`
+相手を【永遠の灯火状態】にする。
+【永遠の灯火状態】は死亡するまで解除されず、受けるダメージが1.5倍になる。
+相手を炎上状態にする。
 `
 },
 
@@ -2360,11 +2575,11 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 自身の最大HPの1/4回復し、
-相手全体を必ず出血状態にする。
+相手全体を必ず出血させる。
 `
 },
 
@@ -2382,7 +2597,7 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 相手を【永遠の呪い状態】にする。
@@ -2406,7 +2621,7 @@ id: 215,
     priority:0,
     critical:0,
     contact:true,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 相手を必ず氷結状態にする。
@@ -2431,6 +2646,27 @@ id: 215,
     drain:0,
     effect:`
 使用者の攻撃、特攻を1段階上げる。
+`
+},
+
+{
+    id:3002,
+    kind:"Z技",
+    name:"紫電覇皇斬",
+    kana:"しでんはおうざん",
+    type:["雷"],
+    category:"物理",
+    power:170,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:`
+自身の速度を1段階上げる。
 `
 },
 
@@ -2473,6 +2709,27 @@ id: 215,
     drain:0,
     effect:`
 使用者の防御、特防を1段階上げる。
+`
+},
+
+{
+    id:3005,
+    kind:"Z技",
+    name:"アポカリプスヘルブレイク",
+    kana:"あぽかりぷすへるぶれいく",
+    type:["炎"],
+    category:"物理",
+    power:150,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:`
+死亡した味方のキャラクター1体につき威力が50上昇する。
 `
 },
 

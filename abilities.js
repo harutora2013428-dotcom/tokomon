@@ -40,6 +40,18 @@ const abilities = [
 },
 
 {
+    id:4,
+
+    name:"雷の力",
+    kana:"かみなりのちから",
+    type:"専用",
+    category:"攻撃",
+    effect:`
+雷属性の技が大地属性の相手にも命中する。
+`
+},
+
+{
     id:5,
 
     name:"会心の満月",
@@ -83,7 +95,6 @@ const abilities = [
     name:"絶対的忠誠心",
     kana:"ぜったいてきちゅうせいしん",
     type:"専用",
-    damage: true,
     category:"攻撃",
     effect:`
 東葉が味方にいる場合、自身と東葉の全ての技の威力が1.5倍になる。<br>

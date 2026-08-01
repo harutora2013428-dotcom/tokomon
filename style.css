@@ -1660,5 +1660,23 @@ border:1px solid #31456d;
     align-items:center;
     justify-content:center;
     position:relative;
-    top:-3px;
+}
+
+#detailType,
+#detailMoveType,
+#detailDefenderType{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    justify-content:flex-end;
+    align-items:center;
+
+    flex:1;
+}
+
+.attribute{
+    color:#fff !important;
+    text-shadow:none !important;
+    filter:none !important;
+    opacity:1 !important;
 }

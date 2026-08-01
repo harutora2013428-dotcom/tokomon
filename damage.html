@@ -42,6 +42,18 @@
    <select id="assistPower" class="selectBox"></select>
 </div>
 
+<div id="deathCountBox" style="display:none;">
+    <label>死亡キャラ数</label>
+    <select id="deathCount" class="selectBox"></select>
+</div>
+
+<div id="hexOption" class="conditionItem" style="display:none;">
+    <label>
+        <input type="checkbox" id="hexBoost">
+        相手が状態異常（威力2倍）
+    </label>
+</div>
+
 <div id="categorySelect" class="categorySelect" style="display:none;">
 
 <div class="categoryTitle">
@@ -248,6 +260,20 @@ class="categoryButton">
     <label>
         <input type="checkbox" id="eternalCurse">
         永遠の呪い
+    </label>
+</div>
+
+    <div class="conditionItem">
+    <label>
+        <input type="checkbox" id="eternalFlame">
+        永遠の灯火
+    </label>
+</div>
+
+    <div class="conditionItem">
+    <label>
+        <input type="checkbox" id="absoluteLoyalty">
+        絶対的忠誠心
     </label>
 </div>
 
