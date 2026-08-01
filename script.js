@@ -1430,6 +1430,9 @@ if(state){
     type.value = state.type;
     category.value = state.category;
 
+    if (sort) {
+        sort.value = state.sort || "no";
+    }
 }
 
 showAbilities();
@@ -1458,10 +1461,11 @@ const category = document.getElementById("categoryFilter");
 function openItemList(id){
 
     saveListState("itemList",{
-        search: search.value,
-        type: type.value,
-        category: category.value
-    });
+    search: search.value,
+    type: type.value,
+    category: category.value,
+    sort: sort ? sort.value : "no"
+});
 
     location.href = `item.html?id=${id}`;
 
@@ -1499,7 +1503,18 @@ data = data.filter(i =>
 
 }
 
-data.sort((a,b)=>a.kana.localeCompare(b.kana,"ja"));
+const sort = document.getElementById("sortFilter");
+
+if (sort) {
+    switch (sort.value) {
+        case "name":
+            data.sort((a,b)=>a.kana.localeCompare(b.kana,"ja"));
+            break;
+
+        default:
+            data.sort((a,b)=>a.id-b.id);
+    }
+}
 
 list.innerHTML = data.length ? data.map(i => `
 
@@ -1534,6 +1549,11 @@ ${i.effect}
 search.addEventListener("input", showItems);
 type.addEventListener("change", showItems);
 category.addEventListener("change", showItems);
+
+const sort = document.getElementById("sortFilter");
+if (sort) {
+    sort.addEventListener("change", showItems);
+}
 
 const state = loadListState("itemList");
 
