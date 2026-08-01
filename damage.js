@@ -1366,6 +1366,19 @@ power * attackNow / defenseNow / 2;
 hitDamage *= stab;
 hitDamage *= type;
 
+if (selectedMove.name === "ヘルファイアブレード") {
+
+    const hasFireResistance =
+        defender.character.resistance?.includes("炎") ||
+        getTypeEffectiveness("炎", defender.character.attribute) < 1;
+
+    if (hasFireResistance) {
+        hitDamage *= 2;
+        addModifier("ヘルファイアブレード", 2);
+    }
+
+}
+
 // 範囲攻撃補正
 if(battleType === "double"){
 
