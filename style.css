@@ -1675,8 +1675,14 @@ border:1px solid #31456d;
 }
 
 .attribute{
-    color:#fff !important;
     text-shadow:none !important;
     filter:none !important;
     opacity:1 !important;
+}
+
+.attribute-雷,
+.attribute-月,
+.attribute-氷,
+.attribute-聖{
+    color:#222 !important;
 }
