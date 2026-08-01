@@ -617,7 +617,7 @@ const moves = [
     target:"相手全体",
     priority:0,
     critical:0,
-    contact:false,
+    contact:true,
     protect:true,
     drain:0,
     effect:`
@@ -2789,7 +2789,7 @@ id: 215,
     target:"相手単体",
     priority:0,
     critical:0,
-    contact:false,
+    contact:true,
     protect:false,
     drain:0,
     effect:`
