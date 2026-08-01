@@ -1675,6 +1675,7 @@ border:1px solid #31456d;
 }
 
 .attribute{
+    color:#fff !important;
     text-shadow:none !important;
     filter:none !important;
     opacity:1 !important;
