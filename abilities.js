@@ -77,6 +77,15 @@ const abilities = [
 },
 
 {
+    id: 7,
+    name: "ファイアノード",
+    kana: "ふぁいあのーど",
+    type: "専用",
+    category: "防御",
+    effect: "弱点のダメージを0.7倍にする。"
+},
+
+{
     id:8,
 
     name:"ブラッドデビル",
