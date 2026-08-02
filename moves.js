@@ -822,7 +822,7 @@ const moves = [
     protect:true,
     drain:0,
     effect:`
-相手に月弱点を追加する。
+ランダムな相手2体に攻撃する。相手に月弱点を追加する。
 `
 },
 
