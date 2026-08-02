@@ -2866,7 +2866,7 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
 　　drain:0,
     effect:`
 相手の速度を1段階下げる。
@@ -2887,7 +2887,7 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 味方全員の攻撃と特攻を1段階上げる。
@@ -2932,7 +2932,7 @@ id: 215,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 50%の確率で相手を封じ状態にする。
