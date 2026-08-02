@@ -38,8 +38,13 @@
 </div>
 
 <div id="assistPowerBox" style="display:none;">
-    <label for="assistPower">技威力</label>
+    <label for="assistPower">威力</label>
    <select id="assistPower" class="selectBox"></select>
+</div>
+
+<div id="shingekiBox" style="display:none;">
+    <label>威力</label>
+    <select id="shingekiPower" class="selectBox"></select>
 </div>
 
 <div id="deathCountBox" style="display:none;">
@@ -52,6 +57,16 @@
         <input type="checkbox" id="hexBoost">
         相手が状態異常（威力2倍）
     </label>
+</div>
+
+<div id="megisosBox" style="display:none;">
+    <label>威力</label>
+    <select id="megisos" class="selectBox"></select>
+</div>
+
+<div id="judgementBox" style="display:none;">
+    <label>威力</label>
+    <select id="judgementPower" class="selectBox"></select>
 </div>
 
 <div id="categorySelect" class="categorySelect" style="display:none;">
@@ -256,6 +271,20 @@ class="categoryButton">
     </label>
 </div>
 
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="deathAura">
+        デスオーラ
+    </label>
+</div>
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="moonWeak">
+        月弱点追加
+    </label>
+</div>
+
     <div class="conditionItem">
     <label>
         <input type="checkbox" id="eternalCurse">
@@ -267,6 +296,13 @@ class="categoryButton">
     <label>
         <input type="checkbox" id="eternalFlame">
         永遠の灯火
+    </label>
+</div>
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="stoneStatue">
+        石像
     </label>
 </div>
 

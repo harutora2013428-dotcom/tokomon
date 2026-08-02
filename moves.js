@@ -517,6 +517,186 @@ const moves = [
   effect:"1ターン後に攻撃する。攻撃するまでの間、受けるダメージが1.3倍になる。自身の特攻を1段階上げる。相手を必ず出血させる。"
 },
 {
+    id:27,
+
+    kind:"通常",
+    name:"神乃悪魔",
+    kana:"めぎそず",
+    type:["ブラッド"],
+    category:"特殊",
+    power:50,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+自身が攻撃した回数1回につき威力が50上がる。(最大威力350)
+交代するとリセットされる。
+`
+},
+
+{
+    id:28,
+
+    kind:"通常",
+    name:"血行上流",
+    kana:"けっこうじょうりゅう",
+    type:["ブラッド"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:5,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+自身の攻撃、特攻、防御、特防、速度が1段階上がるが、交代ができなくなる。
+自身がゴースト属性なら交代できる。
+2回目以降は失敗する。
+`
+},
+
+{
+    id:29,
+
+    kind:"通常",
+    name:"バイオレンスムーン",
+    kana:"ばいおれんすむーん",
+    type:["ブラッド"],
+    category:"物理",
+    power:60,
+    accuracy:90,
+    pp:1,
+    target:"相手単体",
+    priority:-6,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:`
+優先度-6。攻撃後、相手を強制交代させる。
+召喚されるキャラクターはランダムで選ばれる。
+`
+},
+
+{
+    id:30,
+
+    kind:"通常",
+    name:"ナイトメア・ゼロワールド",
+    kana:"ないとめあ・ぜろわーるど",
+    type:["ブラッド"],
+    category:"変化",
+    power:0,
+    accuracy:100,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+自身が受けている『渦潮』『雷壁』『ブラッドプリズン』『命血』や
+自分の場の『ステルスグランド』『撒菱』『毒菱』などの効果を解除する。
+相手を必ず出血状態にする。
+`
+},
+{
+    id:31,
+    kind:"通常",
+    name:"復活のポーション",
+    kana:"ふっかつのぽーしょん",
+    type:["無"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:1,
+    target:"味方単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+死亡した味方1人を最大HPの半分の状態で復活させる。
+`
+},
+
+{
+    id:32,
+    kind:"通常",
+    name:"要塞のポーション",
+    kana:"ようさいのぽーしょん",
+    type:["無"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:10,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+毎ターン最大HPの1/12回復する。
+交代できなくなる。
+強制交代技でも交代しない。
+『バトンタッチ』『クイックターン』『ボルトチェンジ』『深淵の残響』では交代できる。
+`
+},
+
+{
+    id:33,
+    kind:"通常",
+    name:"神風嵐",
+    kana:"かみかぜあらし",
+    type:["風"],
+    category:"特殊",
+    power:80,
+    accuracy:100,
+    pp:15,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+20%の確率で相手を混乱状態にする。
+`
+},
+
+{
+    id:34,
+    kind:"通常",
+    name:"破滅のポーション",
+    kana:"はめつのぽーしょん",
+    type:["無"],
+    category:"変化",
+    power:0,
+    accuracy:90,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+相手の残りHPを半分にする。
+属性相性の影響を受けない。
+`
+},
+{
     id:35,
     kind:"通常",
     name:"ディサピアーゴースト",
@@ -601,6 +781,94 @@ const moves = [
 自身のHPを0にし、戦闘不能の味方1人をHP満タンで復活させる。
 復活した味方の攻撃と特攻を1段階上げる。
 戦闘不能の味方がいない場合は失敗する。
+`
+},
+
+{
+    id:39,
+    kind:"通常",
+    name:"ルナエクリプスレイ",
+    kana:"るなえくりぷすれい",
+    type:["月"],
+    category:"特殊",
+    power:120,
+    accuracy:100,
+    pp:5,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+連続使用不可。
+`
+},
+
+{
+    id:40,
+    kind:"通常",
+    name:"オーロラビジョン",
+    kana:"おーろらびじょん",
+    type:["氷"],
+    category:"特殊",
+    power:50,
+    accuracy:90,
+    pp:10,
+    target:"2体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+相手に月弱点を追加する。
+`
+},
+
+{
+    id:41,
+    kind:"通常",
+    name:"神撃",
+    kana:"しんげき",
+    type:["月"],
+    category:"特殊",
+    power:20,
+    accuracy:101,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:`
+自身のHPが少ないほど威力が上がる。
+HP70%以下で威力40。
+HP50%以下で威力80。
+HP30%以下で威力120。
+HP5%以下で威力200。
+`
+},
+
+{
+    id:42,
+    kind:"通常",
+    name:"ブリザードフォース",
+    kana:"ぶりざーどふぉーす",
+    type:["氷"],
+    category:"特殊",
+    power:85,
+    accuracy:100,
+    pp:5,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+30%の確率で相手の特防を1段階下げる。
 `
 },
 
@@ -2584,6 +2852,49 @@ id: 215,
 },
 
 {
+    id:2007,
+
+    kind:"奥義",
+    name:"エクレセントグラビティ",
+    kana:"えくれせんとぐらびてぃ",
+    type:["ブラッド"],
+    category:"特殊",
+    power:160,
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+　　drain:0,
+    effect:`
+相手の速度を1段階下げる。
+`
+},
+
+{
+    id:2008,
+    kind:"奥義",
+    name:"斬月風波電撃",
+    kana:"ざんげつふうはでんげき",
+    type:["風"],
+    category:"特殊",
+    power:125,
+    accuracy:100,
+    pp:0,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+味方全員の攻撃と特攻を1段階上げる。
+`
+},
+
+{
     id:2009,
     kind:"奥義",
     name:"エターナルゴーストカース",
@@ -2604,6 +2915,30 @@ id: 215,
 【永遠の呪い状態】は死亡するまで解除されず、
 毎ターン終了時に最大HPの1/16ダメージを受ける。
 さらに、与えるダメージが0.8倍になる。
+`
+},
+
+{
+    id:2010,
+    kind:"奥義",
+    name:"コールドジェニックブルームーン",
+    kana:"こーるどじぇにっくぶるーむーん",
+    type:["月"],
+    category:"特殊",
+    power:100,
+    accuracy:100,
+    pp:0,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+50%の確率で相手を封じ状態にする。
+封じ状態の相手は2ターンの間、最後に使用した技しか使えず、受けるダメージが1.5倍になる。
+PPが0になると封じ状態は解除される。
+15%の確率で相手を氷結状態にする。
 `
 },
 
@@ -2755,6 +3090,50 @@ id: 215,
 },
 
 {
+    id:3007,
+
+    kind:"Z技",
+    name:"終焉を告げる赫き神罰",
+    kana:"しゅうえんをつげるあかきしんばつ",
+    type:["ブラッド"],
+    category:"特殊",
+    power:120,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+drain:0,
+    effect:`
+自身の能力ランク上昇1つにつき威力が30上がる。
+`
+},
+
+{
+    id:3008,
+    kind:"Z技",
+    name:"ガーディアンアクアシールド",
+    kana:"がーでぃあんあくあしーるど",
+    type:["水"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:1,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+自身の防御と特防を2段階上げる。
+自身のHPを最大HPの半分回復する。
+`
+},
+
+{
     id:3009,
     kind:"Z技",
     name:"ファントムソウルテイクオーバー",
@@ -2773,6 +3152,27 @@ id: 215,
     effect:`
 相手の特攻と特防を1段階下げる。
 自身の特攻を1段階上げる。
+`
+},
+
+{
+    id:3010,
+    kind:"Z技",
+    name:"ユニバースイモータルフロスト",
+    kana:"ゆにばーすいもーたるふろすと",
+    type:["氷"],
+    category:"特殊",
+    power:200,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+相手の能力ランクの影響を無視して攻撃する。
 `
 },
 
