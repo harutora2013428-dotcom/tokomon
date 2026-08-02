@@ -654,7 +654,7 @@ function drawCharacterList(list){
 
     searchList.innerHTML = "";
 
-    list.sort((a,b)=>a.name.localeCompare(b.name,"ja"));
+    list.sort((a,b)=>a.id - b.id);
 
     searchList.innerHTML = "";
 
