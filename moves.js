@@ -1916,7 +1916,7 @@ id: 215,
   target: "相手単体",
   priority: 1,
   critical: 0,
-  contact: false,
+  contact: true,
   protect: true,
   drain: 0,
   effect: "優先度+1で攻撃する。"
