@@ -573,7 +573,7 @@ const moves = [
     category:"物理",
     power:60,
     accuracy:90,
-    pp:1,
+    pp:15,
     target:"相手単体",
     priority:-6,
     critical:0,
