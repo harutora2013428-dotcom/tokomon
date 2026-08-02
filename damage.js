@@ -293,6 +293,65 @@ if (
 
 }
 
+const megisosBox = document.getElementById("megisosBox");
+const megisos = document.getElementById("megisos");
+
+if (selectedMove.name === "神乃悪魔") {
+
+    megisosBox.style.display = "";
+
+    megisos.innerHTML = "";
+
+    for (let power = 50; power <= 350; power += 50) {
+        megisos.innerHTML += `<option value="${power}">${power}</option>`;
+    }
+
+} else {
+
+    megisosBox.style.display = "none";
+
+}
+
+const shingekiBox = document.getElementById("shingekiBox");
+const shingekiPower = document.getElementById("shingekiPower");
+
+if (selectedMove.name === "神撃") {
+
+    shingekiBox.style.display = "";
+
+    shingekiPower.innerHTML = "";
+
+    [20, 40, 80, 120, 200].forEach(power => {
+        shingekiPower.innerHTML += `
+            <option value="${power}">${power}</option>
+        `;
+    });
+
+} else {
+
+    shingekiBox.style.display = "none";
+
+}
+
+const judgementBox = document.getElementById("judgementBox");
+const judgementPower = document.getElementById("judgementPower");
+
+if (selectedMove.name === "終焉を告げる赫き神罰") {
+
+    judgementBox.style.display = "";
+
+    judgementPower.innerHTML = "";
+
+    for (let power = 120; power <= 1020; power += 30) {
+        judgementPower.innerHTML += `<option value="${power}">${power}</option>`;
+    }
+
+} else {
+
+    judgementBox.style.display = "none";
+
+}
+
 const hexOption =
 document.getElementById("hexOption");
 
@@ -1162,6 +1221,33 @@ if (
     Number(document.getElementById("deathCount").value);
 
     power = 150 + death * 50;
+    
+} else if (
+    selectedMove.name === "神乃悪魔"
+) {
+
+    power = Number(
+        document.getElementById("megisos").value
+    );
+    
+    const judgementBox = document.getElementById("judgementBox");
+const judgementPower = document.getElementById("judgementPower");
+
+} else if (
+    selectedMove.name === "終焉を告げる赫き神罰"
+) {
+
+    power = Number(
+        document.getElementById("judgementPower").value
+    );
+
+} else if (
+    selectedMove.name === "神撃"
+) {
+
+    power = Number(
+        document.getElementById("shingekiPower").value
+    );
 
 } else {
 
@@ -1295,12 +1381,35 @@ getTypeEffectiveness(
     defender.character.attribute
 );
 
-if (type > 1) {
-    addModifier("弱点", type);
-} else if (type > 0 && type < 1) {
-    addModifier("耐性", type);
-} else if (type === 0) {
-    addModifier("無効", 0);
+// オーロラビジョン（月弱点追加）
+let finalType = type;
+
+if (
+    document.getElementById("moonWeak").checked &&
+    moveType.includes("月") &&
+    finalType < 2
+) {
+    finalType = 2;
+    addModifier("月弱点追加", "2");
+}
+
+if (
+    document.getElementById("moonWeak").checked &&
+    moveType.includes("月")
+) {
+
+    addModifier("月弱点追加", 2);
+
+} else {
+
+    if (type > 1) {
+        addModifier("弱点", type);
+    } else if (type > 0 && type < 1) {
+        addModifier("耐性", type);
+    } else if (type === 0) {
+        addModifier("無効", 0);
+    }
+
 }
 
 const hitCount =
@@ -1364,7 +1473,16 @@ let hitDamage =
 power * attackNow / defenseNow / 2;
 
 hitDamage *= stab;
-hitDamage *= type;
+hitDamage *= finalType;
+
+// デスオーラ
+if (
+    moveType.includes("ブラッド") &&
+    document.getElementById("deathAura").checked
+){
+    hitDamage *= 1.33;
+    addModifier("デスオーラ", 1.33);
+}
 
 if (selectedMove.name === "ヘルファイアブレード") {
 
@@ -1478,6 +1596,12 @@ addModifier("永遠の呪い", 0.8);
 if (document.getElementById("eternalFlame").checked) {
     hitDamage *= 1.5;
     addModifier("永遠の灯火", 1.5);
+}
+
+//石像
+if (document.getElementById("stoneStatue").checked) {
+    hitDamage *= 1.5;
+    addModifier("石像", 1.5);
 }
 
 // 絶対的忠誠心
@@ -2116,3 +2240,23 @@ document.getElementById("absoluteLoyalty").onchange = () => {
 
 //祟り目
 document.getElementById("hexBoost").onchange = updateScreen;
+
+//デスオーラ
+document.getElementById("deathAura").onchange = () => {
+    updateScreen();
+};
+
+//メギソズ
+document.getElementById("megisos").onchange = updateScreen;
+
+//終焉を告げる赫き神罰
+document.getElementById("judgementPower").onchange = updateScreen;
+
+//月弱点追加
+document.getElementById("moonWeak").onchange = updateScreen;
+
+// 神撃
+document.getElementById("shingekiPower").onchange = updateScreen;
+
+//石像
+document.getElementById("stoneStatue").onchange = updateScreen;
