@@ -3104,7 +3104,7 @@ PPが0になると封じ状態は解除される。
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
 drain:0,
     effect:`
 自身の能力ランク上昇1つにつき威力が30上がる。
@@ -3169,7 +3169,7 @@ drain:0,
     priority:0,
     critical:0,
     contact:false,
-    protect:true,
+    protect:false,
     drain:0,
     effect:`
 相手の能力ランクの影響を無視して攻撃する。
