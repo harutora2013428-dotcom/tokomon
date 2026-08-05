@@ -131,7 +131,7 @@ function getMoveId(){
 
 function saveListState(key, state){
 
-    sessionStorage.setItem(key, JSON.stringify({
+    localStorage.setItem(key, JSON.stringify({
         ...state,
         scroll: window.scrollY
     }));
@@ -140,7 +140,7 @@ function saveListState(key, state){
 
 function loadListState(key){
 
-    const data = sessionStorage.getItem(key);
+    const data = localStorage.getItem(key);
 
     return data ? JSON.parse(data) : null;
 
@@ -523,7 +523,7 @@ nextButton.onclick = () => {
 let state = loadListState("characterDetail");
 
 if(state && state.characterId !== id){
-    sessionStorage.removeItem("characterDetail");
+    localStorage.removeItem("characterDetail");
     state = null;
 }
 
@@ -1643,4 +1643,295 @@ nextButton.onclick = () => {
 
 if(itemDetail){
     displayItemDetail();
+}
+
+function generateEVs(){
+
+    const evs = {
+        hp:0,
+        attack:0,
+        defense:0,
+        spAttack:0,
+        spDefense:0,
+        speed:0
+    };
+
+    const stats = ["hp","attack","defense","spAttack","spDefense","speed"];
+
+    stats.sort(()=>Math.random()-0.5);
+
+    evs[stats[0]] = 8;
+    evs[stats[1]] = 8;
+    evs[stats[2]] = 4;
+
+    return evs;
+
+}
+
+function generateMoves(character){
+
+// ランダムに4つ選ぶ
+let randomMoves = [...character.moves]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+
+// 4つの中に攻撃技があるか確認
+const hasAttackMove = randomMoves.some(id => {
+    const move = moves.find(m => m.id === id);
+    return move && move.category !== "変化";
+});
+
+// なければ攻撃技を1つ入れる
+if (!hasAttackMove) {
+
+    const attackMoves = character.moves.filter(id => {
+        const move = moves.find(m => m.id === id);
+        return move && move.category !== "変化";
+    });
+
+    if (attackMoves.length > 0) {
+        randomMoves[0] =
+            attackMoves[Math.floor(Math.random() * attackMoves.length)];
+    }
+}
+
+return randomMoves;
+
+}
+
+function generateAbility(character){
+
+    const randomAbilityId =
+        character.abilities[
+            Math.floor(Math.random() * character.abilities.length)
+        ];
+
+    return abilities.find(a => a.id === randomAbilityId);
+
+}
+
+function generateItem(randomMoves){
+
+    const hasMultiHit = randomMoves.some(id => {
+        const move = moves.find(m => m.id === id);
+        return move && move.hits > 1;
+    });
+
+    const hasStatusMove = randomMoves.some(id => {
+        const move = moves.find(m => m.id === id);
+        return move && move.category === "変化";
+    });
+
+    const hasPhysicalMove = randomMoves.some(id => {
+        const move = moves.find(m => m.id === id);
+        return move && move.category === "物理";
+    });
+
+    const hasSpecialMove = randomMoves.some(id => {
+        const move = moves.find(m => m.id === id);
+        return move && move.category === "特殊";
+    });
+
+    const itemCandidates = items.filter(item => {
+
+        if(!item.condition) return true;
+
+        if(item.condition.multiHit && !hasMultiHit) return false;
+
+        if(item.condition.attackOnly && hasStatusMove) return false;
+
+        if(item.condition.physical && !hasPhysicalMove) return false;
+
+        if(item.condition.special && !hasSpecialMove) return false;
+
+        if(item.condition.zType){
+            const ok = randomMoves.some(id => {
+                const move = moves.find(m => m.id === id);
+                return move &&
+                       move.category !== "変化" &&
+                       move.type.includes(item.condition.zType);
+            });
+
+            if(!ok) return false;
+        }
+
+        if(item.condition.zMove){
+            const ok = randomMoves.some(id => {
+                const move = moves.find(m => m.id === id);
+                return move && move.name === item.condition.zMove;
+            });
+
+            if(!ok) return false;
+        }
+
+        return true;
+    });
+
+    return itemCandidates[
+        Math.floor(Math.random() * itemCandidates.length)
+    ];
+}
+
+const randomButton = document.getElementById("randomGenerateButton");
+const randomResult = document.getElementById("randomResult");
+
+if (randomButton && randomResult) {
+
+    randomButton.addEventListener("click", function () {
+
+    this.style.background = "#b71c1c";
+    
+    const randomCharacter = characters[
+    Math.floor(Math.random() * characters.length)
+];
+
+const evs = generateEVs();
+
+const statusHTML = `
+<div class="randomStat statHP">
+<span>HP</span>
+<span>${randomCharacter.status.hp + evs.hp * 5}</span>
+<span>(+${evs.hp})</span>
+</div>
+
+<div class="randomStat statAtk">
+<span>攻撃</span>
+<span>${randomCharacter.status.attack + evs.attack * 5}</span>
+<span>(+${evs.attack})</span>
+</div>
+
+<div class="randomStat statDef">
+<span>防御</span>
+<span>${randomCharacter.status.defense + evs.defense * 5}</span>
+<span>(+${evs.defense})</span>
+</div>
+
+<div class="randomStat statSpAtk">
+<span>特攻</span>
+<span>${randomCharacter.status.spAttack + evs.spAttack * 5}</span>
+<span>(+${evs.spAttack})</span>
+</div>
+
+<div class="randomStat statSpDef">
+<span>特防</span>
+<span>${randomCharacter.status.spDefense + evs.spDefense * 5}</span>
+<span>(+${evs.spDefense})</span>
+</div>
+
+<div class="randomStat statSpe">
+<span>速度</span>
+<span>${randomCharacter.status.speed + evs.speed * 5}</span>
+<span>(+${evs.speed})</span>
+</div>
+`;
+
+const randomMoves = generateMoves(randomCharacter);
+
+const randomItem = generateItem(randomMoves);
+
+// 特性をランダムで1つ選ぶ
+const randomAbility = generateAbility(randomCharacter);
+
+randomResult.innerHTML = `
+<div class="card randomCharacterCard">
+
+    <div class="randomNameRow">
+        <h2>${randomCharacter.name}</h2>
+        <span>No.${String(randomCharacter.id).padStart(3,"0")}</span>
+    </div>
+
+    <div>
+        ${createTypeBadges(randomCharacter.attribute)}
+    </div>
+
+</div>
+
+<div class="randomBuild">
+
+    <div class="buildTop">
+
+        <div class="buildLeft">
+
+            <div class="card miniCard">
+                <h3>ステータス</h3>
+
+                <div id="randomStatus">
+                    ${statusHTML}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="buildRight">
+
+            <div class="card miniCard">
+                <h3>技</h3>
+
+                ${randomMoves.map(id => {
+                    const move = moves.find(m => m.id === id);
+
+                    return `
+<div class="randomMoveCard">
+
+    <div class="randomMoveTags">
+        ${createTypeBadges(move.type)}
+        <span class="move-category">${move.category}</span>
+    </div>
+
+    <div class="randomMoveName">
+        ${move.name}
+    </div>
+
+</div>
+`;
+                }).join("")}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="buildBottom">
+
+<div class="card miniCard">
+
+    <div class="randomAbilityName">
+        ${randomAbility.name}
+    </div>
+
+    <div class="randomAbilityEffect">
+        ${randomAbility.effect}
+    </div>
+
+</div>
+
+<div class="card miniCard">
+
+    <div class="randomItemName">
+        ${randomItem.name}
+    </div>
+
+    <div class="randomItemEffect">
+        ${randomItem.effect}
+    </div>
+
+</div>
+
+    </div>
+
+</div>
+
+</div>
+`;
+
+randomResult.style.display = "block";
+
+    setTimeout(() => {
+        this.style.background = "#d32f2f";
+    }, 100);
+
+});
+
 }

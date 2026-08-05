@@ -7,6 +7,9 @@ kana:"こだわりすてっき",
 type:"共通",
 damage: true,
 category:"攻撃",
+condition:{
+    special:true
+},
 effect:"同じ技しか出せなくなるが、特攻が1.5倍になる。"
 },
 
@@ -17,6 +20,9 @@ kana:"こだわりそーど",
 type:"共通",
 damage: true,
 category:"攻撃",
+condition:{
+    physical:true
+},
 effect:"同じ技しか出せなくなるが、攻撃が1.5倍になる。"
 },
 
@@ -82,6 +88,9 @@ name:"イカサマダイス",
 kana:"いかさまだいす",
 type:"共通",
 category:"攻撃",
+condition:{
+    multiHit:true
+},
 effect:"連続攻撃技の攻撃回数が必ず4回以上になる。"
 },
 
@@ -120,6 +129,9 @@ kana:"とつげきちょっき",
 type:"共通",
 damage: true,
 category:"防御",
+condition:{
+    attackOnly:true
+},
 effect:"特防が1.5倍になるが、変化技を出せなくなる。"
 },
 
@@ -148,6 +160,9 @@ name:"無Z",
 kana:"ノーマルぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"無"
+},
 effect:"無属性の技をZ技に変化させる。"
 },
 
@@ -157,6 +172,9 @@ name:"炎Z",
 kana:"ほのおぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"炎"
+},
 effect:"炎属性の技をZ技に変化させる。"
 },
 
@@ -166,6 +184,9 @@ name:"雷Z",
 kana:"かみなりぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"雷"
+},
 effect:"雷属性の技をZ技に変化させる。"
 },
 
@@ -175,6 +196,9 @@ name:"水Z",
 kana:"みずぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"水"
+},
 effect:"水属性の技をZ技に変化させる。"
 },
 
@@ -184,6 +208,9 @@ name:"風Z",
 kana:"かぜぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"風"
+},
 effect:"風属性の技をZ技に変化させる。"
 },
 
@@ -193,6 +220,9 @@ name:"ブラッドZ",
 kana:"ぶらっどぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"ブラッド"
+},
 effect:"ブラッド属性の技をZ技に変化させる。"
 },
 
@@ -202,6 +232,9 @@ name:"氷Z",
 kana:"こおりぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"氷"
+},
 effect:"氷属性の技をZ技に変化させる。"
 },
 
@@ -211,6 +244,9 @@ name:"月Z",
 kana:"つきぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"月"
+},
 effect:"月属性の技をZ技に変化させる。"
 },
 
@@ -220,6 +256,9 @@ name:"ゴーストZ",
 kana:"ごーすとぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"ゴースト"
+},
 effect:"ゴースト属性の技をZ技に変化させる。"
 },
 
@@ -229,6 +268,9 @@ name:"聖Z",
 kana:"せいぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"聖"
+},
 effect:"聖属性の技をZ技に変化させる。"
 },
 
@@ -238,6 +280,9 @@ name:"闇Z",
 kana:"やみぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"闇"
+},
 effect:"闇属性の技をZ技に変化させる。"
 },
 
@@ -247,6 +292,9 @@ name:"鋼Z",
 kana:"はがねぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"鋼"
+},
 effect:"鋼属性の技をZ技に変化させる。"
 },
 
@@ -256,6 +304,9 @@ name:"毒Z",
 kana:"どくぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"毒"
+},
 effect:"毒属性の技をZ技に変化させる。"
 },
 
@@ -265,6 +316,9 @@ name:"大地Z",
 kana:"だいちぜっと",
 type:"共通",
 category:"Zクリスタル",
+condition:{
+    zType:"大地"
+},
 effect:"大地属性の技をZ技に変化させる。"
 },
 
@@ -274,6 +328,9 @@ name:"おとこZ",
 kana:"おとこぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"はやぶ三連撃"
+},
 effect:"おとこ専用。はやぶ三連撃がZ技に変化する。"
 },
 
@@ -283,6 +340,9 @@ name:"はやぶさZ",
 kana:"はやぶさぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"ライジングブレイク"
+},
 effect:"はやぶさ専用。ライジングブレイクがZ技に変化する。"
 },
 
@@ -292,6 +352,9 @@ name:"こまちZ",
 kana:"こまちぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"神速斬突・炎"
+},
 effect:"こまち専用。神速斬突・炎がZ技に変化する。"
 },
 
@@ -301,6 +364,9 @@ name:"東西Z",
 kana:"とうざいぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"レインボルトノヴァ"
+},
 effect:"東西専用。レインボルトノヴァがZ技に変化する。"
 },
 
@@ -310,6 +376,9 @@ name:"山手Z",
 kana:"やまのてぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"炎炎ノ斬撃"
+},
 effect:"山手専用。炎炎ノ斬撃がZ技に変化する。"
 },
 
@@ -319,6 +388,9 @@ name:"丸ノ内(XV)Z",
 kana:"まるのうちえっくすぶいぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"ブラッドムーンルインレイ"
+},
 effect:"丸ノ内XV専用。ブラッドムーンルインレイがZ技に変化する。"
 },
 
@@ -328,6 +400,9 @@ name:"丸ノ内(NI)Z",
 kana:"まるのうちえぬあいぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"神乃悪魔"
+},
 effect:"丸ノ内NI専用。神乃悪魔がZ技に変化する。"
 },
 
@@ -337,6 +412,9 @@ name:"東葉Z",
 kana:"とうようぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"要塞のポーション"
+},
 effect:"東葉専用。要塞のポーションがZ技に変化する。"
 },
 
@@ -346,6 +424,9 @@ name:"南武Z",
 kana:"なんぶぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"シャドウソウルオーバー"
+},
 effect:"南武専用。シャドウソウルオーバーがZ技に変化する。"
 },
 
@@ -355,6 +436,9 @@ name:"かもめZ",
 kana:"かもめぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"オーロラビジョン"
+},
 effect:"かもめ専用。オーロラビジョンがZ技に変化する。"
 },
 
@@ -364,6 +448,9 @@ name:"かがやきZ",
 kana:"かがやきぜっと",
 type:"専用",
 category:"Zクリスタル",
+condition:{
+    zMove:"オーロラブリザード"
+},
 effect:"かがやき専用。オーロラブリザードがZ技に変化する。"
 },
 

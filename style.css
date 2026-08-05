@@ -1643,7 +1643,7 @@ border:1px solid #31456d;
     padding:12px;
 }
 
-.randomGrid{
+.damageGrid{
     display:grid;
     grid-template-columns:repeat(8,minmax(0,1fr));
     gap:3px;
@@ -1686,4 +1686,324 @@ border:1px solid #31456d;
 .attribute-氷,
 .attribute-聖{
     color:#222 !important;
+}
+
+.random-box{
+
+    margin-top:30px;
+
+}
+
+#randomGenerateButton{
+
+    width:100%;
+    padding:14px;
+    font-size:20px;
+    font-weight:bold;
+
+}
+
+.randomCharacterCard{
+
+    margin-top:20px;
+    margin-bottom:15px;
+
+}
+
+.randomGrid{
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+
+}
+
+.randomRight{
+
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+
+}
+
+#randomGenerateButton{
+    width: 50%;
+    max-width: 240px;
+    height: 55px;
+    display: block;
+    margin: 20px 16px 20px auto;
+}
+
+button{
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus{
+    outline: none;
+}
+
+button:active{
+    filter: none;
+}
+
+#randomGenerateButton{
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+#randomGenerateButton:focus,
+#randomGenerateButton:active{
+    background:#d32f2f;
+    color:#fff;
+    filter:none;
+    opacity:1;
+    outline:none;
+    box-shadow:none;
+}
+
+button{
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus{
+    outline: none;
+}
+
+button:active{
+    filter: none;
+}
+
+.randomCharacterCard{
+    margin-bottom:16px;
+}
+
+.randomRow{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+}
+
+.randomRow .card{
+    min-height:140px;
+}
+
+.randomBuild{
+    display:flex;
+    align-items:stretch;
+    gap:16px;
+}
+
+.buildLeft,
+.buildRight{
+    display:flex;
+    flex-direction:column;
+}
+
+.randomStat{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    color:#222;
+    font-weight:bold;
+    font-size:18px;
+
+    border-radius:10px;
+    padding:8px 12px;
+    margin-bottom:8px;
+    height:100%;
+}
+
+.statHP{
+    background:#ffffff;
+    border:2px solid #55c93a;
+}
+
+.statAtk{
+    background:#ffffff;
+    border:2px solid #e53935;
+}
+
+.statDef{
+    background:#ffffff;
+    border:2px solid #1976d2;
+}
+
+.statSpAtk{
+    background:#ffffff;
+    border:2px solid #fbc02d;
+}
+
+.statSpDef{
+    background:#ffffff;
+    border:2px solid #8e24aa;
+}
+
+.statSpe{
+    background:#ffffff;
+    border:2px solid #00acc1;
+}
+
+.randomStat{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.randomStat span{
+    display:flex;
+    align-items:center;
+    height:100%;
+    line-height:1;
+}
+
+.randomMoveCard{
+    background:#fff;
+    border:2px solid #d9d9d9;
+    border-radius:12px;
+    padding:10px;
+    margin-bottom:8px;
+}
+
+.randomMoveTags{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:6px;
+}
+
+.randomMoveName{
+    font-size:13px;
+    font-weight:bold;
+    line-height:1.2;
+    word-break:break-word;
+}
+
+.randomMoveType{
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+}
+
+.randomMoveCategory{
+    font-size: 12px;
+}
+
+.randomMoveCard{
+    padding: 8px 10px;
+    margin-bottom: 2px;
+}
+
+.buildLeft,
+.buildRight{
+    display:flex;
+    flex-direction:column;
+}
+
+.buildLeft .miniCard,
+.buildRight .miniCard:first-child{
+    flex:1;
+}
+
+.buildRight .miniCard:first-child{
+    display:flex;
+    flex-direction:column;
+}
+
+.buildTop{
+    display:flex;
+    gap:12px;
+    align-items:stretch;
+}
+
+.buildBottom{
+    display:flex;
+    gap:8px;
+    margin-top:0px;
+}
+
+.buildBottom .miniCard{
+    flex:1;
+}
+
+.randomBuild{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.buildTop{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.buildBottom{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.buildLeft,
+.buildRight{
+    width:auto;
+}
+
+/* ランダム生成 */
+.randomCharacterCard h2{
+    font-size:18px;
+}
+
+.randomCharacterCard .card{
+    font-size:14px;
+}
+
+.randomCharacterCard .attribute{
+    font-size:12px;
+}
+
+.randomCharacterCard h3{
+    font-size:16px;
+}
+
+.randomCharacterCard{
+    padding:6px 10px;
+    margin-top:8px;
+    margin-bottom:8px;
+}
+
+.randomNameRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.randomNameRow h2{
+    margin:0;
+}
+
+.randomNameRow span{
+    font-size:16px;
+    color:#666;
+    font-weight:bold;
+}
+
+.buildTop .card{
+    margin-bottom:0;
+}
+
+.randomAbilityName,
+.randomItemName{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.randomAbilityEffect,
+.randomItemEffect{
+    font-size:14px;
+    line-height:1.5;
+    color:#555;
 }
