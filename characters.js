@@ -470,7 +470,7 @@ kana:"まるのうちえっくすぶい",
         enemy: "images/characters/hanzomon/enemy.png"
     },
 
-    attribute:["聖","闇"],
+    attribute:["闇","聖"],
 
     status:{
         hp:170,
