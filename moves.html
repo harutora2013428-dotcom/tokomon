@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta name="robots" content="noindex, nofollow">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>技一覧</title>
@@ -23,10 +25,9 @@
 
 <div class="container">
 
-<input
-type="text"
-id="moveSearch"
-placeholder="検索">
+<input type="text" id="nameSearch" placeholder="技名で検索" autocomplete="off">
+
+<input type="text" id="effectSearch" placeholder="技効果で検索" autocomplete="off">
 
 <div class="filter-box">
 
@@ -48,6 +49,7 @@ placeholder="検索">
 <option value="毒">毒</option>
 <option value="大地">大地</option>
 <option value="虹">虹</option>
+  <option value="龍">龍</option>
 </select>
 
 <select id="categoryFilter">

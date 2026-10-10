@@ -30,7 +30,8 @@ const allTypes = [
     "鋼",
     "毒",
     "大地",
-    "虹"
+    "虹",
+  "龍",
 ];
 
 // 属性バッジ作成
@@ -80,6 +81,20 @@ function getTypeRelations(defendTypes){
             immunity.push(type);
         }
 
+    });
+
+    // 4倍弱点を一番左にする
+    weakness.sort((a, b) => {
+        const rateA = Number(a.split("×")[1]);
+        const rateB = Number(b.split("×")[1]);
+        return rateB - rateA;
+    });
+
+    // 0.25倍耐性を一番右にする
+    resistance.sort((a, b) => {
+        const rateA = Number(a.split("×")[1]);
+        const rateB = Number(b.split("×")[1]);
+        return rateB - rateA;
     });
 
     return {
@@ -228,14 +243,9 @@ function displayCharacters(list){
 function openCharacter(id){
 
     saveListState("characterList",{
-
-        search: search ? search.value : "",
-
-        type: typeFilter ? typeFilter.value : "",
-
-        sort: sort ? sort.value : ""
-
-    });
+    type: typeFilter ? typeFilter.value : "",
+    sort: sort ? sort.value : ""
+});
 
     location.href = `detail.html?id=${id}`;
 
@@ -329,8 +339,6 @@ if(characterList){
 
     if(state){
 
-        if(search) search.value = state.search;
-
         if(typeFilter) typeFilter.value = state.type;
 
         if(sort) sort.value = state.sort;
@@ -357,7 +365,20 @@ function displayBasicInfo(c, relation){
 
 return `
 
-<h2>${c.name}</h2>
+<div class="status-title">
+    <h2>${c.name}</h2>
+
+    ${
+        c.forms && c.forms.length > 0
+        ? `
+        <button id="formChangeButton"
+        class="form-change-button">
+        形態変化
+        </button>
+        `
+        : ""
+    }
+</div>
 
 <p><strong>No.</strong> ${String(c.id).padStart(3,"0")}</p>
 
@@ -413,43 +434,110 @@ relation.immunity.length
 
 }
 
+let showBaseStats = false;
+
 function displayStatus(c){
+  
+    const keys = ["hp","attack","defense","spAttack","spDefense","speed"];
 
-return `
+    const names = {
+        hp:"HP",
+        attack:"攻撃",
+        defense:"防御",
+        spAttack:"特攻",
+        spDefense:"特防",
+        speed:"速度"
+    };
 
-<h3>ステータス</h3>
+    // 種族値に変換
+    function getValue(key){
+        if(showBaseStats){
+            return c.status[key] - (key === "hp" ? 75 : 20);
+        }
 
-<div class="status-list">
+        return c.status[key];
+    }
 
-${["hp","attack","defense","spAttack","spDefense","speed"].map(key=>`
+    // 合計
+    const total = keys.reduce((sum, key)=>{
+        return sum + getValue(key);
+    }, 0);
 
-<div class="status-row">
+    // 合計順位
+    const realTotal =
+        c.status.hp +
+        c.status.attack +
+        c.status.defense +
+        c.status.spAttack +
+        c.status.spDefense +
+        c.status.speed;
 
-<span>${
-{
-hp:"HP",
-attack:"攻撃",
-defense:"防御",
-spAttack:"特攻",
-spDefense:"特防",
-speed:"速度"
-}[key]
-}</span>
+    const rank = characters.filter(ch => {
 
-<div class="status-bar">
-<div class="status-fill" style="width:${c.status[key]/2}%"></div>
-</div>
+        const otherTotal =
+            ch.status.hp +
+            ch.status.attack +
+            ch.status.defense +
+            ch.status.spAttack +
+            ch.status.spDefense +
+            ch.status.speed;
 
-<b>${c.status[key]}</b>
+        return otherTotal > realTotal;
 
-</div>
+    }).length + 1;
 
-`).join("")}
+    return `
+    <div class="status-section">
 
-</div>
+        <div class="status-title">
+            <h3>ステータス</h3>
 
-`;
+            <button id="statusModeButton">
+                ${showBaseStats ? "種族値" : "実数値"}
+            </button>
+        </div>
 
+        <div class="status-list">
+
+        ${keys.map(key=>{
+
+            const value = getValue(key);
+
+            // 実数値：HP330 / その他275
+            // 種族値：全て255
+            const max = showBaseStats
+                ? 255
+                : (key === "hp" ? 330 : 275);
+
+            const percent = Math.min(value / max * 100, 100);
+
+            return `
+                <div class="status-row">
+
+                    <span>${names[key]}</span>
+
+                    <div class="status-bar">
+                        <div class="status-fill"
+                             style="width:${percent}%">
+                        </div>
+                    </div>
+
+                    <b>${value}</b>
+
+                </div>
+            `;
+
+        }).join("")}
+
+        <div class="status-row status-total">
+            <span>合計</span>
+            <b>${total}（${rank}位）</b>
+        </div>
+
+        </div>
+
+            </div>
+    `;
 }
 
 function displayDetail(){
@@ -469,7 +557,17 @@ function displayDetail(){
         return;
     }
 
+  let formIndex = -1;
+
     const relation = getTypeRelations(c.attribute);
+
+  const formKey = `formIndex_${c.id}`;
+
+  const savedFormIndex = sessionStorage.getItem(formKey);
+
+if (savedFormIndex !== null) {
+    formIndex = Number(savedFormIndex);
+}
 
     const allMoves = [
     ...c.moves
@@ -481,6 +579,8 @@ function displayDetail(){
     moves.find(m => m.id === c.zMove)
 
 ].filter(Boolean);
+
+let currentMoveList = [...allMoves];
 
     detail.innerHTML = `
         ${displayBasicInfo(c, relation)}
@@ -500,8 +600,143 @@ function displayDetail(){
 
 </div>
     `;
-    
-    const prevButton = document.getElementById("prevCharacter");
+
+  function setupStatusButton() {
+    const button = document.getElementById("statusModeButton");
+
+    if (!button) return;
+
+    button.onclick = () => {
+        showBaseStats = !showBaseStats;
+
+        const oldStatus = detail.querySelector(".status-section");
+
+        if (!oldStatus) return;
+
+        const currentForm =
+    formIndex === -1
+        ? c
+        : c.forms[formIndex];
+
+oldStatus.outerHTML = displayStatus(currentForm);
+
+        setupStatusButton();
+    };
+}
+
+  function setupFormChangeButton() {
+
+    const button = document.getElementById("formChangeButton");
+
+    if (!button) return;
+
+    button.onclick = () => {
+
+        if (!c.forms || c.forms.length === 0) return;
+
+        // 通常形態 → 変化形態 → 通常形態
+        formIndex++;
+
+        if (formIndex >= c.forms.length) {
+            formIndex = -1;
+        }
+
+      sessionStorage.setItem(formKey, formIndex);
+
+        // =====================
+        // 通常形態
+        // =====================
+
+        if (formIndex === -1) {
+
+            const title = detail.querySelector(".status-title h2");
+
+            if (title) {
+                title.textContent = c.name;
+            }
+
+            const status = detail.querySelector(".status-section");
+
+            if (status) {
+                status.outerHTML = displayStatus(c);
+            }
+
+            currentMoveList = [...allMoves];
+
+        }
+
+        // =====================
+        // 変化形態
+        // =====================
+
+        else {
+
+            const currentForm = c.forms[formIndex];
+
+            const title = detail.querySelector(".status-title h2");
+
+            if (title) {
+                title.textContent = currentForm.name;
+            }
+
+            const status = detail.querySelector(".status-section");
+
+            if (status) {
+                status.outerHTML = displayStatus(currentForm);
+            }
+
+            const formMoves = currentForm.moves
+                .map(idOrName => {
+
+                    if (typeof idOrName === "number") {
+                        return moves.find(m => m.id === idOrName);
+                    }
+
+                    return moves.find(m => m.name === idOrName);
+
+                })
+                .filter(Boolean);
+
+            const formUltimate = moves.find(m => {
+
+                if (typeof currentForm.ultimate === "number") {
+                    return m.id === currentForm.ultimate;
+                }
+
+                return m.name === currentForm.ultimate;
+
+            });
+
+            const zMove = moves.find(m => m.id === c.zMove);
+
+            currentMoveList = [
+                ...formMoves,
+                formUltimate,
+                zMove
+            ].filter(Boolean);
+
+        }
+
+        // =====================
+        // ステータスボタン再設定
+        // =====================
+
+        setupStatusButton();
+
+        // =====================
+        // 技一覧を更新
+        // =====================
+
+        updateCharacterMoves();
+
+    };
+
+}
+
+setupStatusButton();
+  setupFormChangeButton();
+
+const prevButton = document.getElementById("prevCharacter");
 const nextButton = document.getElementById("nextCharacter");
 
 prevButton.onclick = () => {
@@ -529,8 +764,6 @@ if(state && state.characterId !== id){
 
 if(state){
 
-    moveSearch.value = state.search;
-
     if(moveTypeFilter) moveTypeFilter.value = state.type;
     if(moveCategoryFilter) moveCategoryFilter.value = state.category;
     if(moveKindFilter) moveKindFilter.value = state.kind;
@@ -542,9 +775,9 @@ if(state){
 
     function updateCharacterMoves(){
 
-        let filtered = [...allMoves];
+        let filtered = [...currentMoveList];
 
-        const keyword = moveSearch.value.toLowerCase();
+        const keyword = moveSearch ? moveSearch.value.trim().toLowerCase() : "";
 
         filtered = filtered.filter(move => {
 
@@ -652,7 +885,27 @@ if(filtered.length === 0){
         
         updateCharacterMoves();
         
+// 保存していた形態を画面に復元
+const savedIndexForRestore = sessionStorage.getItem(formKey);
 
+if (savedIndexForRestore !== null) {
+    const savedIndex = Number(savedIndexForRestore);
+
+    if (
+        savedIndex >= 0 &&
+        c.forms &&
+        savedIndex < c.forms.length
+    ) {
+        formIndex = savedIndex - 1;
+
+        const formButton =
+            document.getElementById("formChangeButton");
+
+        if (formButton) {
+            formButton.click();
+        }
+    }
+}
       
   requestAnimationFrame(() => {
 
@@ -859,23 +1112,23 @@ function openMove(id){
     }
 
     // 技一覧から来た場合
-    const search = document.getElementById("moveSearch");
-    const type = document.getElementById("typeFilter");
-    const category = document.getElementById("categoryFilter");
-    const kind = document.getElementById("kindFilter");
-    const sort = document.getElementById("sort");
+    const nameSearch = document.getElementById("nameSearch");
+const effectSearch = document.getElementById("effectSearch");
+const type = document.getElementById("typeFilter");
+const category = document.getElementById("categoryFilter");
+const kind = document.getElementById("kindFilter");
+const sort = document.getElementById("sort");
 
-    if(type){
-
-        saveListState("moveList",{
-            search: search.value,
-            type: type.value,
-            category: category.value,
-            kind: kind.value,
-            sort: sort.value
-        });
-
-    }
+if(type){
+    saveListState("moveList",{
+        nameSearch: nameSearch ? nameSearch.value : "",
+        effectSearch: effectSearch ? effectSearch.value : "",
+        type: type.value,
+        category: category.value,
+        kind: kind.value,
+        sort: sort.value
+    });
+}
 
     location.href = `move.html?id=${id}`;
 
@@ -917,133 +1170,173 @@ const moveListPage = document.getElementById("move-list");
 
 if (moveListPage) {
 
-    const moveSearch = document.getElementById("moveSearch");
+    const nameSearch = document.getElementById("nameSearch");
+    const effectSearch = document.getElementById("effectSearch");
     const typeFilter = document.getElementById("typeFilter");
     const categoryFilter = document.getElementById("categoryFilter");
     const kindFilter = document.getElementById("kindFilter");
     const sort = document.getElementById("sort");
 
+    // 保存されていた状態を復元
+    const moveListState = loadListState("moveList");
+
+    if(moveListState){
+
+        if(nameSearch)
+            nameSearch.value = moveListState.nameSearch || "";
+
+        if(effectSearch)
+            effectSearch.value = moveListState.effectSearch || "";
+
+        if(typeFilter)
+            typeFilter.value = moveListState.type || "";
+
+        if(categoryFilter)
+            categoryFilter.value = moveListState.category || "";
+
+        if(kindFilter)
+            kindFilter.value = moveListState.kind || "";
+
+        if(sort)
+            sort.value = moveListState.sort || "id";
+    }
+
     function updateMoveList(){
-      
 
         let list = [...moves];
 
-        // 検索
-        const keyword = moveSearch.value.trim().toLowerCase();
+        // 技名検索
+        const nameKeyword = nameSearch
+            ? nameSearch.value.trim().toLowerCase()
+            : "";
 
-        if(keyword !== ""){
-            list = list.filter(move=>
-                move.name.toLowerCase().includes(keyword) ||
-move.kana.toLowerCase().includes(keyword) ||
-move.effect.toLowerCase().includes(keyword)
+        if(nameKeyword !== ""){
+            list = list.filter(move =>
+                move.name.toLowerCase().includes(nameKeyword) ||
+                move.kana.toLowerCase().includes(nameKeyword)
+            );
+        }
+
+        // 技効果検索
+        const effectKeyword = effectSearch
+            ? effectSearch.value.trim().toLowerCase()
+            : "";
+
+        if(effectKeyword !== ""){
+            list = list.filter(move =>
+                move.effect.toLowerCase().includes(effectKeyword)
             );
         }
 
         // 属性
-        if(typeFilter.value !== ""){
+        if(typeFilter && typeFilter.value !== ""){
             list = list.filter(move =>
                 move.type.includes(typeFilter.value)
             );
         }
 
         // 分類
-        if(categoryFilter.value !== ""){
+        if(categoryFilter && categoryFilter.value !== ""){
             list = list.filter(move =>
                 move.category === categoryFilter.value
             );
         }
 
         // 種類
-        if(kindFilter.value !== ""){
+        if(kindFilter && kindFilter.value !== ""){
             list = list.filter(move =>
                 move.kind === kindFilter.value
             );
         }
 
         // 並び替え
-        switch(sort.value){
+        if(sort){
 
-            case "name":
-                list.sort((a,b)=>a.kana.localeCompare(b.kana,"ja"));
-                break;
+            switch(sort.value){
 
-            case "power":
-                list.sort((a,b)=>b.power-a.power);
-                break;
+                case "name":
+                    list.sort((a,b) =>
+                        a.kana.localeCompare(b.kana,"ja")
+                    );
+                    break;
 
-            case "accuracy":
-                list.sort((a,b)=>b.accuracy-a.accuracy);
-                break;
+                case "power":
+                    list.sort((a,b) => b.power - a.power);
+                    break;
 
-            case "pp":
-                list.sort((a,b)=>b.pp-a.pp);
-                break;
+                case "accuracy":
+                    list.sort((a,b) => b.accuracy - a.accuracy);
+                    break;
 
-            default:
-                list.sort((a,b)=>a.id-b.id);
+                case "pp":
+                    list.sort((a,b) => b.pp - a.pp);
+                    break;
 
+                default:
+                    list.sort((a,b) => a.id - b.id);
+            }
         }
 
-if(list.length === 0){
+        if(list.length === 0){
 
-    moveListPage.innerHTML = `
-        <div class="no-result">
-            条件に一致する技は見つかりませんでした。
-        </div>
-    `;
+            moveListPage.innerHTML = `
+                <div class="no-result">
+                    条件に一致する技は見つかりませんでした。
+                </div>
+            `;
 
-}else{
+        }else{
 
-    moveListPage.innerHTML = displayMoves(list);
+            moveListPage.innerHTML = displayMoves(list);
 
-}
-        
-        saveListState("moveList",{
-
-    search: moveSearch.value,
-
-    type: typeFilter.value,
-
-    category: categoryFilter.value,
-
-    kind: kindFilter.value,
-
-    sort: sort.value
-
-});
-
+        }
     }
 
-    moveSearch.addEventListener("input", updateMoveList);
-    typeFilter.addEventListener("change", updateMoveList);
-    categoryFilter.addEventListener("change", updateMoveList);
-    kindFilter.addEventListener("change", updateMoveList);
-    sort.addEventListener("change", updateMoveList);
+    // 検索
+    if(nameSearch)
+        nameSearch.addEventListener("input", updateMoveList);
 
-    const state = loadListState("moveList");
+    if(effectSearch)
+        effectSearch.addEventListener("input", updateMoveList);
+
+    // フィルター
+    if(typeFilter)
+        typeFilter.addEventListener("change", updateMoveList);
+
+    if(categoryFilter)
+        categoryFilter.addEventListener("change", updateMoveList);
+
+    if(kindFilter)
+        kindFilter.addEventListener("change", updateMoveList);
+
+    if(sort)
+        sort.addEventListener("change", updateMoveList);
+
+
+    // 一覧を表示
+    updateMoveList();
+
+
+    // 技カードから戻ってきた場合だけ状態を復元
+    if(moveListState){
+
+        requestAnimationFrame(() => {
+
+            window.scrollTo({
+                top: Number(moveListState.scroll) || 0,
+                behavior: "instant"
+            });
+
+        });
+
+        // 復元したら保存データを削除
+        localStorage.removeItem("moveList");
+    }
+
+}
+
     
 
-if(state){
-
-    moveSearch.value = state.search;
-    typeFilter.value = state.type;
-    categoryFilter.value = state.category;
-    kindFilter.value = state.kind;
-    sort.value = state.sort;
-
-}
-
-updateMoveList();
-
-if(state){
-
-    requestAnimationFrame(()=>{
-        window.scrollTo(0, state.scroll);
-    });
-
-}
-
-}
 
 // 詳細ページなら表示
 if(detail){
@@ -1073,21 +1366,74 @@ function displayMoveDetail(){
         return;
     }
     
-    const users = characters.filter(c => {
+    const users = [];
 
-    if (move.kind === "通常") {
-        return c.moves.includes(move.id);
+characters.forEach(c => {
+
+    // 通常形態が覚える技
+    if (
+        move.kind === "通常" &&
+        c.moves.includes(move.id)
+    ) {
+        users.push({
+            character: c,
+            formIndex: -1,
+            formName: ""
+        });
     }
 
-    if (move.kind === "奥義") {
-        return c.ultimate === move.id;
+    // 通常形態の奥義
+    if (
+        move.kind === "奥義" &&
+        c.ultimate === move.id
+    ) {
+        users.push({
+            character: c,
+            formIndex: -1,
+            formName: ""
+        });
     }
 
-    if (move.kind === "Z技") {
-        return c.zMove === move.id;
+    // Z技
+    if (
+        move.kind === "Z技" &&
+        c.zMove === move.id
+    ) {
+        users.push({
+            character: c,
+            formIndex: -1,
+            formName: ""
+        });
     }
 
-    return false;
+    // 変化形態が覚える技・奥義
+    (c.forms || []).forEach((form, formIndex) => {
+
+        const hasMove =
+            move.kind === "通常" &&
+            (form.moves || []).some(idOrName =>
+                typeof idOrName === "number"
+                    ? idOrName === move.id
+                    : idOrName === move.name
+            );
+
+        const hasUltimate =
+            move.kind === "奥義" &&
+            (
+                typeof form.ultimate === "number"
+                    ? form.ultimate === move.id
+                    : form.ultimate === move.name
+            );
+
+        if (hasMove || hasUltimate) {
+            users.push({
+                character: c,
+                formIndex: formIndex,
+                formName: form.name
+            });
+        }
+
+    });
 
 });
 
@@ -1208,10 +1554,19 @@ ${
 <p>${users.length}件</p>
 
 <ul>
-${users.map(c => `
+${users.map(user => `
 <li>
-<a href="detail.html?id=${c.id}">
-${c.name} ＞
+<a
+    href="detail.html?id=${user.character.id}"
+    onclick="sessionStorage.setItem(
+        'formIndex_${user.character.id}',
+        '${user.formIndex}'
+    )"
+>
+${user.formName
+    ? user.formName
+    : user.character.name
+} ＞
 </a>
 </li>
 `).join("")}
@@ -1756,13 +2111,17 @@ function generateItem(randomMoves){
         }
 
         if(item.condition.zMove){
-            const ok = randomMoves.some(id => {
-                const move = moves.find(m => m.id === id);
-                return move && move.name === item.condition.zMove;
-            });
+    const zMoves = Array.isArray(item.condition.zMove)
+        ? item.condition.zMove
+        : [item.condition.zMove];
 
-            if(!ok) return false;
-        }
+    const ok = randomMoves.some(id => {
+        const move = moves.find(m => m.id === id);
+        return move && zMoves.includes(move.name);
+    });
+
+    if(!ok) return false;
+}
 
         return true;
     });

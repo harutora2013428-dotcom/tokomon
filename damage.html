@@ -2,6 +2,8 @@
 <html lang="ja">
 
 <head>
+  <meta name="robots" content="noindex, nofollow">
+
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,9 +25,12 @@
 <h2>攻撃側</h2>
 
 <label>キャラクター</label>
-<button id="attackerCharacterButton" class="selectButton">
-キャラクターを選択
-</button>
+<div class="characterSelectRow">
+  <button id="attackerCharacterButton" class="selectButton">
+  キャラクターを選択
+  </button>
+  <button id="attackerFormButton" class="formChangeButton" style="display:none;">形態変化</button>
+</div>
 
 <label>技</label>
 <button id="moveButton" class="selectButton">
@@ -148,9 +153,12 @@ class="categoryButton">
 <h2>防御側</h2>
 
 <label>キャラクター</label>
-<button id="defenderCharacterButton" class="selectButton">
-キャラクターを選択
-</button>
+<div class="characterSelectRow">
+  <button id="defenderCharacterButton" class="selectButton">
+  キャラクターを選択
+  </button>
+  <button id="defenderFormButton" class="formChangeButton" style="display:none;">形態変化</button>
+</div>
 
 <label>特性</label>
 <button id="defenderAbilityButton" class="selectButton">

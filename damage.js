@@ -16,18 +16,42 @@ function createTypeBadges(types){
 // 初期設定
 // ==========================
 
+
 const attacker = {
     character: characters[0],
+    formIndex: -1,
     ev: 0,
     rank: 0
 };
 
 const defender = {
     character: characters[0],
+    formIndex: -1,
     hpEV: 0,
     ev: 0,
     rank: 0
 };
+
+// 現在の形態のデータを取得
+function getCurrentFormData(side) {
+    const character = side.character;
+
+    if (
+        side.formIndex >= 0 &&
+        character.forms &&
+        character.forms[side.formIndex]
+    ) {
+        return {
+            ...character,
+            ...character.forms[side.formIndex],
+            attribute: character.attribute,
+            forms: character.forms
+        };
+    }
+
+    return character;
+}
+
 
 let attackType = "attack";
 let defenseType = "defense";
@@ -556,7 +580,7 @@ function drawMoveList(){
 
     searchList.innerHTML = "";
 
-    const character = attacker.character;
+    const character = getCurrentFormData(attacker);
 
     // 覚える技
     const specialIds = [
@@ -677,11 +701,25 @@ card.innerHTML = `
 
         card.onclick = ()=>{
 
-            if(selectMode==="attacker"){
-                attacker.character = character;
-            }else{
-                defender.character = character;
-            }
+            
+if(selectMode === "attacker"){
+    attacker.character = character;
+    attacker.formIndex = -1;
+
+    document.getElementById("attackerFormButton").style.display =
+        character.forms && character.forms.length > 0
+            ? ""
+            : "none";
+}else{
+    defender.character = character;
+    defender.formIndex = -1;
+
+    document.getElementById("defenderFormButton").style.display =
+        character.forms && character.forms.length > 0
+            ? ""
+            : "none";
+}
+
 
             searchModal.style.display = "none";
 document.body.style.overflow = "";
@@ -737,13 +775,11 @@ function updateScreen(){
     defenseStatName.textContent =
     defenseType === "defense" ? "防御" : "特防";
 
-    const atkBase =
-attacker.character.status[attackType] +
-attacker.ev * 5;
+    const atkForm = getCurrentFormData(attacker);
+const defForm = getCurrentFormData(defender);
 
-const defBase =
-defender.character.status[defenseType] +
-defender.ev * 5;
+const atkBase = atkForm.status[attackType] + attacker.ev * 5;
+const defBase = defForm.status[defenseType] + defender.ev * 5;
 
 let criticalAttackRank = attacker.rank;
 let criticalDefenseRank = defender.rank;
@@ -770,7 +806,7 @@ attackStatValue.textContent = atkStat;
 
 defenseStatValue.textContent = defStat;
 
-hpStatValue.textContent = defender.character.status.hp;
+hpStatValue.textContent = defForm.status.hp;
 
 hpEV.textContent = defender.hpEV;
 
@@ -1087,9 +1123,8 @@ function calculateDamage(){
 
     }
         
-        const hp =
-    defender.character.status.hp +
-    defender.hpEV * 5;
+        const defForm = getCurrentFormData(defender);
+const hp = defForm.status.hp + defender.hpEV * 5;
 
 let currentHp = hp;
 
@@ -1143,9 +1178,13 @@ console.log(selectedDefenseAbility);
         const isPhysical = attackType === "attack";
 const isSpecial = attackType === "spAttack";
 
+
+const atkForm = getCurrentFormData(attacker);
+
 let attack =
-attacker.character.status[attackType] +
-attacker.ev * 5;
+    atkForm.status[attackType] +
+    attacker.ev * 5;
+
 
 // 拘りソード
 if (
@@ -1165,9 +1204,9 @@ if (
     addModifier("拘りステッキ", 1.5);
 }
 
-        let defense =
-defender.character.status[defenseType] +
-defender.ev * 5;
+let defense =
+    defForm.status[defenseType] +
+    defender.ev * 5;
         
         // 壁
 if(
@@ -1699,9 +1738,8 @@ console.log(e.stack);
     
     function calculateHitCount(damage, currentHp){
 
-    const hp =
-        defender.character.status.hp +
-        defender.hpEV * 5;
+    const defForm = getCurrentFormData(defender);
+const hp = defForm.status.hp + defender.hpEV * 5;
 
     let hpNow = currentHp;
 
@@ -2260,3 +2298,42 @@ document.getElementById("shingekiPower").onchange = updateScreen;
 
 //石像
 document.getElementById("stoneStatue").onchange = updateScreen;
+
+
+function changeForm(side) {
+    const data = side === "attack" ? attacker : defender;
+    const character = data.character;
+
+    if (!character.forms || character.forms.length === 0) {
+        return;
+    }
+
+    data.formIndex++;
+
+    if (data.formIndex >= character.forms.length) {
+        data.formIndex = -1;
+    }
+
+    const button = document.getElementById(
+        side === "attack"
+            ? "attackerFormButton"
+            : "defenderFormButton"
+    );
+
+    const form = getCurrentFormData(data);
+
+    button.textContent =
+        data.formIndex === -1
+            ? "通常形態"
+            : form.name;
+
+    updateScreen();
+}
+
+document.getElementById("attackerFormButton").onclick = () => {
+    changeForm("attack");
+};
+
+document.getElementById("defenderFormButton").onclick = () => {
+    changeForm("defense");
+};

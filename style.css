@@ -332,6 +332,13 @@ button:hover{
     background:linear-gradient(135deg,#BDBDBD,#757575);
 }
 
+.attribute-龍{
+    background:linear-gradient(135deg,#1a237e,#3949ab,#7986cb);
+    color:#ffffff;
+    border:1px solid #9fa8da;
+    text-shadow:0 0 6px rgba(180,190,255,.8);
+}
+
 .ability-list{
     display:flex;
     flex-direction:column;
@@ -362,7 +369,7 @@ button:hover{
 
 .ability-card{
     padding:16px 18px;
-    margin:12px 0;
+    margin:3px 0;
 }
 
 .ability-card h2{
@@ -628,6 +635,11 @@ line-height:1.4;
 
 .move-category-変化{
     background:#43a047;
+}
+
+.move-category-不明{
+    color:#fff !important;
+    background:#777 !important;
 }
 
 .move-card.ultimate{
@@ -961,42 +973,41 @@ background:#eee;
 
 .moveCard{
     background:#fff;
-    border-radius:14px;
-    margin:8px;
-    padding:12px;
+    border-radius:12px;
+    margin:4px 0;
+    padding:8px 10px;
     border:2px solid #ddd;
     cursor:pointer;
 }
 
-.moveCard:hover{
-    transform:scale(1.02);
-}
-
 .moveName{
-    font-size:18px;
+    font-size:17px;
     font-weight:bold;
-    margin-bottom:8px;
+    margin:0 0 3px 0;
 }
 
 .moveInfo{
     display:flex;
-    gap:6px;
+    align-items:center;
+    gap:4px;
     flex-wrap:wrap;
-    margin-bottom:8px;
+    margin:0;
 }
 
 .moveTag,
 .move-kind-tag,
 .move-category-tag,
 .attribute{
-    font-size:12px;
-    padding:4px 8px;
+    font-size:11px;
+    padding:3px 6px;
+    margin:0;
 }
 
 .moveEffect{
     color:#555;
-    font-size:14px;
-    line-height:1.4;
+    font-size:13px;
+    line-height:1.25;
+    margin:3px 0 0 0;
 
     display:-webkit-box;
     -webkit-line-clamp:2;
@@ -1675,7 +1686,7 @@ border:1px solid #31456d;
 }
 
 .attribute{
-    color:#fff !important;
+  color:#fff !important;
     text-shadow:none !important;
     filter:none !important;
     opacity:1 !important;
@@ -2006,4 +2017,1202 @@ button:active{
     font-size:14px;
     line-height:1.5;
     color:#555;
+}
+
+/* ===========================
+   パーティーメーカー
+=========================== */
+
+.party-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    padding:15px;
+}
+
+.party-card{
+    background:#fff;
+    border-radius:15px;
+    padding:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.party-card:hover{
+    transform:translateY(-2px);
+}
+
+.party-name{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.party-count{
+    color:#666;
+    margin-bottom:10px;
+}
+
+.party-members{
+    color:#888;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.fab{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+
+    width:65px;
+    height:65px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:0;
+
+    border:none;
+    border-radius:50%;
+
+    font-size:42px;
+    line-height:1;
+
+    background:#2196f3;
+    color:#fff;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.3);
+}
+
+/* ======================
+   パーティー編集
+====================== */
+
+.party-editor{
+
+    padding:15px;
+
+}
+
+.party-name-input{
+
+    width:100%;
+    padding:12px;
+    font-size:18px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-bottom:20px;
+    box-sizing:border-box;
+
+}
+
+.member-card{
+
+    background:#fff;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:12px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+    cursor:pointer;
+
+}
+
+.member-number{
+
+    font-weight:bold;
+    font-size:18px;
+
+}
+
+.member-empty{
+
+    color:#888;
+    margin-top:8px;
+
+}
+
+.save-button{
+
+    width:100%;
+    padding:15px;
+    font-size:18px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#2196f3;
+    color:white;
+
+    margin-top:20px;
+
+}
+
+/* ======================
+   パーティーモーダル
+====================== */
+
+.party-modal{
+    position:fixed;
+    inset:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+
+    background:rgba(0,0,0,.45);
+
+    z-index:999;
+}
+
+.party-modal-content{
+
+    width:100%;
+    max-width:520px;
+
+    background:#f7f7f7;
+
+    border-radius:22px 22px 0 0;
+
+    padding:20px;
+
+    box-sizing:border-box;
+
+    animation:modalUp .2s;
+}
+
+.party-modal-header{
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.party-modal-header h2{
+
+    margin:0;
+
+    font-size:30px;
+
+    color:#222;
+}
+
+.party-modal-header button{
+
+    width:56px;
+    height:56px;
+
+    padding:0;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#d32f2f;
+
+    color:#fff;
+
+    font-size:28px;
+
+    cursor:pointer;
+}
+
+.party-modal-button{
+
+    width:100%;
+    padding:16px;
+    margin-bottom:14px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#42a5f5;
+    color:#fff;
+
+    font-size:20px;
+    font-weight:bold;
+
+    transition:.2s;
+    box-shadow:0 3px 8px rgba(66,165,245,.35);
+
+}
+
+.party-modal-button:active{
+
+    background:#1e88e5;
+    transform:scale(.98);
+
+}
+
+.party-modal-button:active{
+
+    transform:scale(.98);
+
+    background:#d32f2f;
+
+    color:#fff;
+}
+
+@keyframes modalUp{
+
+    from{
+        transform:translateY(100%);
+    }
+
+    to{
+        transform:translateY(0);
+    }
+
+}
+
+.hidden{
+    display:none !important;
+}
+
+.party-header{
+    background:#d32f2f;
+    color:#fff;
+
+    height:140px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.party-header h1{
+    margin:0;
+    font-size:40px;
+}
+
+.party-header p{
+    margin-top:8px;
+    font-size:18px;
+    opacity:.9;
+}
+
+.party-edit-header{
+    display:grid;
+    grid-template-columns:50px 1fr 50px;
+    align-items:center;
+
+    height:72px;
+    padding:0 16px;
+
+    background:#d32f2f;
+}
+
+.back-button{
+    justify-self:start;
+    color:#fff;
+    text-decoration:none;
+    font-size:32px;
+}
+
+#partySlot{
+    justify-self:center;
+    color:#fff;
+    font-size:30px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.menu-button{
+    justify-self:end;
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:30px;
+}
+
+.box-list{
+
+    margin-top:20px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:12px;
+
+    max-height:400px;
+    overflow-y:auto;
+}
+
+.box-card{
+
+    display:flex;
+    align-items:center;
+
+    gap:14px;
+
+    padding:14px;
+
+    background:#fff;
+
+    border:2px solid #d32f2f;
+
+    border-radius:14px;
+
+    cursor:pointer;
+}
+
+.box-card:active{
+
+    background:#ffeaea;
+}
+
+.box-icon{
+
+    width:54px;
+    height:54px;
+
+    border-radius:12px;
+
+    background:#ddd;
+
+    flex-shrink:0;
+}
+
+.box-info h3{
+
+    margin:0;
+
+    font-size:20px;
+}
+
+.box-info p{
+
+    margin:4px 0 0;
+
+    color:#777;
+}
+
+.danger{
+    background:#e53935;
+    box-shadow:0 3px 8px rgba(229,57,53,.35);
+}
+
+.danger:active{
+    background:#c62828;
+}
+
+.box-icon{
+
+    width:72px;
+    height:72px;
+
+    border-radius:12px;
+
+    background:#eee;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+}
+
+.box-icon img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+}
+
+/* ===== BOX ===== */
+
+.box-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+　  font-size: 30px;
+    padding:5px 10px;
+}
+
+.box-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+
+    padding:8px;
+
+}
+
+.box-card{
+    aspect-ratio:1/1;
+    width:100%;
+    box-sizing:border-box;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+}
+
+.box-card img{
+    width:70%;
+    aspect-ratio:1/1;
+    object-fit:contain;
+}
+
+.box-card-name{
+
+    margin-top:8px;
+
+    font-size:13px;
+
+    text-align:center;
+
+}
+
+.new-card{
+    position:relative;
+    border:2px dashed #4FC3F7;
+    color:#4FC3F7;
+}
+
+.new-card .plus{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:40px;
+    line-height:1;
+}
+
+.new-card span{
+    position:absolute;
+    left:50%;
+    top:calc(50% + 26px);
+    transform:translateX(-50%);
+    font-size:14px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.box-header{
+    background:#d32f2f;
+    color:#fff;
+
+    display:grid;
+    grid-template-columns:50px 1fr 50px;
+    align-items:center;
+
+    height:70px;
+    padding:0 12px;
+}
+
+.box-header h1{
+    margin:0;
+    text-align:center;
+    font-size:34px;
+}
+
+.back-button,
+.search-button{
+    width:44px;
+    height:44px;
+    padding:0;
+    border:none;
+    background:none;
+    color:white;
+    font-size:28px;
+}
+
+.boxMenu{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+
+    width:85%;
+    max-width:400px;
+
+    background:white;
+    border-radius:20px;
+    padding:20px;
+
+    box-sizing:border-box;
+}
+
+.boxMenu h2{
+    text-align:center;
+    margin:0 0 20px;
+}
+
+.boxMenu button{
+    width:100%;
+    margin-bottom:10px;
+    padding:14px;
+
+    border:none;
+    border-radius:12px;
+
+    font-size:18px;
+    font-weight:bold;
+
+    background:#f2f2f2;
+    color:#222;
+}
+
+.boxMenu .delete-button{
+    background:#e53935;
+    color:white;
+}
+
+.boxMenu .cancel-button{
+    background:#ddd;
+}
+
+.box-card{
+    -webkit-tap-highlight-color: transparent;
+    outline:none;
+}
+
+.box-card:focus,
+.box-card:active{
+    outline:none;
+}
+
+ =========================
+   育成画面
+========================= */
+
+.training-header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+}
+
+.training-header h1{
+    margin:0;
+    font-size:24px;
+}
+
+.training-header .back-button{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+
+/* 全体 */
+
+.training-container{
+    width:92%;
+    max-width:600px;
+    margin:0 auto;
+    padding:20px 0 40px;
+}
+
+
+/* キャラクター */
+
+.training-character{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.training-character img{
+    width:180px;
+    height:180px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 10px;
+}
+
+.training-character h2{
+    margin:5px 0;
+    font-size:24px;
+}
+
+.training-character .attribute{
+    font-size:16px;
+    font-weight:bold;
+    padding:6px 18px;
+    border-radius:20px;
+}
+
+
+/* セクション */
+
+.training-section{
+    margin-bottom:25px;
+}
+
+.training-section > h2{
+    font-size:20px;
+    margin:0 0 10px;
+}
+
+
+/* 共通カード */
+
+.training-card{
+    background:white;
+    border-radius:15px;
+    padding:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+    box-sizing:border-box;
+}
+
+
+/* ステータス */
+
+.training-status{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px 5px;
+    border-bottom:1px solid #eee;
+}
+
+.training-status:last-of-type{
+    border-bottom:none;
+}
+
+.training-status span{
+    font-weight:bold;
+}
+
+.training-status b{
+    font-size:18px;
+}
+
+.change-hint{
+    text-align:center;
+    margin-top:12px;
+
+    font-size:13px;
+    color:#888;
+}
+
+
+/* 技 */
+
+#moveList{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.move-slot{
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+/* 特性・持ち物 */
+
+#abilityCard,
+#itemCard{
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+/* 保存 */
+
+.training-save{
+    display:block;
+
+    width:100%;
+    padding:15px;
+
+    border:none;
+    border-radius:15px;
+
+    background:#333;
+    color:white;
+
+    font-size:18px;
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.training-save:active{
+    transform:scale(.98);
+}
+
+#trainingAttribute{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+#trainingAttribute{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+#trainingAttribute .attribute{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.training-header {
+    position: relative;
+}
+
+.training-header .back-button {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 50px;
+    height: 50px;
+
+    background: transparent;
+    border: none;
+
+    color: white;
+    font-size: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10;
+}
+
+/* 能力ポイント */
+.training-points{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    padding:16px 0;
+    border-top:1px solid #eee;
+}
+
+/* 能力ポイント操作 */
+.training-controls{
+    padding:0 15px 15px;
+}
+
+.training-control{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:50px;
+    border-top:1px solid #eee;
+}
+
+.training-control span{
+    flex:1;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.training-control b{
+    width:30px;
+    text-align:center;
+    font-size:18px;
+}
+
+/* ＋・−ボタン */
+.training-control button{
+    width:38px;
+    height:38px;
+    padding:0;
+    border:none;
+    border-radius:50%;
+    background:#eeeeee;
+    font-size:22px;
+    font-weight:bold;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    line-height:1;
+}
+
+.training-control .plus-button{
+    background:#309EFF;
+    color:white;
+}
+
+.training-control .minus-button{
+    background:#eeeeee;
+    color:#333;
+}
+
+/* 育成保存ボタン */
+#saveTraining{
+    background:#3498db;
+    color:white;
+    border:none;
+    border-radius:16px;
+    font-size:20px;
+    font-weight:bold;
+    padding:18px;
+}
+
+#saveTraining:active{
+    opacity:.8;
+}
+
+/* =========================
+   技選択モーダル
+========================= */
+
+.move-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    z-index:1000;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.move-modal.show{
+    display:flex;
+}
+
+.move-modal-content{
+    width:88%;
+    max-width:500px;
+    max-height:80vh;
+    overflow-y:auto;
+
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.move-modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.move-modal-header h2{
+    margin:0;
+    font-size:22px;
+}
+
+.move-modal-header button{
+    width:40px;
+    height:40px;
+    padding:0;
+    border:none;
+    background:#e53935;
+    color:white;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:24px;
+    line-height:1;
+}
+
+.move-select-list{
+    display:flex;
+    flex-direction:column;
+    gap:0px;
+}
+
+.move-select-list button{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#f1f1f1;
+    text-align:left;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.move-select-list button:active{
+    opacity:.7;
+}
+
+.other-moves-button{
+    width:100%;
+    margin:15px 0 10px;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#42a5f5 !important;
+    color:white !important;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.other-moves-button:active{
+    background:#42a5f5 !important;
+    color:white !important;
+}
+
+#otherMoves{
+    display:none;
+}
+
+#otherMoves.open{
+    display:flex;
+}
+
+/* 育成画面の技枠 */
+.move-slot {
+    padding: 12px 16px;
+}
+
+/* 技カード */
+.training-move-card {
+    padding: 0;
+}
+
+.training-move-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.training-move-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+/* 技をドラッグ中 */
+.move-slot {
+    touch-action: none;
+}
+
+.move-slot.dragging {
+    opacity: 0.5;
+}
+
+.move-slot.drag-over {
+    border: 3px solid #2196f3;
+}
+
+.training-move-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.training-move-content{
+    flex:1;
+    min-width:0;
+}
+
+.move-drag-handle{
+    width:36px;
+    height:50px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin-left:10px;
+
+    border-radius:10px;
+    background:#f0f3f7;
+
+    color:#555;
+    font-size:24px;
+    font-weight:bold;
+
+    cursor:grab;
+
+    touch-action:none;
+    user-select:none;
+}
+
+.move-drag-handle:active{
+    cursor:grabbing;
+}
+
+/* 技のドラッグハンドル */
+.move-drag-handle {
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+}
+
+/* 技カード自体は普通にスクロール */
+.move-slot {
+    touch-action: pan-y;
+}
+
+.move-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 8px;
+}
+
+.move-delete-button {
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #ffe5e5;
+    color: #e53935;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+}
+
+.move-delete-button:active {
+    transform: scale(0.9);
+}
+
+/* キャラクター詳細の特性 */
+.ability-effect{
+    font-size:14px;
+    line-height:1.5;
+
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+}
+
+.status-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 12px;
+    box-sizing: border-box;
+}
+
+.status-total span {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.status-total b {
+    font-size: 22px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#statusModeButton {
+    font-size: 16px;
+    padding: 8px 14px;
+    width: auto;
+    min-width: 85px;
+    border-radius: 8px;
+    background-color: #1976d2;
+    color: white;
+}
+
+.detail-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.detail-title h2{
+    margin:0;
+}
+
+.form-change-button{
+    background:#1976d2;
+    color:white;
+    border:none;
+    border-radius:10px;
+    padding:12px 24px;
+    font-size:18px;
+    font-weight:bold;
+    white-space:nowrap;
+    cursor:pointer;
+}
+
+.form-change-button{
+    background:#1976d2;
+    color:white;
+    border:none;
+    border-radius:10px;
+    padding:8px 14px;
+    font-size:16px;
+    font-weight:bold;
+    white-space:nowrap;
+    cursor:pointer;
+}
+
+.form-change-button{
+    font-size:16px;
+    padding:8px 14px;
+    width:auto;
+    min-width:85px;
+    border-radius:8px;
+    background: #1976d2 !important;
+    color:white;
+    border:none;
+    font-weight:bold;
+    white-space:nowrap;
+    cursor:pointer;
+}
+
+
+.formChangeButton {
+    width: 100%;
+    padding: 12px;
+    margin: 4px 0;
+    background: #1976d2 !important;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.formChangeButton:active {
+    background-color: #2468d8;
 }
