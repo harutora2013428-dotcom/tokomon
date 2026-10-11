@@ -59,6 +59,8 @@ let defenseType = "defense";
 let battleType = "single";
 let damageModifiers = [];
 
+let actualMovePower = 0;
+
 // ==========================
 // 要素取得
 // ==========================
@@ -291,12 +293,27 @@ if (
 
 }
 
+      
+    // 断罪の仮面
+    const judgmentMaskBox = document.getElementById("judgmentMaskBox");
+
+    if (selectedAttackAbility?.name === "断罪の仮面") {
+        judgmentMaskBox.style.display = "";
+    } else {
+        judgmentMaskBox.style.display = "none";
+        document.getElementById("judgmentMaskRank").value = "0";
+    }
+
+
 const deathCountBox = document.getElementById("deathCountBox");
 const deathCount = document.getElementById("deathCount");
 
 if (
     selectedMove.name === "お墓参り" ||
-    selectedMove.name === "アポカリプスヘルブレイク"
+    (
+    selectedMove.name === "アポカリプスヘルブレイク" ||
+    selectedMove.name === "滅亡龍嵐波"
+)
 ) {
 
     deathCountBox.style.display = "";
@@ -393,6 +410,27 @@ if (selectedMove.name === "祟り目") {
 
 }
 
+      // アクロバットのときだけ表示
+const acrobaticsBox = document.getElementById("acrobaticsBox");
+
+acrobaticsBox.style.display =
+    selectedMove && selectedMove.name === "アクロバット"
+        ? "block"
+        : "none";
+
+      // アビスメテオのときだけ表示
+const abyssMeteorBox =
+    document.getElementById("abyssMeteorBox");
+
+abyssMeteorBox.style.display =
+    selectedMove.name === "アビスメテオ"
+        ? "block"
+        : "none";
+
+if (selectedMove.name !== "アビスメテオ") {
+    document.getElementById("abyssMeteor").checked = false;
+}
+
         if(move.category === "不明"){
 
     categorySelect.style.display = "block";
@@ -476,6 +514,13 @@ function addNoneAbilityButton(){
             defenderAbilityButton.textContent = "特性を選択";
         }
 
+      const judgmentMaskBox =
+    document.getElementById("judgmentMaskBox");
+
+judgmentMaskBox.style.display = "none";
+
+document.getElementById("judgmentMaskRank").value = "0";
+
         searchModal.style.display = "none";
         document.body.style.overflow = "";
 
@@ -521,6 +566,11 @@ function addAbilityButton(ability){
     selectedDefenseAbility = ability;
     defenderAbilityButton.textContent = ability.name;
 }
+
+      const judgmentMaskBox = document.getElementById("judgmentMaskBox");
+
+judgmentMaskBox.style.display =
+    ability.name === "断罪の仮面" ? "" : "none";
 
     searchModal.style.display = "none";
     document.body.style.overflow = "";
@@ -634,7 +684,10 @@ function drawAbilityList(){
 
     searchList.innerHTML = "";
 
-    const character = attacker.character;
+    const character =
+    abilitySide === "attack"
+        ? attacker.character
+        : defender.character;
 
 const specialIds = character.abilities;
 
@@ -1252,16 +1305,30 @@ if (
 
     power = 50 + death * 50;
 
+
 } else if (
-    selectedMove.name === "アポカリプスヘルブレイク"
+    (
+    selectedMove.name === "アポカリプスヘルブレイク" ||
+    selectedMove.name === "滅亡龍嵐波"
+)
 ) {
 
     const death =
     Number(document.getElementById("deathCount").value);
 
     power = 150 + death * 50;
-    
+
 } else if (
+    selectedMove.name === "滅亡龍嵐波"
+) {
+
+    const death =
+    Number(document.getElementById("deathCount").value);
+
+    power = 150 + death * 50;
+
+}
+ else if (
     selectedMove.name === "神乃悪魔"
 ) {
 
@@ -1292,6 +1359,26 @@ const judgementPower = document.getElementById("judgementPower");
 
     power = selectedMove.power;
 
+}
+
+      actualMovePower = power;
+
+      // アクロバット
+if (
+    selectedMove.name === "アクロバット" &&
+    document.getElementById("acrobatics").checked
+) {
+    power *= 2;
+    addModifier("アクロバット", 2);
+}
+
+      // アビスメテオ
+if (
+    selectedMove.name === "アビスメテオ" &&
+    document.getElementById("abyssMeteor").checked
+) {
+    power *= 1.5;
+    addModifier("アビスメテオ", 1.5);
 }
 
 // 祟り目
@@ -1380,14 +1467,30 @@ if(
 addModifier("フリーズスキン", 1.2);
 }
 
-        const stab =
-moveType.some(type =>
+      actualMovePower = power;
+        const isTerastal =
+    document.getElementById("terastal").checked;
+
+const hasStab = moveType.some(type =>
     attacker.character.attribute.includes(type)
-)
-? 1.5
-: 1;
-if (stab > 1) {
-    addModifier("属性一致", stab);
+);
+
+let stab;
+
+if (isTerastal) {
+    stab = hasStab ? 2 : 1.5;
+
+    addModifier(
+        hasStab ? "テラスタル（属性一致）" : "テラスタル",
+        stab
+    );
+
+} else {
+    stab = hasStab ? 1.5 : 1;
+
+    if (hasStab) {
+        addModifier("属性一致", stab);
+    }
 }
         
         // 貯水
@@ -1598,6 +1701,34 @@ if(
 addModifier("レインボーオーラ・ビッグバン", 2);
 }
 
+      
+ // ブラッドムーンルインレイ
+if (document.getElementById("bloodMoonRuinRay").checked) {
+    hitDamage *= 1.3;
+    addModifier("ブラッドムーンルインレイ", 1.3);
+}
+
+      
+// 暴走（攻撃）
+if (document.getElementById("berserkAttack").checked) {
+    hitDamage *= 1.2;
+    addModifier("暴走（攻撃）", 1.2);
+}
+
+// 暴走（防御）
+if (document.getElementById("berserkDefense").checked) {
+    hitDamage *= 1.2;
+    addModifier("暴走（防御）", 1.2);
+}
+      
+
+// シャドウバースト
+if (document.getElementById("shadowBurst").checked) {
+    hitDamage *= 2;
+    addModifier("シャドウバースト", 2);
+}
+
+
 // 守る
 if(document.getElementById("protectBreak").checked){
     hitDamage *= 0.25;
@@ -1649,6 +1780,28 @@ if (document.getElementById("absoluteLoyalty").checked) {
     addModifier("絶対的忠誠心", 1.5);
 }
 
+     
+ // 断罪の仮面
+if (selectedAttackAbility?.name === "断罪の仮面") {
+    const rank = Number(
+        document.getElementById("judgmentMaskRank").value
+    );
+
+    const multiplier = 1 + rank * 0.3;
+
+    console.log("断罪の仮面:", {
+        ability: selectedAttackAbility?.name,
+        rank,
+        multiplier
+    });
+
+    if (rank > 0) {
+        hitDamage *= multiplier;
+        addModifier("断罪の仮面", multiplier);
+    }
+}
+
+
         
         // マルチアーマー
 if (
@@ -1658,6 +1811,18 @@ if (
     hitDamage *= 0.5;
 }
 
+      // アルファストーン
+if (
+    selectedDefenseAbility?.name === "アルファストーン" &&
+    selectedMove.type?.some(type =>
+        ["炎", "水", "雷"].includes(type)
+    )
+) {
+    hitDamage *= 0.5;
+    addModifier("アルファストーン", 0.5);
+}
+
+      
 
 hitDamage = Math.floor(hitDamage * i / 100);
         // ここでマルチアーマー
@@ -2160,6 +2325,30 @@ document.getElementById("bigBang").onchange = () => {
     updateScreen();
 };
 
+
+ // ブラッドムーンルインレイ
+document.getElementById("bloodMoonRuinRay").onchange = () => {
+    updateScreen();
+};
+
+
+ // 暴走（攻撃）
+document.getElementById("berserkAttack").onchange = () => {
+    updateScreen();
+};
+
+// 暴走（防御）
+document.getElementById("berserkDefense").onchange = () => {
+    updateScreen();
+};
+
+
+// シャドウバースト
+document.getElementById("shadowBurst").onchange = () => {
+    updateScreen();
+};
+
+
 //連続技
 document.getElementById("hitCount").onchange = () => {
     updateScreen();
@@ -2212,9 +2401,6 @@ damageModifiers.map(m => `
 
     document.getElementById("detailMoveType").innerHTML =
         createTypeBadges(selectedMove.type);
-
-    document.getElementById("detailPower").textContent =
-        selectedMove.power;
         
         document.getElementById("detailDefender").textContent =
     defender.character.name;
@@ -2235,6 +2421,9 @@ document.getElementById("detailDefenderType").innerHTML =
     createTypeBadges(defender.character.attribute);
     
     const damages = calculateDamage();
+
+  document.getElementById("detailPower").textContent =
+    actualMovePower;
 
 document.getElementById("randomGrid").innerHTML =
 damages.map((d, i) => `
@@ -2279,6 +2468,16 @@ document.getElementById("absoluteLoyalty").onchange = () => {
 //祟り目
 document.getElementById("hexBoost").onchange = updateScreen;
 
+// アクロバット
+document.getElementById("acrobatics").onchange = () => {
+    updateScreen();
+};
+
+// アビスメテオ
+document.getElementById("abyssMeteor").onchange = () => {
+    updateScreen();
+};
+
 //デスオーラ
 document.getElementById("deathAura").onchange = () => {
     updateScreen();
@@ -2298,6 +2497,9 @@ document.getElementById("shingekiPower").onchange = updateScreen;
 
 //石像
 document.getElementById("stoneStatue").onchange = updateScreen;
+
+// テラスタル
+document.getElementById("terastal").onchange = updateScreen;
 
 
 function changeForm(side) {
@@ -2337,3 +2539,18 @@ document.getElementById("attackerFormButton").onclick = () => {
 document.getElementById("defenderFormButton").onclick = () => {
     changeForm("defense");
 };
+
+
+
+for (let i = 0; i <= 30; i++) {
+    const option = document.createElement("option");
+
+    option.value = i;
+    option.textContent = `${i * 30}%`;
+
+    judgmentMaskRank.appendChild(option);
+}
+
+judgmentMaskRank.value = "0";
+
+judgmentMaskRank.onchange = updateScreen;

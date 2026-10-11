@@ -989,7 +989,7 @@ const moves = [
     critical:0,
     contact:true,
     protect:true,
-    drain:0.25,
+    drain:50,
 
     effect:`
 50%の確率で相手を毒か炎上状態にする。

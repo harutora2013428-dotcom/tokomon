@@ -45,6 +45,7 @@ const abilities = [
     name:"雷の力",
     kana:"かみなりのちから",
     type:"専用",
+  damage: true,
     category:"攻撃",
     effect:`
 雷属性の技が大地属性の相手にも命中する。
