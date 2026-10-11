@@ -1517,11 +1517,22 @@ if(
     return new Array(16).fill(0);
 }
 
-const type =
+
+let type =
 getTypeEffectiveness(
     moveType,
     defender.character.attribute
 );
+
+// フリーズドライ（水属性に弱点を突く）
+if (
+    selectedMove.name === "フリーズドライ" &&
+    moveType.includes("氷") &&
+    defender.character.attribute.includes("水")
+) {
+    type *= 4;
+}
+
 
 // オーロラビジョン（月弱点追加）
 let finalType = type;
