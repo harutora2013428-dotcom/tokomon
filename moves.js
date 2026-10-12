@@ -1394,6 +1394,141 @@ HP5%以下で威力200。
 3回目は75%、4・5回目は50%の確率で攻撃する。
 `
 },
+
+  
+{
+    id:63,
+    kind:"通常",
+    name:"は？・改",
+    kana:"は？・かい",
+    type:["おとこ"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:8,
+    target:"味方単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+選択した味方の攻撃と特攻を1段階上昇させる。
+身代わりを貫通する。
+`
+},
+
+{
+    id:64,
+    kind:"通常",
+    name:"は？きもすぎだろ・改",
+    kana:"は？きもすぎだろ・かい",
+    type:["おとこ"],
+    category:"特殊",
+    power:80,
+    accuracy:100,
+    pp:15,
+    target:"2体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+ランダムな相手2体に攻撃する。
+身代わりを貫通する。
+`
+},
+
+{
+    id:65,
+    kind:"通常",
+    name:"は？うざすぎだろ・改",
+    kana:"は？うざすぎだろ・かい",
+    type:["おとこ"],
+    category:"特殊",
+    power:40,
+    accuracy:100,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+63%の確率で自分以外の味方の特攻が1段階上がる。
+身代わりを貫通する。
+`
+},
+
+{
+    id:66,
+    kind:"通常",
+    name:"は？ふざけんなよ・改",
+    kana:"は？ふざけんなよ・かい",
+    type:["おとこ"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:10,
+    target:"味方単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+選択した味方の防御を3段階上げる。
+身代わりを貫通する。
+`
+},
+
+{
+    id:67,
+    kind:"通常",
+    name:"はやぶ三連撃・改",
+    kana:"はやぶさんれんげき・かい",
+    type:["おとこ"],
+    category:"特殊",
+    power:15,
+    accuracy:100,
+    pp:15,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    hits:[3,3],
+    effect:`
+必ず3回連続で攻撃する。
+攻撃する度に30%の確率で特防を1段階下げる。
+`
+},
+
+{
+    id:68,
+    kind:"通常",
+    name:"は？コーラに決まってんだろ・改",
+    kana:"は？こーらにきまってんだろ・かい",
+    type:["おとこ"],
+    category:"特殊",
+    power:40,
+    accuracy:0,
+    pp:5,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+自身のHPを最大HPの63%分回復する。
+身代わりを貫通する。
+`
+},
+
 {
   id: 199,
   kind: "通常",
@@ -3638,6 +3773,27 @@ PPが0になると封じ状態は解除される。
 `
 },
 
+  {
+    id:2016,
+    kind:"奥義",
+    name:"アルティメットはやぶサンダー・改",
+    kana:"あるてぃめっとはやぶさんだー・かい",
+    type:["おとこ"],
+    category:"特殊",
+    power:150,
+    accuracy:100,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:`
+仲間全体のHPを186回復する。
+`
+},
+
 {
     id:3001,
     kind:"Z技",
@@ -3658,6 +3814,8 @@ PPが0になると封じ状態は解除される。
 使用者の攻撃、特攻を1段階上げる。
 `
 },
+
+  
 
 {
     id:3002,
@@ -3959,6 +4117,27 @@ drain:0,
     drain:0,
     effect:`
 相手の特性の影響を受けずに攻撃する。
+`
+},
+
+  {
+    id:3016,
+    kind:"Z技",
+    name:"スーパーコーラアタック・改",
+    kana:"すーぱーこーらあたっく・かい",
+    type:["おとこ"],
+    category:"特殊",
+    power:186,
+    accuracy:100,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:`
+使用者の特攻と特防を1段階上げる。
 `
 },
 
