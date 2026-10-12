@@ -3632,7 +3632,7 @@ id: 252,
   target: "相手単体",
   priority: 0,
   critical: 0,
-  contact: false,
+  contact: true,
   protect: true,
   drain: 0,
   effect: "相手を必ず混乱にする。"
