@@ -3782,7 +3782,7 @@ PPが0になると封じ状態は解除される。
     category:"特殊",
     power:150,
     accuracy:100,
-    pp:1,
+    pp:0,
     target:"相手単体",
     priority:0,
     critical:0,
