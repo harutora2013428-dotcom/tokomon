@@ -1515,7 +1515,7 @@ HP5%以下で威力200。
     type:["おとこ"],
     category:"特殊",
     power:40,
-    accuracy:0,
+    accuracy:100,
     pp:5,
     target:"相手単体",
     priority:0,
