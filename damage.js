@@ -61,6 +61,8 @@ let damageModifiers = [];
 
 let actualMovePower = 0;
 
+let baseMovePower = 0;
+
 // ==========================
 // 要素取得
 // ==========================
@@ -1361,6 +1363,7 @@ const judgementPower = document.getElementById("judgementPower");
 
 }
 
+      baseMovePower = power;
       actualMovePower = power;
 
       // アクロバット
@@ -1467,7 +1470,6 @@ if(
 addModifier("フリーズスキン", 1.2);
 }
 
-      actualMovePower = power;
         const isTerastal =
     document.getElementById("terastal").checked;
 
@@ -2434,7 +2436,7 @@ document.getElementById("detailDefenderType").innerHTML =
     const damages = calculateDamage();
 
   document.getElementById("detailPower").textContent =
-    actualMovePower;
+    baseMovePower;
 
 document.getElementById("randomGrid").innerHTML =
 damages.map((d, i) => `
