@@ -272,6 +272,18 @@ const abilities = [
 
   
 {
+    id:22,
+    name:"毒霧ノ闇",
+    kana:"どくきりのやみ",
+    type:"専用",
+    category:"防御",
+    effect:`
+直接攻撃をしてきた相手を毒状態にする。
+`
+},
+
+  
+{
     id:35,
     name:"鋼のおとこ",
     kana:"はがねのおとこ",

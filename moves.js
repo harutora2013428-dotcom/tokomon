@@ -1529,6 +1529,78 @@ HP5%以下で威力200。
 `
 },
 
+  {
+    id:73,
+    kind:"通常",
+    name:"零式神速斬突・毒",
+    kana:"ぜろしきしんそくざんとつ・どく",
+    type:["毒"],
+    category:"物理",
+    power:20,
+    accuracy:100,
+    pp:30,
+    target:"相手単体",
+    priority:1,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:"50%の確率で自身の攻撃が1段階上がる。"
+},
+{
+    id:74,
+    kind:"通常",
+    name:"極大炎手裏剣・零",
+    kana:"ごくだいほのおしゅりけん・ぜろ",
+    type:["炎"],
+    category:"物理",
+    power:60,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:"40%の確率で相手を炎上状態にする。既に炎上状態なら、相手の最大HPの1/8のダメージを追加で与える。"
+},
+{
+    id:75,
+    kind:"通常",
+    name:"改・毒霧之幻",
+    kana:"かい・どくきりのまぼろし",
+    type:["毒"],
+    category:"変化",
+    power:0,
+    accuracy:90,
+    pp:20,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:"相手を毒状態にし、1ターンの間、変化技を封じる。"
+},
+{
+    id:76,
+    kind:"通常",
+    name:"改・神出斬撃・聖",
+    kana:"かい・しんしゅつざんげき・せい",
+    type:["聖"],
+    category:"物理",
+    power:80,
+    accuracy:101,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:"10%の確率で相手を暗闇状態にする。"
+},
   
 {
     id:125,
@@ -3927,6 +3999,24 @@ PPが0になると封じ状態は解除される。
 `
 },
 
+  {
+    id:2018,
+    kind:"奥義",
+    name:"改・地聖炎毒苦無",
+    kana:"かい・ちせいえんどくくない",
+    type:["大地"],
+    category:"物理",
+    power:180,
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:"相手を必ずスタン、暗闇、炎上、猛毒のいずれかの状態にする。"
+},
   
 {
     id:2031,
@@ -4296,7 +4386,25 @@ drain:0,
 使用者の特攻と特防を1段階上げる。
 `
 },
-
+  
+{
+    id:3018,
+    kind:"Z技",
+    name:"冥界紫毒苦無斬撃・零",
+    kana:"めいかいしどくくないざんげき・ぜろ",
+    type:["毒"],
+    category:"物理",
+    power:110,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:100,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:"必ず会心になる。相手を必ず猛毒状態にする。"
+},
   
 {
     id:3031,
