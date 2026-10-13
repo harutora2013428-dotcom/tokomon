@@ -1529,6 +1529,139 @@ HP5%以下で威力200。
 `
 },
 
+  
+{
+    id:125,
+    kind:"通常",
+    name:"は？・滅",
+    kana:"は？・めつ",
+    type:["おとこ"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:8,
+    target:"味方単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+選択した味方の防御と特防を1段階上昇させる。
+身代わりを貫通する。
+`
+},
+
+{
+    id:126,
+    kind:"通常",
+    name:"は？きもすぎだろ・滅",
+    kana:"は？きもすぎだろ・めつ",
+    type:["おとこ"],
+    category:"物理",
+    power:100,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+身代わりを貫通する。
+`
+},
+
+{
+    id:127,
+    kind:"通常",
+    name:"は？うざすぎだろ・滅",
+    kana:"は？うざすぎだろ・めつ",
+    type:["おとこ"],
+    category:"物理",
+    power:60,
+    accuracy:100,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+63%の確率で自身の防御が2段階上昇する。
+身代わりを貫通する。
+`
+},
+
+{
+    id:128,
+    kind:"通常",
+    name:"は？ふざけんなよ・滅",
+    kana:"は？ふざけんなよ・めつ",
+    type:["おとこ"],
+    category:"変化",
+    power:0,
+    accuracy:100,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:`
+相手の攻撃を3段階下げる。
+身代わりを貫通する。
+`
+},
+
+{
+    id:129,
+    kind:"通常",
+    name:"はやぶ三連撃・滅",
+    kana:"はやぶさんれんげき・めつ",
+    type:["おとこ"],
+    category:"物理",
+    power:20,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    hits:[1,3],
+    effect:`
+相手単体に3回連続で攻撃する。
+攻撃する度に30%の確率で自身の防御が1段階上昇する。
+`
+},
+
+{
+    id:130,
+    kind:"通常",
+    name:"は？ポテトに決まってんだろ・滅",
+    kana:"は？ぽてとにきまってんだろ・めつ",
+    type:["おとこ"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:1,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:null,
+    drain:0,
+    effect:`
+自身の最大HPの88%分回復する。
+`
+},
+
+
 {
   id: 199,
   kind: "通常",
@@ -3794,6 +3927,29 @@ PPが0になると封じ状態は解除される。
 `
 },
 
+  
+{
+    id:2031,
+    kind:"奥義",
+    name:"アルティメットはやぶサンダー・滅",
+    kana:"あるてぃめっとはやぶさんだー・めつ",
+    type:["おとこ"],
+    category:"物理",
+    power:150,
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:`
+自身の防御と特防が1段階上昇する。
+`
+}
+,
+
 {
     id:3001,
     kind:"Z技",
@@ -4140,6 +4296,29 @@ drain:0,
 使用者の特攻と特防を1段階上げる。
 `
 },
+
+  
+{
+    id:3031,
+    kind:"Z技",
+    name:"スーパーポテトアタック・滅",
+    kana:"すーぱーぽてとあたっく・めつ",
+    type:["おとこ"],
+    category:"物理",
+    power:186,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:`
+使用者の攻撃と防御が1段階上昇する。
+`
+},
+
 
 {
   id: 3501,
