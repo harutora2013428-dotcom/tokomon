@@ -1500,7 +1500,7 @@ HP5%以下で威力200。
     contact:false,
     protect:true,
     drain:0,
-    hits:[3,3],
+    hits:[1,3],
     effect:`
 必ず3回連続で攻撃する。
 攻撃する度に30%の確率で特防を1段階下げる。
