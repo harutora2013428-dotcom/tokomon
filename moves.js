@@ -233,9 +233,9 @@ const moves = [
 {
   id: 12,
   kind: "通常",
-  name: "月手裏剣",
-  kana: "つきしゅりけん",
-  type: ["月"],
+  name: "炎手裏剣",
+  kana: "ほのおしゅりけん",
+  type: ["炎"],
   category: "特殊",
   power: 25,
   hits: [1, 5],
@@ -270,20 +270,20 @@ const moves = [
 {
   id: 14,
   kind: "通常",
-  name: "神出斬撃・闇",
-  kana: "しんしゅつざんげき・やみ",
-  type: ["闇"],
+  name: "神出斬撃・月",
+  kana: "しんしゅつざんげき・つき",
+  type: ["月"],
   category: "物理",
   power: 80,
   accuracy: 101,
   pp: 15,
   target: "相手単体",
   priority: 0,
-  critical: 0,
+  critical: 10,
   contact: true,
   protect: true,
   drain: 0,
-  effect: "10%の確率で相手を暗闇状態にする。"
+  effect: "10%の確率で会心になる。"
 },
 
 {
@@ -1601,6 +1601,81 @@ HP5%以下で威力200。
     drain:0,
     effect:"10%の確率で相手を暗闇状態にする。"
 },
+
+  
+{
+    id:77,
+    kind:"通常",
+    name:"光速・シャドウビーム・零",
+    kana:"こうそく・しゃどうびーむ・ぜろ",
+    type:["虹"],
+    category:"特殊",
+    power:80,
+    accuracy:101,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:"ヴォイドメーターが4以上なら闇属性で攻撃する。闇属性で攻撃した場合は必ず会心になり、ヴォイドメーターを2消費する。その後、ヴォイドメーターに1追加する。"
+},
+{
+    id:78,
+    kind:"通常",
+    name:"レインボーオーラ・改",
+    kana:"れいんぼーおーら・かい",
+    type:["虹"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:20,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:"次に使用する虹技の威力を2倍にする。ヴォイドメーターが3以上なら3倍にする。使用時にヴォイドメーターを1追加する。威力が3倍になった場合、ヴォイドメーターを2消費する。"
+},
+{
+    id:79,
+    kind:"通常",
+    name:"ナイトハート・改",
+    kana:"ないとはーと・かい",
+    type:["闇"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:15,
+    target:"味方全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:"味方全員のHPを、最大HP÷(8÷ヴォイドメーターの数)だけ回復し、暗闇状態を治す。ヴォイドメーターを3消費する。"
+},
+{
+    id:80,
+    kind:"通常",
+    name:"零式・レインヴォイドアビス",
+    kana:"ぜろしき・れいんゔぉいどあびす",
+    type:["虹","闇"],
+    category:"特殊",
+    power:60,
+    accuracy:100,
+    pp:10,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:"攻撃前のヴォイドメーターの数×10だけ威力が上昇する。攻撃時にヴォイドメーターをすべて消費する。この攻撃で100ダメージ以上与えた場合、ヴォイドメーターに3追加する。"
+},
+
   
 {
     id:125,
@@ -1731,6 +1806,80 @@ HP5%以下で威力200。
     effect:`
 自身の最大HPの88%分回復する。
 `
+},
+
+  
+{
+    id:139,
+    kind:"通常",
+    name:"光速・塗血斬・滅",
+    kana:"こうそく・とけつざん・めつ",
+    type:["虹"],
+    category:"物理",
+    power:60,
+    accuracy:101,
+    pp:10,
+    target:"相手単体",
+    priority:0,
+    critical:30,
+    contact:false,
+    protect:true,
+    drain:0,
+    effect:"30%の確率で会心になる。会心になった場合、相手を出血状態にする。"
+},
+{
+    id:140,
+    kind:"通常",
+    name:"七色光衣・終",
+    kana:"なないろこうい・しゅう",
+    type:["虹"],
+    category:"変化",
+    power:0,
+    accuracy:0,
+    pp:20,
+    target:"自分",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:"この技では形態変化しない。通常形態または七色虹翼形態では、次に使う虹技の威力が2.5倍になる。血剣悪魔形態では、次に使うブラッド技の威力が2.5倍になる。"
+},
+{
+    id:141,
+    kind:"通常",
+    name:"血虹魔剣・滅",
+    kana:"けっこうまけん・めつ",
+    type:["ブラッド"],
+    category:"物理",
+    power:40,
+    accuracy:100,
+    pp:15,
+    target:"相手単体",
+    priority:0,
+    critical:15,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:"70%の確率で相手の防御を1段階下げる。15%の確率で会心になる。"
+},
+{
+    id:142,
+    kind:"通常",
+    name:"終式・破滅虹血剣",
+    kana:"しゅうしき・はめつこうけつけん",
+    type:["虹","ブラッド"],
+    category:"物理",
+    power:20,
+    accuracy:100,
+    pp:10,
+    target:"相手全体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:true,
+    drain:0,
+    effect:"この技では形態変化しない。通常形態では、自身の能力ランク上昇1つにつき威力が15上昇する。七色虹翼形態では威力60になり、30%の確率で各相手を出血状態にする。血剣悪魔形態では威力100になり、相手に与えたダメージの平均の50%分の反動を受ける。"
 },
 
 
@@ -4018,6 +4167,27 @@ PPが0になると封じ状態は解除される。
     drain:0,
     effect:"相手を必ずスタン、暗闇、炎上、猛毒のいずれかの状態にする。"
 },
+
+  
+{
+    id:2019,
+    kind:"奥義",
+    name:"ヴォイドフォース・ブラックホール・零",
+    kana:"ゔぉいどふぉーす・ぶらっくほーる・ぜろ",
+    type:["闇"],
+    category:"特殊",
+    power:100,
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:"守りを貫通する。ヴォイドメーターの数×10だけ威力が上昇し、ヴォイドメーターをすべて消費する。ヴォイドメーターが4以上なら相手を1ターンの間行動不能にする。行動不能にした場合、ヴォイドメーターに2追加する。"
+},
+
   
 {
     id:2031,
@@ -4038,9 +4208,29 @@ PPが0になると封じ状態は解除される。
     effect:`
 自身の防御と特防が1段階上昇する。
 `
-}
-,
+},
 
+
+{
+    id:2034,
+    kind:"奥義",
+    name:"七色光衣・虹血魔断・終",
+    kana:"なないろこうい・こうけつまだん・しゅう",
+    type:["虹"],
+    category:"物理",
+    power:150,
+    accuracy:100,
+    pp:0,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:"相手の防御を1段階下げる。守りを貫通する。"
+},
+
+  
 {
     id:3001,
     kind:"Z技",
@@ -4406,6 +4596,27 @@ drain:0,
     drain:0,
     effect:"必ず会心になる。相手を必ず猛毒状態にする。"
 },
+
+  
+{
+    id:3019,
+    kind:"Z技",
+    name:"レインヴォイドヘルギャラクシー・零",
+    kana:"れいんゔぉいどへるぎゃらくしー・ぜろ",
+    type:["虹","闇"],
+    category:"特殊",
+    power:150,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:false,
+    protect:false,
+    drain:0,
+    effect:"使用後、自身の特攻が1段階上昇し、ヴォイドメーターを5にする。"
+},
+
   
 {
     id:3031,
@@ -4426,6 +4637,26 @@ drain:0,
     effect:`
 使用者の攻撃と防御が1段階上昇する。
 `
+},
+
+  
+{
+    id:3034,
+    kind:"Z技",
+    name:"終式・滅亡魔血七虹斬",
+    kana:"しゅうしき・めつぼうまけつしちこうざん",
+    type:["虹","ブラッド"],
+    category:"物理",
+    power:180,
+    accuracy:101,
+    pp:1,
+    target:"相手単体",
+    priority:0,
+    critical:0,
+    contact:true,
+    protect:false,
+    drain:0,
+    effect:"この技では形態変化しない。この攻撃で相手を倒した場合、自身の攻撃が1段階上がる。"
 },
 
 

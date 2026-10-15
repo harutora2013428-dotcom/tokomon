@@ -366,7 +366,9 @@ function displayBasicInfo(c, relation){
 return `
 
 <div class="status-title">
-    <h2>${c.name}</h2>
+    <h2>
+    ${c.name.replace(/\((.*?)\)/g, '<span class="form-name">($1)</span>')}
+</h2>
 
     ${
         c.forms && c.forms.length > 0
@@ -433,6 +435,63 @@ relation.immunity.length
 `;
 
 }
+
+
+
+function updateBasicInfo(currentForm, c){
+
+    const info = detail.querySelector(".status-title").parentElement;
+
+    const relation = getTypeRelations(
+        currentForm.attribute || c.attribute
+    );
+
+    const html = displayBasicInfo(
+        {
+            ...c,
+            name: currentForm.name || c.name,
+            attribute: currentForm.attribute || c.attribute,
+            forms: c.forms
+        },
+        relation
+    );
+
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+
+    // 属性・No.の表示を更新（タイトルとボタンは残す）
+    const oldParagraphs = info.querySelectorAll("p");
+    const newParagraphs = temp.querySelectorAll("p");
+
+    oldParagraphs.forEach((p, i) => {
+        if(newParagraphs[i]){
+            p.replaceWith(newParagraphs[i]);
+        }
+    });
+
+    // 弱点・耐性・無効を更新
+    ["弱点", "耐性", "無効"].forEach(label => {
+
+        const oldHeading = [...info.querySelectorAll("h3")]
+            .find(h => h.textContent.trim() === label);
+
+        const newHeading = [...temp.querySelectorAll("h3")]
+            .find(h => h.textContent.trim() === label);
+
+        if(oldHeading && newHeading){
+            const oldList = oldHeading.nextElementSibling;
+            const newList = newHeading.nextElementSibling;
+
+            oldHeading.textContent = label;
+
+            if(oldList && newList){
+                oldList.replaceWith(newList);
+            }
+        }
+    });
+}
+
+
 
 let showBaseStats = false;
 
@@ -663,6 +722,7 @@ oldStatus.outerHTML = displayStatus(currentForm);
 
             currentMoveList = [...allMoves];
 
+          updateBasicInfo(c, c);
         }
 
         // =====================
@@ -673,11 +733,19 @@ oldStatus.outerHTML = displayStatus(currentForm);
 
             const currentForm = c.forms[formIndex];
 
+         updateBasicInfo(currentForm, c);
+
             const title = detail.querySelector(".status-title h2");
 
-            if (title) {
-                title.textContent = currentForm.name;
-            }
+            
+if (title) {
+    const name = currentForm.name || c.name;
+    title.innerHTML = name.replace(
+        /（(.*?)）|\((.*?)\)/g,
+        '<span class="form-name">($1$2)</span>'
+    );
+}
+
 
             const status = detail.querySelector(".status-section");
 
@@ -685,7 +753,9 @@ oldStatus.outerHTML = displayStatus(currentForm);
                 status.outerHTML = displayStatus(currentForm);
             }
 
-            const formMoves = currentForm.moves
+            
+const formMoves = (currentForm.moves || [])
+
                 .map(idOrName => {
 
                     if (typeof idOrName === "number") {
@@ -1394,6 +1464,7 @@ characters.forEach(c => {
         });
     }
 
+    
     // Z技
     if (
         move.kind === "Z技" &&
@@ -1404,7 +1475,17 @@ characters.forEach(c => {
             formIndex: -1,
             formName: ""
         });
+
+        // 形態ごとにもZ技の習得者として表示
+        (c.forms || []).forEach((form, formIndex) => {
+            users.push({
+                character: c,
+                formIndex: formIndex,
+                formName: form.name
+            });
+        });
     }
+
 
     // 変化形態が覚える技・奥義
     (c.forms || []).forEach((form, formIndex) => {

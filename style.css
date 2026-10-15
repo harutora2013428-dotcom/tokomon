@@ -3216,3 +3216,9 @@ button:active{
 .formChangeButton:active {
     background-color: #2468d8;
 }
+
+
+.form-name {
+    font-size: 0.75em;
+    font-weight: normal;
+}

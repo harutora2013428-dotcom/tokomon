@@ -44,7 +44,9 @@ function getCurrentFormData(side) {
         return {
             ...character,
             ...character.forms[side.formIndex],
-            attribute: character.attribute,
+            attribute:
+    character.forms[side.formIndex].attribute
+    || character.attribute,
             forms: character.forms
         };
     }
@@ -906,7 +908,7 @@ if(document.getElementById("stealthRock").checked){
     const type =
         getTypeEffectiveness(
             "大地",
-            defender.character.attribute
+            defForm.attribute
         );
 
     currentHp -= Math.floor(hp / 8 * type);
@@ -1159,6 +1161,9 @@ function getRankMultiplier(rank){
 
 function calculateDamage(){
 
+  const atkForm = getCurrentFormData(attacker);
+const defForm = getCurrentFormData(defender);
+
     try{
 
     if(!selectedMove){
@@ -1189,7 +1194,7 @@ if(document.getElementById("stealthRock").checked){
     const type =
         getTypeEffectiveness(
             "大地",
-            defender.character.attribute
+            defForm.attribute
         );
 
     currentHp -= Math.floor(hp / 8 * type);
@@ -1474,7 +1479,7 @@ addModifier("フリーズスキン", 1.2);
     document.getElementById("terastal").checked;
 
 const hasStab = moveType.some(type =>
-    attacker.character.attribute.includes(type)
+    atkForm.attribute.includes(type)
 );
 
 let stab;
@@ -1519,18 +1524,17 @@ if(
     return new Array(16).fill(0);
 }
 
-
 let type =
-getTypeEffectiveness(
-    moveType,
-    defender.character.attribute
-);
+    getTypeEffectiveness(
+        moveType,
+        defForm.attribute
+    );
 
 // フリーズドライ（水属性に弱点を突く）
 if (
     selectedMove.name === "フリーズドライ" &&
     moveType.includes("氷") &&
-    defender.character.attribute.includes("水")
+    defForm.attribute.includes("水")
 ) {
     type *= 4;
 }
@@ -1639,11 +1643,14 @@ if (
     addModifier("デスオーラ", 1.33);
 }
 
+
 if (selectedMove.name === "ヘルファイアブレード") {
+
+    const defForm = getCurrentFormData(defender);
 
     const hasFireResistance =
         defender.character.resistance?.includes("炎") ||
-        getTypeEffectiveness("炎", defender.character.attribute) < 1;
+        getTypeEffectiveness("炎", defForm.attribute) < 1;
 
     if (hasFireResistance) {
         hitDamage *= 2;
@@ -1651,6 +1658,7 @@ if (selectedMove.name === "ヘルファイアブレード") {
     }
 
 }
+
 
 // 範囲攻撃補正
 if(battleType === "double"){
@@ -2410,7 +2418,7 @@ damageModifiers.map(m => `
         attackStatValue.textContent;
 
     document.getElementById("detailType").innerHTML =
-        createTypeBadges(attacker.character.attribute);
+    createTypeBadges(getCurrentFormData(attacker).attribute);
 
     document.getElementById("detailMoveType").innerHTML =
         createTypeBadges(selectedMove.type);
@@ -2431,7 +2439,7 @@ document.getElementById("detailDefense").textContent =
     defenseStatValue.textContent;
 
 document.getElementById("detailDefenderType").innerHTML =
-    createTypeBadges(defender.character.attribute);
+    createTypeBadges(getCurrentFormData(defender).attribute);
     
     const damages = calculateDamage();
 
