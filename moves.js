@@ -828,7 +828,7 @@ const moves = [
     type:["龍"],
     category:"変化",
     power:0,
-    accuracy:101,
+    accuracy:0,
     pp:5,
     target:"自分",
     priority:0,
@@ -1530,6 +1530,79 @@ HP5%以下で威力200。
 },
 
   {
+    id: 69,
+    kind: "通常",
+    name: "光壁・改",
+    kana: "こうへき・かい",
+    type: ["聖"],
+    category: "変化",
+    power: 0,
+    accuracy: 0,
+    pp: 15,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: null,
+    drain: 0,
+    effect: "対象が直前に使用した技をもう一度使わせる。"
+},
+{
+    id: 70,
+    kind: "通常",
+    name: "シャイニングブレイク・改",
+    kana: "しゃいにんぐぶれいく・かい",
+    type: ["聖"],
+    category: "物理",
+    power: 90,
+    accuracy: 100,
+    pp: 15,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: true,
+    protect: true,
+    drain: 0,
+    effect: "10%の確率で相手を暗闇状態にする。"
+},
+{
+    id: 71,
+    kind: "通常",
+    name: "オーバーレディアント・改",
+    kana: "おーばーれでぃあんと・かい",
+    type: ["聖"],
+    category: "物理",
+    power: 110,
+    accuracy: 70,
+    pp: 10,
+    target: "相手全体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: true,
+    drain: 0,
+    effect: "通常攻撃。"
+},
+{
+    id: 72,
+    kind: "通常",
+    name: "破滅の災い・改",
+    kana: "はめつのわざわい・かい",
+    type: ["聖"],
+    category: "変化",
+    power: 0,
+    accuracy: 0,
+    pp: 10,
+    target: "自分",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: null,
+    drain: 0,
+    effect: "次に使う聖属性の技の威力が2.5倍になる。"
+},
+
+  {
     id:73,
     kind:"通常",
     name:"零式神速斬突・毒",
@@ -1676,6 +1749,92 @@ HP5%以下で威力200。
     effect:"攻撃前のヴォイドメーターの数×10だけ威力が上昇する。攻撃時にヴォイドメーターをすべて消費する。この攻撃で100ダメージ以上与えた場合、ヴォイドメーターに3追加する。"
 },
 
+  {
+    id: 85,
+    kind: "通常",
+    name: "青龍王・零",
+    kana: "せぎごーど・ぜろ",
+    type: ["ブラッド"],
+    category: "特殊",
+    power: 20,
+    accuracy: 100,
+    pp: 10,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: true,
+    drain: 0,
+    effect: `
+相手を必ず暗闇と混乱にする。
+`
+},
+
+{
+    id: 86,
+    kind: "通常",
+    name: "零式・極嵐牢獄",
+    kana: "ぜろしき・ごくらんろうごく",
+    type: ["風"],
+    category: "変化",
+    power: 0,
+    accuracy: 90,
+    pp: 5,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: true,
+    drain: 0,
+    effect: `
+相手を交代できなくし、混乱状態にする。
+ただし、ゴースト属性のキャラクターは交代できる。
+`
+},
+
+{
+    id: 87,
+    kind: "通常",
+    name: "鮮血凶風加護・零",
+    kana: "せんけつきょうふうかご・ぜろ",
+    type: ["ブラッド"],
+    category: "変化",
+    power: 0,
+    accuracy: 0,
+    pp: 10,
+    target: "味方単体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: true,
+    drain: 0,
+    effect: `
+選択した味方の技威力を2倍にする。
+その味方を混乱と出血状態にする。
+`
+},
+
+{
+    id: 88,
+    kind: "通常",
+    name: "旋風破滅光線・零",
+    kana: "せんぷうはめつこうせん・ぜろ",
+    type: ["風"],
+    category: "特殊",
+    power: 300,
+    accuracy: 0,
+    pp: 5,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: true,
+    drain: 0,
+    effect: `
+相手を必ず混乱と出血状態にする。
+次のターン、自身は行動不能になる。
+`
+},
   
 {
     id:125,
@@ -4150,6 +4309,26 @@ PPが0になると封じ状態は解除される。
 },
 
   {
+    id: 2017,
+    kind: "奥義",
+    name: "瞬間回光撃・改",
+    kana: "しゅんかんかいこうげき・かい",
+    type: ["聖"],
+    category: "物理",
+    power: 40,
+    accuracy: 100,
+    pp: 0,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: true,
+    protect: false,
+    drain: 0,
+    hits: [1,4],
+    effect: "相手単体に4回連続で攻撃する。攻撃する度に相手を60%の確率で暗闇状態にする。既に暗闇状態なら30ダメージを与える。"
+},
+
+  {
     id:2018,
     kind:"奥義",
     name:"改・地聖炎毒苦無",
@@ -4185,9 +4364,29 @@ PPが0になると封じ状態は解除される。
     contact:false,
     protect:false,
     drain:0,
-    effect:"守りを貫通する。ヴォイドメーターの数×10だけ威力が上昇し、ヴォイドメーターをすべて消費する。ヴォイドメーターが4以上なら相手を2ターンの間行動不能にする。行動不能にした場合、ヴォイドメーターに2追加する。"
+    effect:"ヴォイドメーターの数×10だけ威力が上昇し、ヴォイドメーターをすべて消費する。ヴォイドメーターが4以上なら相手を2ターンの間行動不能にする。行動不能にした場合、ヴォイドメーターに2追加する。"
 },
 
+{
+    id: 2021,
+    kind: "奥義",
+    name: "狂天嵐ノ悪夢・改",
+    kana: "きょうてんらんのあくむ・かい",
+    type: ["風"],
+    category: "特殊",
+    power: 100,
+    accuracy: 101,
+    pp: 0,
+    target: "相手全体",
+    priority: 0,
+    critical: 0,
+    contact: false,
+    protect: false,
+    drain: 0,
+    effect: `
+相手全員の特防を1段階下げ、必ず出血させる。
+`
+},
   
 {
     id:2031,
@@ -4577,6 +4776,25 @@ drain:0,
 使用者の特攻と特防を1段階上げる。
 `
 },
+
+  {
+    id: 3017,
+    kind: "Z技",
+    name: "第零式・極閃覇皇撃",
+    kana: "だいぜろしき・きょくせんはおうげき",
+    type: ["聖"],
+    category: "物理",
+    power: 170,
+    accuracy: 101,
+    pp: 1,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: true,
+    protect: false,
+    drain: 0,
+    effect: "自身の攻撃を1段階上げる。"
+},
   
 {
     id:3018,
@@ -4617,6 +4835,27 @@ drain:0,
     effect:"使用後、自身の特攻が1段階上昇し、ヴォイドメーターを5にする。"
 },
 
+  {
+    id: 3021,
+    kind: "Z技",
+    name: "鮮血月蝕終焉斬・零",
+    kana: "せんけつげっしょくしゅうえんざん・ぜろ",
+    type: ["ブラッド"],
+    category: "物理",
+    power: 140,
+    accuracy: 101,
+    pp: 1,
+    target: "相手単体",
+    priority: 0,
+    critical: 0,
+    contact: true,
+    protect: false,
+    drain: 0,
+    effect: `
+相手の出血している数に応じて威力が上がる。
+出血している相手1体につき、威力が20上がる。
+`
+},
   
 {
     id:3031,
