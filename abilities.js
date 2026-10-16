@@ -129,7 +129,7 @@ const abilities = [
     id:11,
 
     name:"飛竜乗雲",
-    kana:"ひりゅうじょううん",
+    kana:"ひりょうじょううん",
     type:"専用",
     category:"補助",
 
