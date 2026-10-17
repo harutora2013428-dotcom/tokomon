@@ -314,19 +314,74 @@ button:hover{
     text-shadow:0 0 6px rgba(220,200,255,.8);
 }
 
-.attribute-虹{
-    background:linear-gradient(135deg,
-        #ff1744 0%,
-        #ff9100 18%,
-        #ffee58 34%,
-        #00e676 50%,
-        #00b0ff 66%,
-        #536dfe 82%,
-        #d500f9 100%);
-    color:#fff;
-    border:2px solid #fff;
-    text-shadow:0 0 8px rgba(255,255,255,1);
+
+
+/* 虹属性：光を包む外側 */
+.attribute-虹-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    isolation: isolate;
+    vertical-align: middle;
+    margin: 0 3px;
 }
+
+/* 虹色の光：タグ本体の後ろ */
+.attribute-虹-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 22px;
+
+    background: conic-gradient(
+        #ff1744,
+        #ff9100,
+        #ffee58,
+        #00e676,
+        #00b0ff,
+        #536dfe,
+        #d500f9,
+        #ff1744
+    );
+
+    filter: blur(8px);
+    opacity: 0.9;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 虹属性：タグ本体を光より手前に */
+.attribute-虹-wrap > .attribute-虹 {
+    position: relative;
+    z-index: 1;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 3px 6px;
+border: 1px solid #fff;
+    border-radius: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #ff1744,
+        #ff9100,
+        #ffee58,
+        #00e676,
+        #00b0ff,
+        #536dfe,
+        #d500f9
+    );
+
+    color: #fff !important;
+    text-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    box-shadow: none;
+}
+
 
 
 /* 幻属性：巨大な黒い太陽 */
@@ -339,7 +394,7 @@ button:hover{
     
 background:
     radial-gradient(
-        ellipse 75% 72% at center,
+        ellipse 62% 65% at center,
         #000000 0%,
         #000000 48%,
         #020106 53%,

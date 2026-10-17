@@ -36,16 +36,23 @@ const allTypes = [
 ];
 
 // 属性バッジ作成
-function createTypeBadges(types){
+function createTypeBadges(types) {
 
-    if(!Array.isArray(types)){
+    if (!Array.isArray(types)) {
         types = [types];
     }
 
-    return types.map(type =>
-        `<span class="attribute attribute-${type}">${type}</span>`
-    ).join(" ");
+    return types.map(type => {
+        if (type === "虹") {
+            return `
+                <span class="attribute-虹-wrap">
+                    <span class="attribute attribute-虹">虹</span>
+                </span>
+            `;
+        }
 
+        return `<span class="attribute attribute-${type}">${type}</span>`;
+    }).join(" ");
 }
 
 // 属性相性取得
