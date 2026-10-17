@@ -4,7 +4,7 @@
   "short_name": "とこモン攻略",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#d32f2f",
   "icons": [
