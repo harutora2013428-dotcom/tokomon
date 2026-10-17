@@ -1,7 +1,7 @@
 
 {
-  "name": "とこモンバトル攻略",
-  "short_name": "とこモン攻略",
+  "name": "とこモンバトル",
+  "short_name": "とこモンバトル",
   "start_url": "./index.html",
   "scope": "./",
   "display": "fullscreen",
