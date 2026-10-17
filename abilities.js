@@ -303,6 +303,16 @@ const abilities = [
 },
 
   {
+    id: 24,
+    name: "アイアンアーマー",
+    kana: "あいあんあーまー",
+    type: "専用",
+    damage: true,
+    category: "防御",
+    effect: "自身の受けるダメージが0.8倍になる。"
+},
+
+  {
     id: 25,
     name: "狂嵐悪魔",
     kana: "きょうらんあくま",
