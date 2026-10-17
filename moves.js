@@ -97,7 +97,7 @@ const moves = [
     pp:15,
     target:"相手単体",
     priority:0,
-    critical:0,
+    critical:50,
     contact:true,
     protect:true,
     drain:0,
