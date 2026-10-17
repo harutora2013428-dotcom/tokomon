@@ -404,6 +404,14 @@ ${
 relation.weakness.length
 ? relation.weakness.map(w=>{
 const parts=w.split(" ");
+if (parts[0] === "虹") {
+    return `
+        <span class="attribute-虹-wrap">
+            <span class="attribute attribute-虹">${parts[0]} ${parts[1]}</span>
+        </span>
+    `;
+}
+
 return `<span class="attribute attribute-${parts[0]}">${parts[0]} ${parts[1]}</span>`;
 }).join("")
 : "なし"
@@ -419,6 +427,14 @@ ${
 relation.resistance.length
 ? relation.resistance.map(r=>{
 const parts=r.split(" ");
+if (parts[0] === "虹") {
+    return `
+        <span class="attribute-虹-wrap">
+            <span class="attribute attribute-虹">${parts[0]} ${parts[1]}</span>
+        </span>
+    `;
+}
+
 return `<span class="attribute attribute-${parts[0]}">${parts[0]} ${parts[1]}</span>`;
 }).join("")
 : "なし"
@@ -433,7 +449,9 @@ return `<span class="attribute attribute-${parts[0]}">${parts[0]} ${parts[1]}</s
 ${
 relation.immunity.length
 ? relation.immunity.map(i=>
-`<span class="attribute attribute-${i}">${i}</span>`
+i === "虹"
+    ? `<span class="attribute-虹-wrap"><span class="attribute attribute-虹">${i}</span></span>`
+    : `<span class="attribute attribute-${i}">${i}</span>`
 ).join("")
 : "なし"
 }
