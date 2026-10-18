@@ -35,25 +35,22 @@ const allTypes = [
     "幻",
 ];
 
-// 属性バッジ作成
-function createTypeBadges(types) {
 
+ // 属性バッジ作成
+function createTypeBadges(types) {
     if (!Array.isArray(types)) {
         types = [types];
     }
 
     return types.map(type => {
         if (type === "虹") {
-            return `
-                <span class="attribute-虹-wrap">
-                    <span class="attribute attribute-虹">虹</span>
-                </span>
-            `;
+            return `<span class="attribute-虹-wrap"><span class="attribute attribute-虹">虹</span></span>`;
         }
 
         return `<span class="attribute attribute-${type}">${type}</span>`;
     }).join(" ");
 }
+
 
 // 属性相性取得
 function getTypeRate(moveType, defendTypes){
@@ -405,11 +402,7 @@ relation.weakness.length
 ? relation.weakness.map(w=>{
 const parts=w.split(" ");
 if (parts[0] === "虹") {
-    return `
-        <span class="attribute-虹-wrap">
-            <span class="attribute attribute-虹">${parts[0]} ${parts[1]}</span>
-        </span>
-    `;
+    return `<span class="attribute-虹-wrap"><span class="attribute attribute-虹">${parts[0]} ${parts[1]}</span></span>`;
 }
 
 return `<span class="attribute attribute-${parts[0]}">${parts[0]} ${parts[1]}</span>`;
@@ -428,11 +421,7 @@ relation.resistance.length
 ? relation.resistance.map(r=>{
 const parts=r.split(" ");
 if (parts[0] === "虹") {
-    return `
-        <span class="attribute-虹-wrap">
-            <span class="attribute attribute-虹">${parts[0]} ${parts[1]}</span>
-        </span>
-    `;
+    return `<span class="attribute-虹-wrap"><span class="attribute attribute-虹">${parts[0]} ${parts[1]}</span></span>`;
 }
 
 return `<span class="attribute attribute-${parts[0]}">${parts[0]} ${parts[1]}</span>`;
