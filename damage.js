@@ -765,19 +765,36 @@ card.innerHTML = `
         card.onclick = ()=>{
 
             
-if(selectMode === "attacker"){
+if (selectMode === "attacker") {
     attacker.character = character;
     attacker.formIndex = -1;
 
-    document.getElementById("attackerFormButton").style.display =
+    const formButton =
+        document.getElementById("attackerFormButton");
+
+    formButton.textContent =
+        character.name.match(/[（(].*?[）)]/)
+            ? character.name
+            : "通常形態";
+
+    formButton.style.display =
         character.forms && character.forms.length > 0
             ? ""
             : "none";
-}else{
+
+} else {
     defender.character = character;
     defender.formIndex = -1;
 
-    document.getElementById("defenderFormButton").style.display =
+    const formButton =
+        document.getElementById("defenderFormButton");
+
+    formButton.textContent =
+        character.name.match(/[（(].*?[）)]/)
+            ? character.name
+            : "通常形態";
+
+    formButton.style.display =
         character.forms && character.forms.length > 0
             ? ""
             : "none";
@@ -1064,6 +1081,15 @@ if(minDamage >= currentHp){
 }
 
 }
+
+  const attackerFormButton =
+    document.getElementById("attackerFormButton");
+
+const defenderFormButton =
+    document.getElementById("defenderFormButton");
+
+// この2つのボタンの textContent を更新している
+// if 文も含めて、追加した処理を全部削除
 
 }
 
@@ -2409,7 +2435,7 @@ damageModifiers.map(m => `
 `).join("");
 
     document.getElementById("detailAttacker").textContent =
-        attacker.character.name;
+    attacker.character.name.replace(/[（(].*?[）)]/g, "");
 
     document.getElementById("detailMove").textContent =
         selectedMove.name;
@@ -2430,7 +2456,7 @@ damageModifiers.map(m => `
         createTypeBadges(selectedMove.type);
         
         document.getElementById("detailDefender").textContent =
-    defender.character.name;
+    defender.character.name.replace(/[（(].*?[）)]/g, "");
 
 document.getElementById("detailDefenderAbility").textContent =
     selectedDefenseAbility?.name ?? "なし";
@@ -2552,9 +2578,13 @@ function changeForm(side) {
     const form = getCurrentFormData(data);
 
     button.textContent =
-        data.formIndex === -1
-            ? "通常形態"
-            : form.name;
+    data.formIndex === -1
+        ? (
+            character.name.match(/[（(].*?[）)]/)
+                ? character.name
+                : "通常形態"
+          )
+        : form.name;
 
     updateScreen();
 }
@@ -2581,3 +2611,4 @@ for (let i = 0; i <= 30; i++) {
 judgmentMaskRank.value = "0";
 
 judgmentMaskRank.onchange = updateScreen;
+

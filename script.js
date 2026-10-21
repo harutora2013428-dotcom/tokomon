@@ -372,7 +372,9 @@ return `
 
 <div class="status-title">
     <h2>
-    ${c.name.replace(/\((.*?)\)/g, '<span class="form-name">($1)</span>')}
+    ${c.name.replace(/（.*?）|\(.*?\)/g, match =>
+    `<span style="font-size:0.75em !important; font-weight:normal;">${match}</span>`
+)}
 </h2>
 
     ${
@@ -726,8 +728,11 @@ oldStatus.outerHTML = displayStatus(currentForm);
             const title = detail.querySelector(".status-title h2");
 
             if (title) {
-                title.textContent = c.name;
-            }
+    title.innerHTML = c.name.replace(
+        /\((.*?)\)/g,
+        '<span class="form-name">($1)</span>'
+    );
+}
 
             const status = detail.querySelector(".status-section");
 
@@ -755,9 +760,11 @@ oldStatus.outerHTML = displayStatus(currentForm);
             
 if (title) {
     const name = currentForm.name || c.name;
+
     title.innerHTML = name.replace(
-        /（(.*?)）|\((.*?)\)/g,
-        '<span class="form-name">($1$2)</span>'
+        /（.*?）|\(.*?\)/g,
+        match =>
+            `<span style="font-size:0.75em !important; font-weight:normal;">${match}</span>`
     );
 }
 
