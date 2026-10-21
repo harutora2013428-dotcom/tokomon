@@ -58,8 +58,26 @@ function getCurrentFormData(side) {
     }
 
     return character;
+  
+  
 }
 
+// 技の最終属性を取得
+function getEffectiveMoveType(move) {
+    if (!move) return [];
+
+    // 光速・シャドウビーム・零
+    if (
+        move.name === "光速・シャドウビーム・零" &&
+        document.getElementById("voidBeam")?.checked
+    ) {
+        return ["闇"];
+    }
+
+    return Array.isArray(move.type)
+        ? move.type
+        : [move.type];
+}
 
 let attackType = "attack";
 let defenseType = "defense";
@@ -303,6 +321,27 @@ if (
 
 }
 
+      // 零式・レインヴォイドアビス
+const voidAbyssPowerBox =
+    document.getElementById("voidAbyssPowerBox");
+
+if (selectedMove.name === "零式・レインヴォイドアビス") {
+    voidAbyssPowerBox.style.display = "block";
+} else {
+    voidAbyssPowerBox.style.display = "none";
+    document.getElementById("voidAbyssPower").value = "60";
+}
+
+      // ヴォイドフォース・ブラックホール・零
+const voidForcePowerBox =
+    document.getElementById("voidForcePowerBox");
+
+if (selectedMove.name === "ヴォイドフォース・ブラックホール・零") {
+    voidForcePowerBox.style.display = "block";
+} else {
+    voidForcePowerBox.style.display = "none";
+    document.getElementById("voidForcePower").value = "100";
+}
       
     // 断罪の仮面
     const judgmentMaskBox = document.getElementById("judgmentMaskBox");
@@ -439,6 +478,17 @@ abyssMeteorBox.style.display =
 
 if (selectedMove.name !== "アビスメテオ") {
     document.getElementById("abyssMeteor").checked = false;
+}
+
+      // 光速・シャドウビーム・零
+const voidBeamBox = document.getElementById("voidBeamBox");
+const voidBeam = document.getElementById("voidBeam");
+
+if (selectedMove.name === "光速・シャドウビーム・零") {
+    voidBeamBox.style.display = "block";
+} else {
+    voidBeamBox.style.display = "none";
+    voidBeam.checked = false;
 }
 
         if(move.category === "不明"){
@@ -890,9 +940,7 @@ hpStatValue.textContent = defForm.status.hp;
 
 hpEV.textContent = defender.hpEV;
 
-hpStatValue.textContent =
-    defender.character.status.hp +
-    defender.hpEV * 5;
+hpStatValue.textContent = getMaxHP(defender);
 
     attackEV.textContent =
     attacker.ev;
@@ -919,9 +967,7 @@ if(damageValue === null){
 const minDamage = damageValue[0].damage;
 const maxDamage = damageValue[15].damage;
 
-    const hp =
-    defender.character.status.hp +
-    defender.hpEV * 5;
+    const hp = getMaxHP(defender);
     
     let currentHp = hp;
     
@@ -1191,6 +1237,25 @@ function getRankMultiplier(rank){
 
 }
 
+// は？ださすぎだろ：最大HP1.5倍
+function getMaxHP(target){
+
+    const form = getCurrentFormData(target);
+
+    let hp =
+        form.status.hp +
+        target.hpEV * 5;
+
+    if(
+        target === defender &&
+        selectedDefenseAbility?.name === "は？ださすぎだろ"
+    ){
+        hp = Math.floor(hp * 1.5);
+    }
+
+    return hp;
+}
+
 function calculateDamage(){
 
   const atkForm = getCurrentFormData(attacker);
@@ -1216,7 +1281,7 @@ const defForm = getCurrentFormData(defender);
     }
         
         const defForm = getCurrentFormData(defender);
-const hp = defForm.status.hp + defender.hpEV * 5;
+const hp = getMaxHP(defender);
 
 let currentHp = hp;
 
@@ -1394,6 +1459,20 @@ const judgementPower = document.getElementById("judgementPower");
         document.getElementById("shingekiPower").value
     );
 
+} else if (
+    selectedMove.name === "零式・レインヴォイドアビス"
+) {
+    power = Number(
+        document.getElementById("voidAbyssPower").value
+    );
+
+} else if (
+    selectedMove.name === "ヴォイドフォース・ブラックホール・零"
+) {
+    power = Number(
+        document.getElementById("voidForcePower").value
+    );
+   
 } else {
 
     power = selectedMove.power;
@@ -1429,8 +1508,9 @@ if (
     power *= 2;
     addModifier("祟り目", 2);
 }
-        let moveType = selectedMove.type;
-
+        let moveType = getEffectiveMoveType(selectedMove);
+      
+      
 // テクニシャン
 if(
     selectedAttackAbility?.name === "テクニシャン" &&
@@ -1556,11 +1636,33 @@ if(
     return new Array(16).fill(0);
 }
 
+
 let type =
     getTypeEffectiveness(
         moveType,
         defForm.attribute
     );
+
+// 雷の力：大地属性による雷技の無効を無視
+if (
+    selectedAttackAbility?.name === "雷の力" &&
+    moveType.includes("雷") &&
+    defForm.attribute.includes("大地") &&
+    type === 0
+) {
+    const otherAttributes =
+        defForm.attribute.filter(
+            attribute => attribute !== "大地"
+        );
+
+    type = otherAttributes.length > 0
+        ? getTypeEffectiveness(
+            moveType,
+            otherAttributes
+        )
+        : 1;
+}
+
 
 // フリーズドライ（水属性に弱点を突く）
 if (
@@ -1572,35 +1674,46 @@ if (
 }
 
 
-// オーロラビジョン（月弱点追加）
+// 月弱点追加・聖弱点追加
 let finalType = type;
 
-if (
+const moonWeakActive =
     document.getElementById("moonWeak").checked &&
-    moveType.includes("月") &&
+    moveType.includes("月");
+
+const holyWeakActive =
+    document.getElementById("holyWeak").checked &&
+    moveType.includes("聖");
+
+// 対象属性の技は、相性を最低でも弱点（2倍）にする
+if (
+    (moonWeakActive || holyWeakActive) &&
     finalType < 2
 ) {
     finalType = 2;
-    addModifier("月弱点追加", "2");
 }
 
-if (
-    document.getElementById("moonWeak").checked &&
-    moveType.includes("月")
-) {
-
+// 補正表示
+if (moonWeakActive) {
     addModifier("月弱点追加", 2);
+}
 
-} else {
+if (holyWeakActive) {
+    addModifier("聖弱点追加", 2);
+}
+
+// どちらも適用されていない場合は通常の相性表示
+if (!moonWeakActive && !holyWeakActive) {
 
     if (type > 1) {
         addModifier("弱点", type);
+
     } else if (type > 0 && type < 1) {
         addModifier("耐性", type);
+
     } else if (type === 0) {
         addModifier("無効", 0);
     }
-
 }
 
 const hitCount =
@@ -1754,6 +1867,32 @@ if(
 addModifier("レインボーオーラ・ビッグバン", 2);
 }
 
+      // レインボーオーラ・改（2倍）
+if (
+    document.getElementById("rainbowAura2").checked &&
+    moveType.includes("虹")
+) {
+    hitDamage *= 2;
+    addModifier("レインボーオーラ・改（2倍）", 2);
+}
+
+// レインボーオーラ・改（3倍）
+if (
+    document.getElementById("rainbowAura3").checked &&
+    moveType.includes("虹")
+) {
+    hitDamage *= 3;
+    addModifier("レインボーオーラ・改（3倍）", 3);
+}
+
+      // 破滅の災い・改
+if (
+    document.getElementById("ruinHoly").checked &&
+    moveType.includes("聖")
+) {
+    hitDamage *= 2.5;
+    addModifier("破滅の災い・改", 2.5);
+}
       
  // ブラッドムーンルインレイ
 if (document.getElementById("bloodMoonRuinRay").checked) {
@@ -1957,7 +2096,7 @@ console.log(e.stack);
     function calculateHitCount(damage, currentHp){
 
     const defForm = getCurrentFormData(defender);
-const hp = defForm.status.hp + defender.hpEV * 5;
+const hp = getMaxHP(defender);
 
     let hpNow = currentHp;
 
@@ -2378,6 +2517,20 @@ document.getElementById("bigBang").onchange = () => {
     updateScreen();
 };
 
+// レインボーオーラ・改（2倍）
+document.getElementById("rainbowAura2").onchange = () => {
+    updateScreen();
+};
+
+// レインボーオーラ・改（3倍）
+document.getElementById("rainbowAura3").onchange = () => {
+    updateScreen();
+};
+
+// 破滅の災い・改
+document.getElementById("ruinHoly").onchange = () => {
+    updateScreen();
+};
 
  // ブラッドムーンルインレイ
 document.getElementById("bloodMoonRuinRay").onchange = () => {
@@ -2401,6 +2554,15 @@ document.getElementById("shadowBurst").onchange = () => {
     updateScreen();
 };
 
+// 零式・レインヴォイドアビス
+document.getElementById("voidAbyssPower").onchange = () => {
+    updateScreen();
+};
+
+// ヴォイドフォース・ブラックホール・零
+document.getElementById("voidForcePower").onchange = () => {
+    updateScreen();
+};
 
 //連続技
 document.getElementById("hitCount").onchange = () => {
@@ -2453,7 +2615,7 @@ damageModifiers.map(m => `
     createTypeBadges(getCurrentFormData(attacker).attribute);
 
     document.getElementById("detailMoveType").innerHTML =
-        createTypeBadges(selectedMove.type);
+    createTypeBadges(getEffectiveMoveType(selectedMove));
         
         document.getElementById("detailDefender").textContent =
     defender.character.name.replace(/[（(].*?[）)]/g, "");
@@ -2531,6 +2693,11 @@ document.getElementById("abyssMeteor").onchange = () => {
     updateScreen();
 };
 
+// 光速・シャドウビーム・零
+document.getElementById("voidBeam").onchange = () => {
+    updateScreen();
+};
+
 //デスオーラ
 document.getElementById("deathAura").onchange = () => {
     updateScreen();
@@ -2544,6 +2711,9 @@ document.getElementById("judgementPower").onchange = updateScreen;
 
 //月弱点追加
 document.getElementById("moonWeak").onchange = updateScreen;
+
+// 聖弱点追加
+document.getElementById("holyWeak").onchange = updateScreen;
 
 // 神撃
 document.getElementById("shingekiPower").onchange = updateScreen;
