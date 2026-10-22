@@ -296,6 +296,12 @@ if (move.hits && move.hits[0] !== move.hits[1]) {
 const assistPowerBox = document.getElementById("assistPowerBox");
 const assistPower = document.getElementById("assistPower");
 
+      // 鮮血月蝕終焉光線・零
+document.getElementById("bleedCountBox").style.display =
+    selectedMove?.name === "鮮血月蝕終焉光線・零"
+        ? "block"
+        : "none";
+
 if (
     selectedMove.name === "アシストパワー" ||
     selectedMove.name === "地獄突き"
@@ -314,11 +320,23 @@ if (
         assistPower.appendChild(option);
 
     }
-
+  
 } else {
 
     assistPowerBox.style.display = "none";
 
+}
+
+      // 鮮血月蝕終焉光線・零：出血数の選択肢を生成
+const bleedCount = document.getElementById("bleedCount");
+
+bleedCount.innerHTML = "";
+
+for (let i = 0; i <= 16; i++) {
+    const power = 140 + i * 20;
+
+    bleedCount.innerHTML +=
+        `<option value="${i}">${i}（威力${power}）</option>`;
 }
 
       // 零式・レインヴォイドアビス
@@ -359,10 +377,9 @@ const deathCount = document.getElementById("deathCount");
 
 if (
     selectedMove.name === "お墓参り" ||
-    (
     selectedMove.name === "アポカリプスヘルブレイク" ||
-    selectedMove.name === "滅亡龍嵐波"
-)
+    selectedMove.name === "滅亡龍嵐波" ||
+    selectedMove.name === "カタクリズムヘルブレイク・零"
 ) {
 
     deathCountBox.style.display = "";
@@ -899,17 +916,28 @@ function updateScreen(){
     defenderCharacterButton.textContent =
     defender.character.name;
 
-    attackStatName.textContent =
-    attackType === "attack" ? "攻撃" : "特攻";
+    const usesDefenseAsAttack =
+    selectedMove?.effect?.includes("防御力で計算する") ?? false;
 
-    defenseStatName.textContent =
+const effectiveAttackType = usesDefenseAsAttack
+    ? "defense"
+    : attackType;
+
+attackStatName.textContent = usesDefenseAsAttack
+    ? "防御（攻撃計算）"
+    : attackType === "attack" ? "攻撃" : "特攻";
+
+defenseStatName.textContent =
     defenseType === "defense" ? "防御" : "特防";
 
-    const atkForm = getCurrentFormData(attacker);
+const atkForm = getCurrentFormData(attacker);
 const defForm = getCurrentFormData(defender);
 
-const atkBase = atkForm.status[attackType] + attacker.ev * 5;
-const defBase = defForm.status[defenseType] + defender.ev * 5;
+const atkBase =
+    atkForm.status[effectiveAttackType] + attacker.ev * 5;
+
+const defBase =
+    defForm.status[defenseType] + defender.ev * 5;
 
 let criticalAttackRank = attacker.rank;
 let criticalDefenseRank = defender.rank;
@@ -1335,18 +1363,25 @@ console.log(selectedDefenseAbility);
         const isPhysical = attackType === "attack";
 const isSpecial = attackType === "spAttack";
 
+const usesDefenseAsAttack =
+    selectedMove?.effect?.includes("防御力で計算する") ?? false;
 
 const atkForm = getCurrentFormData(attacker);
 
+const effectiveAttackType = usesDefenseAsAttack
+    ? "defense"
+    : attackType;
+
 let attack =
-    atkForm.status[attackType] +
+    atkForm.status[effectiveAttackType] +
     attacker.ev * 5;
 
 
 // 拘りソード
 if (
     selectedAttackItem?.name === "拘りソード" &&
-    isPhysical
+    isPhysical &&
+    !usesDefenseAsAttack
 ){
     attack *= 1.5;
     addModifier("拘りソード", 1.5);
@@ -1394,6 +1429,19 @@ addModifier("突撃チョッキ", 0.66);
 let power;
 
 if (
+    selectedMove.name === "鮮血月蝕終焉光線・零"
+) {
+    const bleedCount = Math.min(
+        16,
+        Math.max(
+            0,
+            Number(document.getElementById("bleedCount").value) || 0
+        )
+    );
+
+    power = 140 + bleedCount * 20;
+
+} else if (
     selectedMove.name === "アシストパワー" ||
     selectedMove.name === "地獄突き"
 ) {
@@ -1411,14 +1459,13 @@ if (
 
 
 } else if (
-    (
     selectedMove.name === "アポカリプスヘルブレイク" ||
-    selectedMove.name === "滅亡龍嵐波"
-)
+    selectedMove.name === "滅亡龍嵐波" ||
+    selectedMove.name === "カタクリズムヘルブレイク・零"
 ) {
 
     const death =
-    Number(document.getElementById("deathCount").value);
+        Number(document.getElementById("deathCount").value);
 
     power = 150 + death * 50;
 
@@ -1804,6 +1851,22 @@ if (selectedMove.name === "ヘルファイアブレード") {
 
 }
 
+      // デスルインブレード・改
+if (selectedMove.name === "デスルインブレード・改") {
+
+    const defForm = getCurrentFormData(defender);
+
+    const hasDarkResistance =
+        defender.character.resistance?.includes("闇") ||
+        getTypeEffectiveness("闇", defForm.attribute) < 1;
+
+    if (hasDarkResistance) {
+        hitDamage *= 2;
+        addModifier("デスルインブレード・改", 2);
+    }
+
+}
+
 
 // 範囲攻撃補正
 if(battleType === "double"){
@@ -1883,6 +1946,22 @@ if (
 ) {
     hitDamage *= 3;
     addModifier("レインボーオーラ・改（3倍）", 3);
+}
+
+      // カオストルネード・改（次の技の威力1.2倍）
+if (
+    document.getElementById("chaosTornadoBoost")?.checked
+) {
+    hitDamage *= 1.2;
+    addModifier("カオストルネード・改", 1.2);
+}
+
+      // 鮮血凶風加護・零（技威力2倍）
+if (
+    document.getElementById("bloodStormBoost")?.checked
+) {
+    hitDamage *= 2;
+    addModifier("鮮血凶風加護・零", 2);
 }
 
       // 破滅の災い・改
@@ -2001,6 +2080,14 @@ if (
     hpNow === hp
 ) {
     hitDamage *= 0.5;
+}
+
+      // アイアンアーマー
+if (
+    selectedDefenseAbility?.name === "アイアンアーマー"
+) {
+    hitDamage *= 0.8;
+    addModifier("アイアンアーマー", 0.8);
 }
 
       // アルファストーン
@@ -2512,6 +2599,16 @@ document.getElementById("rainbowAura").onchange = () => {
     updateScreen();
 };
 
+// カオストルネード・改
+document.getElementById("chaosTornadoBoost").onchange = () => {
+    updateScreen();
+};
+
+// 鮮血凶風加護・零
+document.getElementById("bloodStormBoost").onchange = () => {
+    updateScreen();
+};
+
 //レインボーオーラ・ビッグバン
 document.getElementById("bigBang").onchange = () => {
     updateScreen();
@@ -2571,6 +2668,8 @@ document.getElementById("hitCount").onchange = () => {
 
 //能力上昇火力
 document.getElementById("assistPower").onchange = updateScreen;
+
+document.getElementById("bleedCount").onchange = updateScreen;
 
 document.getElementById("deathCount").onchange = updateScreen;
 

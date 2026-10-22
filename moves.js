@@ -3111,7 +3111,7 @@ HP5%以下で威力200。
   category: "変化",
   power: 0,
   accuracy: 0,
-  pp: 15,
+  pp: 20,
   target: "自分",
   priority: 0,
   critical: 0,
@@ -5904,8 +5904,7 @@ drain:0,
     protect: false,
     drain: 0,
     effect: `
-相手の出血している数に応じて威力が上がる。
-出血している相手1体につき、威力が20上がる。
+相手の出血している数分、威力が20上がる。
 `
 },
 
