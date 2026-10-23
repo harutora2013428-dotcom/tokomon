@@ -297,10 +297,25 @@ const assistPowerBox = document.getElementById("assistPowerBox");
 const assistPower = document.getElementById("assistPower");
 
       // 鮮血月蝕終焉光線・零
+
 document.getElementById("bleedCountBox").style.display =
-    selectedMove?.name === "鮮血月蝕終焉光線・零"
+    (
+        selectedMove?.name === "鮮血月蝕終焉光線・零" ||
+        selectedMove?.name === "神乃悪魔・零"
+    )
         ? "block"
         : "none";
+
+
+      // 万物を滅ぼす漆黒の神罰・零
+const ruinGodRankBox =
+    document.getElementById("ruinGodRankBox");
+
+ruinGodRankBox.style.display =
+    selectedMove?.name === "万物を滅ぼす漆黒の神罰・零"
+        ? "block"
+        : "none";
+
 
 if (
     selectedMove.name === "アシストパワー" ||
@@ -328,14 +343,32 @@ if (
 }
 
       // 鮮血月蝕終焉光線・零：出血数の選択肢を生成
+
 const bleedCount = document.getElementById("bleedCount");
 
 bleedCount.innerHTML = "";
 
 for (let i = 0; i <= 16; i++) {
-    const power = 140 + i * 20;
+    const power =
+        selectedMove.name === "神乃悪魔・零"
+            ? 60 + i * 5
+            : 140 + i * 20;
 
     bleedCount.innerHTML +=
+        `<option value="${i}">${i}（威力${power}）</option>`;
+}
+
+      
+// 万物を滅ぼす漆黒の神罰・零：ランク数の選択肢
+const ruinGodRank =
+    document.getElementById("ruinGodRank");
+
+ruinGodRank.innerHTML = "";
+
+for (let i = 0; i <= 60; i++) {
+    const power = 60 + i * 30;
+
+    ruinGodRank.innerHTML +=
         `<option value="${i}">${i}（威力${power}）</option>`;
 }
 
@@ -775,13 +808,19 @@ const category =
 
 const specialAbilities = abilities.filter(ability =>
     specialIds.includes(ability.id) &&
-    ability.category === category &&
+    (
+        ability.category === category ||
+        (ability.name === "ウィークアーマー")
+    ) &&
     ability.damage
 );
 
 const otherAbilities = abilities.filter(ability =>
     !specialIds.includes(ability.id) &&
-    ability.category === category &&
+    (
+        ability.category === category ||
+        (ability.name === "ウィークアーマー")
+    ) &&
     ability.damage
 );
 
@@ -933,11 +972,24 @@ defenseStatName.textContent =
 const atkForm = getCurrentFormData(attacker);
 const defForm = getCurrentFormData(defender);
 
+
 const atkBase =
-    atkForm.status[effectiveAttackType] + attacker.ev * 5;
+    atkForm.status[effectiveAttackType] +
+    attacker.ev * 5 -
+    (
+        usesDefenseAsAttack &&
+        selectedAttackAbility?.name === "ウィークアーマー"
+            ? 20
+            : 0
+    );
+
+
 
 const defBase =
-    defForm.status[defenseType] + defender.ev * 5;
+    defForm.status[defenseType] +
+    defender.ev * 5 -
+    (selectedDefenseAbility?.name === "ウィークアーマー" ? 20 : 0);
+
 
 let criticalAttackRank = attacker.rank;
 let criticalDefenseRank = defender.rank;
@@ -1372,9 +1424,18 @@ const effectiveAttackType = usesDefenseAsAttack
     ? "defense"
     : attackType;
 
+
 let attack =
     atkForm.status[effectiveAttackType] +
     attacker.ev * 5;
+
+if (
+    usesDefenseAsAttack &&
+    selectedAttackAbility?.name === "ウィークアーマー"
+) {
+    attack -= 20;
+}
+
 
 
 // 拘りソード
@@ -1396,9 +1457,12 @@ if (
     addModifier("拘りステッキ", 1.5);
 }
 
+
 let defense =
     defForm.status[defenseType] +
-    defender.ev * 5;
+    defender.ev * 5 -
+    (selectedDefenseAbility?.name === "ウィークアーマー" ? 20 : 0);
+
         
         // 壁
 if(
@@ -1429,7 +1493,23 @@ addModifier("突撃チョッキ", 0.66);
 let power;
 
 if (
-    selectedMove.name === "鮮血月蝕終焉光線・零"
+    selectedMove.name === "万物を滅ぼす漆黒の神罰・零"
+) {
+    const rankCount = Math.min(
+        60,
+        Math.max(
+            0,
+            Number(
+                document.getElementById("ruinGodRank").value
+            ) || 0
+        )
+    );
+
+    power = 60 + rankCount * 30;
+
+} else if (
+    selectedMove.name === "鮮血月蝕終焉光線・零" ||
+    selectedMove.name === "神乃悪魔・零"
 ) {
     const bleedCount = Math.min(
         16,
@@ -1439,9 +1519,14 @@ if (
         )
     );
 
-    power = 140 + bleedCount * 20;
+    if (selectedMove.name === "神乃悪魔・零") {
+        power = 60 + bleedCount * 5;
+    } else {
+        power = 140 + bleedCount * 20;
+    }
 
 } else if (
+
     selectedMove.name === "アシストパワー" ||
     selectedMove.name === "地獄突き"
 ) {
@@ -1574,14 +1659,6 @@ if (
 ){
     power *= 1.2;
 addModifier("クリスタルブレード", 1.2);
-}
-
-// 絶対的忠誠心
-if (
-    selectedAttackAbility?.name === "絶対的忠誠心"
-){
-    power *= 1.5;
-addModifier("絶対的忠誠心", 1.5);
 }
 
 // 斬れ味
@@ -2101,7 +2178,26 @@ if (
     addModifier("アルファストーン", 0.5);
 }
 
+// オメガストーン
+if (
+    selectedDefenseAbility?.name === "オメガストーン" &&
+    selectedMove.type?.some(type =>
+        ["聖", "ブラッド", "ゴースト"].includes(type)
+    )
+) {
+    hitDamage *= 0.5;
+    addModifier("オメガストーン", 0.5);
+}
+
       
+      // 絶対的忠誠心（南武が持ち、東葉へのダメージを半減）
+if (
+    selectedAttackAbility?.name === "絶対的忠誠心" &&
+    defender.character.name === "東葉"
+) {
+    hitDamage *= 0.5;
+    addModifier("絶対的忠誠心", 0.5);
+}
 
 hitDamage = Math.floor(hitDamage * i / 100);
         // ここでマルチアーマー
@@ -2390,17 +2486,37 @@ searchInput.oninput = () => {
 
         const specialAbilities = abilities.filter(ability =>
     specialIds.includes(ability.id) &&
-    ability.category === category &&
+    (
+        ability.category === category ||
+        (
+            ability.name === "ウィークアーマー"
+        )
+    ) &&
     ability.damage &&
-    (ability.name.includes(keyword) || ability.kana.includes(keyword))
+    (
+        ability.name.includes(keyword) ||
+        ability.kana.includes(keyword) ||
+        ability.effect.includes(keyword)
+    )
 );
+
 
 const otherAbilities = abilities.filter(ability =>
     !specialIds.includes(ability.id) &&
-    ability.category === category &&
+    (
+        ability.category === category ||
+        (
+            ability.name === "ウィークアーマー"
+        )
+    ) &&
     ability.damage &&
-    (ability.name.includes(keyword) || ability.kana.includes(keyword))
+    (
+        ability.name.includes(keyword) ||
+        ability.kana.includes(keyword) ||
+        ability.effect.includes(keyword)
+    )
 );
+
 
         const title1 = document.createElement("h3");
         title1.textContent = "★ 持っている特性";
@@ -2660,6 +2776,11 @@ document.getElementById("voidAbyssPower").onchange = () => {
 document.getElementById("voidForcePower").onchange = () => {
     updateScreen();
 };
+
+// 万物を滅ぼす漆黒の神罰・零
+document.getElementById("ruinGodRank").addEventListener("change", () => {
+    updateScreen();
+});
 
 //連続技
 document.getElementById("hitCount").onchange = () => {

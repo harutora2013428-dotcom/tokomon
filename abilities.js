@@ -185,6 +185,7 @@ const abilities = [
     name:"絶対的忠誠心",
     kana:"ぜったいてきちゅうせいしん",
     type:"専用",
+  damage:true,
     category:"攻撃",
     effect:`
 東葉が味方にいる場合、自身と東葉の全ての技の威力が1.5倍になる。<br>
