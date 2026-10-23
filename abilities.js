@@ -246,8 +246,8 @@ const abilities = [
 
     type:"専用",
 
-    category:"補助",
-
+    category:"防御",
+damage: true,
     effect:`
 自身のHPが1.5倍になる。
 `
