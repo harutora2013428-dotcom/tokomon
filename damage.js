@@ -2214,11 +2214,10 @@ if (
     const hitType = hit === 1 ? "鋼" : "聖";
 
     const hitEffectiveness = getTypeEffectiveness(
-        [hitType],
-        defForm.attribute
-    );
+    [hitType],
+    effectiveDefAttribute
+);
 
-  
 if (hitEffectiveness > 1) {
     addModifier(`弱点（${hitType}属性）`, hitEffectiveness);
 } else if (hitEffectiveness > 0 && hitEffectiveness < 1) {
@@ -2227,13 +2226,23 @@ if (hitEffectiveness > 1) {
     addModifier(`無効（${hitType}属性）`, 0);
 }
 
+// 元の属性とテラスタイプの両方を判定
+const hasOriginalHitStab =
+    atkForm.attribute.includes(hitType);
 
-    const hitStab = atkForm.attribute.includes(hitType)
-        ? (isTerastal ? 2 : 1.5)
-        : (isTerastal ? 1.5 : 1);
+const hasTeraHitStab =
+    attackerTeraType !== "" &&
+    attackerTeraType === hitType;
 
-    hitDamage *= hitStab;
-    hitDamage *= hitEffectiveness;
+const hitStab =
+    hasOriginalHitStab && hasTeraHitStab
+        ? 2
+        : hasOriginalHitStab || hasTeraHitStab
+            ? 1.5
+            : 1;
+
+hitDamage *= hitStab;
+hitDamage *= hitEffectiveness;
 
     // その属性に耐性がある場合だけ、その攻撃を3倍
     const hasResistance =
@@ -2294,34 +2303,26 @@ if (
 
 
 if (selectedMove.name === "ヘルファイアブレード") {
-
-    const defForm = getCurrentFormData(defender);
-
     const hasFireResistance =
         defender.character.resistance?.includes("炎") ||
-        getTypeEffectiveness("炎", defForm.attribute) < 1;
+        getTypeEffectiveness("炎", effectiveDefAttribute) < 1;
 
     if (hasFireResistance) {
         hitDamage *= 2;
         addModifier("ヘルファイアブレード", 2);
     }
-
 }
 
       // デスルインブレード・改
 if (selectedMove.name === "デスルインブレード・改") {
-
-    const defForm = getCurrentFormData(defender);
-
     const hasDarkResistance =
         defender.character.resistance?.includes("闇") ||
-        getTypeEffectiveness("闇", defForm.attribute) < 1;
+        getTypeEffectiveness("闇", effectiveDefAttribute) < 1;
 
     if (hasDarkResistance) {
         hitDamage *= 2;
         addModifier("デスルインブレード・改", 2);
     }
-
 }
 
 
