@@ -22,7 +22,12 @@
 
 <div class="card">
 
-<h2>攻撃側</h2>
+<div class="sideTitleRow">
+    <h2>攻撃側</h2>
+    <button id="attackerTeraButton" class="teraButton">
+        テラスタイプ：なし
+    </button>
+</div>
 
 <label>キャラクター</label>
 <div class="characterSelectRow">
@@ -45,6 +50,11 @@
 <div id="assistPowerBox" style="display:none;">
     <label for="assistPower">威力</label>
    <select id="assistPower" class="selectBox"></select>
+</div>
+
+  <div id="ruinRainbowBloodSwordBox" style="display:none;">
+    <label for="ruinRainbowBloodSwordPower">威力</label>
+    <select id="ruinRainbowBloodSwordPower" class="selectBox"></select>
 </div>
 
 <div id="shingekiBox" style="display:none;">
@@ -168,7 +178,31 @@ class="categoryButton">
     <select id="judgmentMaskRank" class="selectBox"></select>
 </div>
 
+  <div id="ruinMaskBox" style="display:none;">
+    <label for="ruinMaskHP">相手のHP割合</label>
+    <select id="ruinMaskHP" class="selectBox">
+        <option value="1">76%以上（×1.0）</option>
+        <option value="1.2">51%以上76%未満（×1.2）</option>
+        <option value="1.3">26%以上51%未満（×1.3）</option>
+        <option value="1.5">11%以上26%未満（×1.5）</option>
+        <option value="2">11%未満（×2.0）</option>
+    </select>
+</div>
 
+<div id="meikaiRinneBox" style="display:none;">
+    <label for="meikaiRinneCharge">火力蓄積（%）</label>
+    <input
+        type="number"
+        id="meikaiRinneCharge"
+        class="selectBox"
+        min="0"
+        max="500"
+        step="1"
+        value="0"
+    >
+    <p id="meikaiRinneMultiplier">ダメージ倍率：0.2倍</p>
+</div>
+  
 <label>持ち物</label>
 <button id="attackerItemButton" class="selectButton">
 持ち物を選択
@@ -208,11 +242,24 @@ class="categoryButton">
 
 </div>
 
+  
+<div style="text-align:center; margin:12px 0;">
+  <button id="swapSidesButton" class="selectButton">
+    ⇅ 攻撃側 ⇄ 防御側
+  </button>
+</div>
+
+
 <!-- 防御側 -->
 
 <div class="card">
 
-<h2>防御側</h2>
+<div class="sideTitleRow">
+    <h2>防御側</h2>
+    <button id="defenderTeraButton" class="teraButton">
+        テラスタイプ：なし
+    </button>
+</div>
 
 <label>キャラクター</label>
 <div class="characterSelectRow">
@@ -288,6 +335,15 @@ class="categoryButton">
 
 <h3>：条件</h3>
 
+  <!-- フィールド -->
+<div class="conditionItem">
+    <label for="battleField">フィールド</label>
+    <select id="battleField" class="selectBox">
+        <option value="none">なし</option>
+        <option value="windMist">風霧空間</option>
+    </select>
+</div>
+
 <div class="condition">
 
     <label>バトル形式</label>
@@ -355,6 +411,22 @@ class="categoryButton">
     </label>
 </div>
 
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="rainbowClothingEnd">
+        七色光衣・終（虹）
+    </label>
+</div>
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="bloodClothingEnd">
+        七色光衣・終（血）
+    </label>
+</div>
+
+  
   <div class="conditionItem">
     <label>
         <input type="checkbox" id="ruinHoly">
@@ -401,6 +473,20 @@ class="categoryButton">
     <label>
         <input type="checkbox" id="holyWeak">
         聖弱点追加
+    </label>
+</div>
+
+  <div class="conditionItem">
+    <label>
+        <input type="checkbox" id="waterWeak">
+        水弱点追加
+    </label>
+</div>
+
+<div class="conditionItem">
+    <label>
+        <input type="checkbox" id="poisonWeak">
+        毒弱点追加
     </label>
 </div>
 
@@ -457,8 +543,8 @@ class="categoryButton">
 
   <div class="conditionItem">
     <label>
-        <input type="checkbox" id="terastal">
-        テラスタル
+        <input type="checkbox" id="cycloneBurst">
+        サイクロンバースト・零
     </label>
 </div>
 

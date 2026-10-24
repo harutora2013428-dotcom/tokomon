@@ -2958,7 +2958,8 @@ HP5%以下で威力200。
   drain: 0,
   effect: "通常攻撃。"
 },
-{
+
+  {
   id: 204,
   kind: "通常",
   name: "トライアタック",
@@ -2975,6 +2976,24 @@ HP5%以下で威力200。
   protect: true,
   drain: 0,
   effect: "20%の確率で相手を麻痺、炎上、氷結のいずれかにする。"
+},
+  {
+  id: 205,
+  kind: "通常",
+  name: "テラバースト",
+  kana: "テラバースト",
+  type: ["無"],
+  category: "不明",
+  power: 80,
+  accuracy: 100,
+  pp: 10,
+  target: "相手単体",
+  priority: 0,
+  critical: 0,
+  contact: false,
+  protect: true,
+  drain: 0,
+  effect: "攻撃の方が高い場合は物理になり、特攻の方が高い場合は特殊になる。テラスタル中に使用した場合、テラスタイプに応じた属性に変化する。"
 },
 {
   id: 225,

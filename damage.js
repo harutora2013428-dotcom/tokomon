@@ -66,12 +66,29 @@ function getCurrentFormData(side) {
 function getEffectiveMoveType(move) {
     if (!move) return [];
 
+  // 第零式・神撃：新月形態ではゴースト属性
+if (move.name === "第零式・神撃") {
+    const form = getCurrentFormData(attacker);
+    const formName = form.name || attacker.character.name;
+
+    if (formName.includes("新月")) {
+        return ["ゴースト"];
+    }
+}
+
     // 光速・シャドウビーム・零
     if (
         move.name === "光速・シャドウビーム・零" &&
         document.getElementById("voidBeam")?.checked
     ) {
         return ["闇"];
+    }
+
+      // テラバースト：テラスタイプに連動
+    if (move.name === "テラバースト") {
+        return attackerTeraType
+            ? [attackerTeraType]
+            : (Array.isArray(move.type) ? move.type : [move.type]);
     }
 
     return Array.isArray(move.type)
@@ -81,6 +98,10 @@ function getEffectiveMoveType(move) {
 
 let attackType = "attack";
 let defenseType = "defense";
+
+// テラスタイプ
+let attackerTeraType = "";
+let defenderTeraType = "";
 
 let battleType = "single";
 let damageModifiers = [];
@@ -272,26 +293,76 @@ function addMoveButton(move){
       
       selectedMove = move;
 
+      const hitCountLabel =
+    document.querySelector('label[for="hitCount"]');
+
+if (hitCountLabel) {
+    hitCountLabel.textContent =
+        move.name === "ルシフェルフォースラジェーション・零"
+            ? "威力"
+            : "Lv";
+}
+
         moveButton.textContent = move.name;
         
-        const hitCountBox = document.getElementById("hitCountBox");
+        
+const hitCountBox = document.getElementById("hitCountBox");
 const hitCount = document.getElementById("hitCount");
 
-if (move.hits && move.hits[0] !== move.hits[1]) {
 
+const isMetalShining =
+    move.name === "第零式・メタルシャイニングブレード";
+const isBrilliantForce =
+    move.name === "ブリリアントフォース・改";
+const isLuciferForce =
+    move.name === "ルシフェルフォースラジェーション・零";
+
+if (
+    (move.hits && move.hits[0] !== move.hits[1]) ||
+    isBrilliantForce ||
+isMetalShining ||
+isLuciferForce
+) {
     hitCountBox.style.display = "block";
-
     hitCount.innerHTML = "";
 
-    for (let i = move.hits[0]; i <= move.hits[1]; i++) {
-        hitCount.innerHTML += `<option value="${i}">${i}回</option>`;
-    }
+    if (isMetalShining) {
+    hitCount.innerHTML = `
+        <option value="1">Lv1〜4</option>
+        <option value="5">Lv5〜9</option>
+        <option value="10">Lv10</option>
+    `;
+} else if (isLuciferForce) {
+    hitCount.innerHTML = "";
 
-} else {
+    for (let lv = 1; lv <= 10; lv++) {
+        const power = 100 + lv * 20;
 
-    hitCountBox.style.display = "none";
+        const option = document.createElement("option");
+        option.value = lv;
+        option.textContent = `威力${power}（Lv${lv}）`;
 
+        hitCount.appendChild(option);
+    
 }
+} else {
+    const minHits = isBrilliantForce ? 1 : move.hits[0];
+    const maxHits = isBrilliantForce ? 10 : move.hits[1];
+
+    for (let i = minHits; i <= maxHits; i++) {
+        const label = isBrilliantForce
+            ? `Lv${i}（${i}回攻撃）`
+            : `${i}回`;
+
+        hitCount.innerHTML +=
+            `<option value="${i}">${label}</option>`;
+    }
+}
+} else {
+    hitCountBox.style.display = "none";
+}
+
+
 
 const assistPowerBox = document.getElementById("assistPowerBox");
 const assistPower = document.getElementById("assistPower");
@@ -316,26 +387,74 @@ ruinGodRankBox.style.display =
         ? "block"
         : "none";
 
+// 終式・破滅虹血剣
+const ruinRainbowBloodSwordBox =
+    document.getElementById("ruinRainbowBloodSwordBox");
+const ruinRainbowBloodSwordPower =
+    document.getElementById("ruinRainbowBloodSwordPower");
 
+const isRuinRainbowBloodSword =
+    selectedMove?.name === "終式・破滅虹血剣";
+
+const currentFormName = isRuinRainbowBloodSword
+    ? (getCurrentFormData(attacker).name || attacker.character.name)
+    : "";
+
+ruinRainbowBloodSwordBox.style.display =
+    isRuinRainbowBloodSword &&
+    !currentFormName.includes("七色虹翼") &&
+    !currentFormName.includes("血剣悪魔")
+        ? ""
+        : "none";
+
+if (isRuinRainbowBloodSword) {
+    ruinRainbowBloodSwordPower.innerHTML = "";
+
+    for (let power = 20; power <= 470; power += 15) {
+        const option = document.createElement("option");
+        option.value = power;
+        option.textContent = power;
+        ruinRainbowBloodSwordPower.appendChild(option);
+    }
+
+    ruinRainbowBloodSwordPower.value = "20";
+}
+      
 if (
     selectedMove.name === "アシストパワー" ||
-    selectedMove.name === "地獄突き"
+    selectedMove.name === "地獄突き" ||
+    selectedMove.name === "オーロラプリズム・改"
 ) {
 
     assistPowerBox.style.display = "";
 
     assistPower.innerHTML = "";
 
-    for (let power = 20; power <= 620; power += 20) {
+    if (selectedMove.name === "オーロラプリズム・改") {
 
-        const option = document.createElement("option");
-        option.value = power;
-        option.textContent = power;
+        for (let lv = 1; lv <= 10; lv++) {
+            const power = lv * 20;
 
-        assistPower.appendChild(option);
+            const option = document.createElement("option");
+            option.value = power;
+            option.textContent = `${power}（Lv${lv}）`;
+
+            assistPower.appendChild(option);
+        }
+
+    } else {
+
+        for (let power = 20; power <= 620; power += 20) {
+
+            const option = document.createElement("option");
+            option.value = power;
+            option.textContent = power;
+
+            assistPower.appendChild(option);
+        }
 
     }
-  
+
 } else {
 
     assistPowerBox.style.display = "none";
@@ -412,6 +531,7 @@ if (
     selectedMove.name === "お墓参り" ||
     selectedMove.name === "アポカリプスヘルブレイク" ||
     selectedMove.name === "滅亡龍嵐波" ||
+    selectedMove.name === "第零式・滅亡龍雷光" ||
     selectedMove.name === "カタクリズムヘルブレイク・零"
 ) {
 
@@ -631,6 +751,9 @@ judgmentMaskBox.style.display = "none";
 
 document.getElementById("judgmentMaskRank").value = "0";
 
+      document.getElementById("ruinMaskBox").style.display = "none";
+document.getElementById("ruinMaskHP").value = "1";
+
         searchModal.style.display = "none";
         document.body.style.overflow = "";
 
@@ -677,10 +800,24 @@ function addAbilityButton(ability){
     defenderAbilityButton.textContent = ability.name;
 }
 
-      const judgmentMaskBox = document.getElementById("judgmentMaskBox");
+      const judgmentMaskBox =
+    document.getElementById("judgmentMaskBox");
 
 judgmentMaskBox.style.display =
     ability.name === "断罪の仮面" ? "" : "none";
+
+// 終式・冥界輪廻
+const meikaiRinneBox =
+    document.getElementById("meikaiRinneBox");
+
+meikaiRinneBox.style.display =
+    ability.name === "終式・冥界輪廻" ? "" : "none";
+      
+const ruinMaskBox =
+    document.getElementById("ruinMaskBox");
+
+ruinMaskBox.style.display =
+    ability.name === "破滅の神面" ? "" : "none";
 
     searchModal.style.display = "none";
     document.body.style.overflow = "";
@@ -810,7 +947,11 @@ const specialAbilities = abilities.filter(ability =>
     specialIds.includes(ability.id) &&
     (
         ability.category === category ||
-        (ability.name === "ウィークアーマー")
+ability.name === "ウィークアーマー" ||
+(
+    ability.name === "血虹悪魔" &&
+    abilitySide === "defense"
+)
     ) &&
     ability.damage
 );
@@ -818,9 +959,13 @@ const specialAbilities = abilities.filter(ability =>
 const otherAbilities = abilities.filter(ability =>
     !specialIds.includes(ability.id) &&
     (
-        ability.category === category ||
-        (ability.name === "ウィークアーマー")
-    ) &&
+    ability.category === category ||
+    ability.name === "ウィークアーマー" ||
+    (
+        ability.name === "血虹悪魔" &&
+        abilitySide === "defense"
+    )
+)&&
     ability.damage
 );
 
@@ -1060,33 +1205,41 @@ if(document.getElementById("stealthRock").checked){
             defForm.attribute
         );
 
-    currentHp -= Math.floor(hp / 8 * type);
+    let hazardDamage = Math.floor(hp / 8 * type);
+
+if (selectedDefenseAbility?.name === "鋼のおとこ") {
+    hazardDamage = Math.max(0, hazardDamage - 18);
+}
+
+currentHp -= hazardDamage;
 
 }
 
 const spikes =
-Number(document.getElementById("spikes").value);
+    Number(document.getElementById("spikes").value);
 
-if(
+if (
     selectedDefenseAbility?.name !== "浮遊" &&
     selectedDefenseItem?.name !== "風船"
-){
-  
-  if(spikes === 1){
-    currentHp -= Math.floor(hp / 8);
+) {
+    let spikesDamage = 0;
+
+    if (spikes === 1) {
+        spikesDamage = Math.floor(hp / 8);
+    } else if (spikes === 2) {
+        spikesDamage = Math.floor(hp / 6);
+    } else if (spikes === 3) {
+        spikesDamage = Math.floor(hp / 4);
+    }
+
+    if (selectedDefenseAbility?.name === "鋼のおとこ") {
+        spikesDamage = Math.max(0, spikesDamage - 18);
+    }
+
+    currentHp -= spikesDamage;
 }
 
-if(spikes === 2){
-    currentHp -= Math.floor(hp / 6);
-}
-
-if(spikes === 3){
-    currentHp -= Math.floor(hp / 4);
-}
-
-}
-
-    if(minDamage === 0){
+    if (maxDamage === 0) {
 
     document.getElementById("barDamage").textContent = "0～0";
     document.getElementById("barRate").textContent = "(0.0%～0.0%)";
@@ -1094,7 +1247,6 @@ if(spikes === 3){
     document.getElementById("damageBarFill").style.width = "0%";
 
     return;
-
 }
 
 const minRate =
@@ -1374,7 +1526,13 @@ if(document.getElementById("stealthRock").checked){
             defForm.attribute
         );
 
-    currentHp -= Math.floor(hp / 8 * type);
+    let hazardDamage = Math.floor(hp / 8 * type);
+
+if (selectedDefenseAbility?.name === "鋼のおとこ") {
+    hazardDamage = Math.max(0, hazardDamage - 18);
+}
+
+currentHp -= hazardDamage;
 
 }
 
@@ -1387,15 +1545,27 @@ if(
 ){
 
     if(spikes === 1){
-        currentHp -= Math.floor(hp / 8);
+        currentHp -= Math.max(
+    0,
+    Math.floor(hp / 8) -
+        (selectedDefenseAbility?.name === "鋼のおとこ" ? 18 : 0)
+);
     }
 
     if(spikes === 2){
-        currentHp -= Math.floor(hp / 6);
+        currentHp -= Math.max(
+    0,
+    Math.floor(hp / 6) -
+        (selectedDefenseAbility?.name === "鋼のおとこ" ? 18 : 0)
+);
     }
 
     if(spikes === 3){
-        currentHp -= Math.floor(hp / 4);
+        currentHp -= Math.max(
+    0,
+    Math.floor(hp / 4) -
+        (selectedDefenseAbility?.name === "鋼のおとこ" ? 18 : 0)
+);
     }
 
 }
@@ -1403,13 +1573,6 @@ if(
 const multiArmor =
     selectedDefenseAbility?.name === "マルチアーマー" &&
     currentHp === hp;
-        
-        console.log(selectedAttackAbility);
-console.log(selectedDefenseAbility);
-
-        console.log(selectedMove);
-        
-        console.log(selectedMove.type);
         
         
         const isPhysical = attackType === "attack";
@@ -1525,10 +1688,27 @@ if (
         power = 140 + bleedCount * 20;
     }
 
+  } else if (
+    selectedMove.name === "終式・破滅虹血剣"
+) {
+    const form = getCurrentFormData(attacker);
+    const formName = form.name || attacker.character.name;
+
+    if (formName.includes("七色虹翼")) {
+        power = 60;
+    } else if (formName.includes("血剣悪魔")) {
+        power = 100;
+    } else {
+        power = Number(
+            document.getElementById("ruinRainbowBloodSwordPower").value
+        ) || 20;
+    }
+
 } else if (
 
     selectedMove.name === "アシストパワー" ||
-    selectedMove.name === "地獄突き"
+    selectedMove.name === "地獄突き" ||
+    selectedMove.name === "オーロラプリズム・改"
 ) {
 
     power = Number(document.getElementById("assistPower").value);
@@ -1548,20 +1728,18 @@ if (
     selectedMove.name === "滅亡龍嵐波" ||
     selectedMove.name === "カタクリズムヘルブレイク・零"
 ) {
-
     const death =
         Number(document.getElementById("deathCount").value);
 
     power = 150 + death * 50;
 
 } else if (
-    selectedMove.name === "滅亡龍嵐波"
+    selectedMove.name === "第零式・滅亡龍雷光"
 ) {
-
     const death =
-    Number(document.getElementById("deathCount").value);
+        Number(document.getElementById("deathCount").value);
 
-    power = 150 + death * 50;
+    power = 130 + death * 50;
 
 }
  else if (
@@ -1592,6 +1770,36 @@ const judgementPower = document.getElementById("judgementPower");
     );
 
 } else if (
+    selectedMove.name === "第零式・神撃"
+) {
+
+    const form = getCurrentFormData(attacker);
+    const formName = form.name || attacker.character.name;
+
+    const charge = Math.min(
+        500,
+        Math.max(
+            0,
+            Math.floor(
+                Number(
+                    document.getElementById("meikaiRinneCharge").value
+                ) || 0
+            )
+        )
+    );
+
+    if (formName.includes("新月")) {
+        power = 50;
+    } else if (
+        formName.includes("月魄") &&
+        charge >= 300
+    ) {
+        power = 300;
+    } else {
+        power = 200;
+    }
+
+} else if (
     selectedMove.name === "零式・レインヴォイドアビス"
 ) {
     power = Number(
@@ -1604,6 +1812,15 @@ const judgementPower = document.getElementById("judgementPower");
     power = Number(
         document.getElementById("voidForcePower").value
     );
+
+   } else if (
+    selectedMove.name === "ルシフェルフォースラジェーション・零"
+) {
+    const lv = Number(
+        document.getElementById("hitCount").value
+    ) || 1;
+
+    power = 100 + lv * 20;
    
 } else {
 
@@ -1640,8 +1857,24 @@ if (
     power *= 2;
     addModifier("祟り目", 2);
 }
-        let moveType = getEffectiveMoveType(selectedMove);
-      
+        
+let moveType = getEffectiveMoveType(selectedMove);
+
+const metalShiningLevel =
+    selectedMove.name === "第零式・メタルシャイニングブレード"
+        ? Number(document.getElementById("hitCount").value)
+        : 0;
+
+if (metalShiningLevel >= 5 && metalShiningLevel <= 9) {
+    power = 160;
+    moveType = ["聖"];
+} else if (metalShiningLevel === 10) {
+    power = 120;
+    moveType = ["鋼"];
+}
+
+baseMovePower = power;
+actualMovePower = power;
       
 // テクニシャン
 if(
@@ -1650,6 +1883,18 @@ if(
 ){
     power *= 1.5;
 addModifier("テクニシャン", 1.5);
+}
+
+      // 赫虹剣：虹・ブラッド属性の技威力1.1倍
+if (
+    selectedAttackAbility?.name === "赫虹剣" &&
+    (
+        moveType.includes("虹") ||
+        moveType.includes("ブラッド")
+    )
+) {
+    power *= 1.1;
+    addModifier("赫虹剣", 1.1);
 }
 
 // クリスタルブレード
@@ -1668,6 +1913,15 @@ if(
 ){
     power *= 1.3;
 addModifier("斬れ味", 1.3);
+}
+
+      // メタルライトデュアルソード
+if (
+    selectedAttackAbility?.name === "メタルライトデュアルソード" &&
+    isPhysical
+) {
+    power *= 1.2;
+    addModifier("メタルライトデュアルソード", 1.2);
 }
 
 //アビスメテオ
@@ -1711,28 +1965,35 @@ if(
 addModifier("フリーズスキン", 1.2);
 }
 
-        const isTerastal =
-    document.getElementById("terastal").checked;
+        const isTerastal = attackerTeraType !== "";
 
-const hasStab = moveType.some(type =>
+const hasOriginalStab = moveType.some(type =>
     atkForm.attribute.includes(type)
 );
+
+const hasTeraStab =
+    isTerastal && moveType.includes(attackerTeraType);
 
 let stab;
 
 if (isTerastal) {
-    stab = hasStab ? 2 : 1.5;
-
-    addModifier(
-        hasStab ? "テラスタル（属性一致）" : "テラスタル",
-        stab
-    );
-
+    if (hasOriginalStab && hasTeraStab) {
+        stab = 2;
+        addModifier("属性一致＋テラスタル一致", 2);
+    } else if (hasOriginalStab) {
+        stab = 1.5;
+        addModifier("属性一致", 1.5);
+    } else if (hasTeraStab) {
+        stab = 1.5;
+        addModifier("テラスタル一致", 1.5);
+    } else {
+        stab = 1;
+    }
 } else {
-    stab = hasStab ? 1.5 : 1;
+    stab = hasOriginalStab ? 1.5 : 1;
 
-    if (hasStab) {
-        addModifier("属性一致", stab);
+    if (hasOriginalStab) {
+        addModifier("属性一致", 1.5);
     }
 }
         
@@ -1761,23 +2022,26 @@ if(
 }
 
 
-let type =
-    getTypeEffectiveness(
-        moveType,
-        defForm.attribute
-    );
+const effectiveDefAttribute = defenderTeraType
+    ? [defenderTeraType]
+    : defForm.attribute;
+
+let type = getTypeEffectiveness(
+    moveType,
+    effectiveDefAttribute
+);
 
 // 雷の力：大地属性による雷技の無効を無視
 if (
     selectedAttackAbility?.name === "雷の力" &&
     moveType.includes("雷") &&
-    defForm.attribute.includes("大地") &&
+    effectiveDefAttribute.includes("大地") &&
     type === 0
 ) {
     const otherAttributes =
-        defForm.attribute.filter(
-            attribute => attribute !== "大地"
-        );
+    effectiveDefAttribute.filter(
+        attribute => attribute !== "大地"
+    );
 
     type = otherAttributes.length > 0
         ? getTypeEffectiveness(
@@ -1792,13 +2056,13 @@ if (
 if (
     selectedMove.name === "フリーズドライ" &&
     moveType.includes("氷") &&
-    defForm.attribute.includes("水")
+    effectiveDefAttribute.includes("水")
 ) {
     type *= 4;
 }
 
 
-// 月弱点追加・聖弱点追加
+// 弱点追加
 let finalType = type;
 
 const moonWeakActive =
@@ -1809,9 +2073,22 @@ const holyWeakActive =
     document.getElementById("holyWeak").checked &&
     moveType.includes("聖");
 
+      const waterWeakActive =
+    document.getElementById("waterWeak").checked &&
+    moveType.includes("水");
+
+const poisonWeakActive =
+    document.getElementById("poisonWeak").checked &&
+    moveType.includes("毒");
+
 // 対象属性の技は、相性を最低でも弱点（2倍）にする
 if (
-    (moonWeakActive || holyWeakActive) &&
+    (
+        moonWeakActive ||
+        holyWeakActive ||
+        waterWeakActive ||
+        poisonWeakActive
+    ) &&
     finalType < 2
 ) {
     finalType = 2;
@@ -1826,28 +2103,60 @@ if (holyWeakActive) {
     addModifier("聖弱点追加", 2);
 }
 
-// どちらも適用されていない場合は通常の相性表示
-if (!moonWeakActive && !holyWeakActive) {
+      if (waterWeakActive) {
+    addModifier("水弱点追加", 2);
+}
 
-    if (type > 1) {
-        addModifier("弱点", type);
+if (poisonWeakActive) {
+    addModifier("毒弱点追加", 2);
+}
 
-    } else if (type > 0 && type < 1) {
-        addModifier("耐性", type);
 
-    } else if (type === 0) {
-        addModifier("無効", 0);
+const isMetalShiningLv10 =
+    selectedMove.name === "第零式・メタルシャイニングブレード" &&
+    metalShiningLevel === 10;
+
+// Lv10は1発ごとに属性別の相性を表示する
+if (!isMetalShiningLv10) {
+    if (
+        !moonWeakActive &&
+        !holyWeakActive &&
+        !waterWeakActive &&
+        !poisonWeakActive
+    ) {
+        if (type > 1) {
+            addModifier(`弱点（${moveType.join("・")}属性）`, type);
+        } else if (type > 0 && type < 1) {
+            addModifier(`耐性（${moveType.join("・")}属性）`, type);
+        } else if (type === 0) {
+            addModifier(`無効（${moveType.join("・")}属性）`, 0);
+        }
     }
 }
 
+
+
+
 const hitCount =
-selectedMove.hits
-? (
-    selectedMove.hits[0] === selectedMove.hits[1]
-    ? selectedMove.hits[0]
-    : Number(document.getElementById("hitCount").value)
-)
-: 1;
+    selectedMove.name === "第零式・メタルシャイニングブレード"
+        ? (metalShiningLevel === 10 ? 2 : 1)
+        : selectedMove.name === "ブリリアントフォース・改"
+            ? Number(document.getElementById("hitCount").value)
+            : selectedMove.hits
+                ? (
+                    selectedMove.hits[0] === selectedMove.hits[1]
+                        ? selectedMove.hits[0]
+                        : Number(document.getElementById("hitCount").value)
+                )
+                : 1;
+
+// 鋼のおとこ：攻撃回数に応じた軽減量を表示
+if (selectedDefenseAbility?.name === "鋼のおとこ") {
+    modifiers.push({
+        name: "鋼のおとこ",
+        value: `-${18 * hitCount}`
+    });
+}
 
         const damages = [];
         
@@ -1891,17 +2200,88 @@ Math.floor(
     getRankMultiplier(defenseRankNow)
 );
 
-console.log({
-    defense,
-    defenseRankNow,
-    defenseNow
-});
+
+
 
 let hitDamage =
-power * attackNow / defenseNow / 2;
+    power * attackNow / defenseNow / 2;
 
-hitDamage *= stab;
-hitDamage *= finalType;
+if (
+    selectedMove.name === "第零式・メタルシャイニングブレード" &&
+    metalShiningLevel === 10
+) {
+    // 1発目は鋼、2発目は聖
+    const hitType = hit === 1 ? "鋼" : "聖";
+
+    const hitEffectiveness = getTypeEffectiveness(
+        [hitType],
+        defForm.attribute
+    );
+
+  
+if (hitEffectiveness > 1) {
+    addModifier(`弱点（${hitType}属性）`, hitEffectiveness);
+} else if (hitEffectiveness > 0 && hitEffectiveness < 1) {
+    addModifier(`耐性（${hitType}属性）`, hitEffectiveness);
+} else if (hitEffectiveness === 0) {
+    addModifier(`無効（${hitType}属性）`, 0);
+}
+
+
+    const hitStab = atkForm.attribute.includes(hitType)
+        ? (isTerastal ? 2 : 1.5)
+        : (isTerastal ? 1.5 : 1);
+
+    hitDamage *= hitStab;
+    hitDamage *= hitEffectiveness;
+
+    // その属性に耐性がある場合だけ、その攻撃を3倍
+    const hasResistance =
+        defender.character.resistance?.includes(hitType) ||
+        (hitEffectiveness > 0 && hitEffectiveness < 1);
+
+    if (hasResistance) {
+        hitDamage *= 3;
+        addModifier(`第零式・メタルシャイニングブレード（${hitType}耐性）`, 3);
+    }
+} else {
+    hitDamage *= stab;
+    hitDamage *= finalType;
+}
+
+
+      // 風霧空間：風技のダメージ1.3倍
+if (
+    document.getElementById("battleField").value === "windMist" &&
+    moveType.includes("風")
+) {
+    hitDamage *= 1.3;
+    addModifier("風霧空間", 1.3);
+}
+
+      // ゲイルカルネージ・改：相手のHPを追加で30減らす
+if (selectedMove.name === "ゲイルカルネージ・改") {
+    hitDamage += 30;
+
+    if (!modifiers.some(m => m.name === "ゲイルカルネージ・改")) {
+        modifiers.push({
+            name: "ゲイルカルネージ・改",
+            value: "+30"
+        });
+    }
+}
+
+      // シャドウカルネージ：相手のHPを追加で10減らす
+if (selectedMove.name === "シャドウカルネージ") {
+    hitDamage += 10;
+
+    if (!modifiers.some(m => m.name === "シャドウカルネージ")) {
+        modifiers.push({
+            name: "シャドウカルネージ",
+            value: "+10"
+        });
+    }
+}
 
 // デスオーラ
 if (
@@ -2025,6 +2405,26 @@ if (
     addModifier("レインボーオーラ・改（3倍）", 3);
 }
 
+      
+ // 七色光衣・終（虹）：虹技の威力2.5倍
+if (
+    document.getElementById("rainbowClothingEnd").checked &&
+    moveType.includes("虹")
+) {
+    hitDamage *= 2.5;
+    addModifier("七色光衣・終（虹）", 2.5);
+}
+
+// 七色光衣・終（血）：ブラッド技の威力2.5倍
+if (
+    document.getElementById("bloodClothingEnd").checked &&
+    moveType.includes("ブラッド")
+) {
+    hitDamage *= 2.5;
+    addModifier("七色光衣・終（血）", 2.5);
+}
+
+
       // カオストルネード・改（次の技の威力1.2倍）
 if (
     document.getElementById("chaosTornadoBoost")?.checked
@@ -2076,6 +2476,11 @@ if (document.getElementById("shadowBurst").checked) {
     addModifier("シャドウバースト", 2);
 }
 
+      // サイクロンバースト・零
+if (document.getElementById("cycloneBurst").checked) {
+    hitDamage *= 2;
+    addModifier("サイクロンバースト・零", 2);
+}
 
 // 守る
 if(document.getElementById("protectBreak").checked){
@@ -2149,6 +2554,39 @@ if (selectedAttackAbility?.name === "断罪の仮面") {
     }
 }
 
+      // 破滅の神面
+if (selectedAttackAbility?.name === "破滅の神面") {
+    const multiplier = Number(
+        document.getElementById("ruinMaskHP").value
+    );
+
+    if (multiplier > 1) {
+        hitDamage *= multiplier;
+        addModifier("破滅の神面", multiplier);
+    }
+}
+
+      // 終式・冥界輪廻
+if (selectedAttackAbility?.name === "終式・冥界輪廻") {
+    const charge = Math.min(
+        500,
+        Math.max(
+            0,
+            Math.floor(
+                Number(
+                    document.getElementById("meikaiRinneCharge").value
+                ) || 0
+            )
+        )
+    );
+
+    const multiplier =
+        charge <= 20 ? 0.2 : charge / 100;
+
+    hitDamage *= multiplier;
+
+    addModifier("終式・冥界輪廻", multiplier);
+}
 
         
         // マルチアーマー
@@ -2199,6 +2637,18 @@ if (
     addModifier("絶対的忠誠心", 0.5);
 }
 
+// 血虹悪魔：血剣悪魔形態は被ダメージ1.2倍
+const defenderFormName =
+    getCurrentFormData(defender).name || defender.character.name;
+
+if (
+    selectedDefenseAbility?.name === "血虹悪魔" &&
+    defenderFormName.includes("血剣悪魔")
+) {
+    hitDamage *= 1.2;
+    addModifier("血虹悪魔", 1.2);
+}
+      
 hitDamage = Math.floor(hitDamage * i / 100);
         // ここでマルチアーマー
         // ここで持久力
@@ -2215,6 +2665,12 @@ if (
     hitDamage = hpNow - 1;
     sashUsed = true;
 
+}
+
+      // 鋼のおとこ：受けるダメージを1ヒットごとに18軽減
+if (selectedDefenseAbility?.name === "鋼のおとこ") {
+    hitDamage = Math.max(0, hitDamage - 18);
+    
 }
 
 totalDamage += hitDamage;
@@ -2277,6 +2733,13 @@ console.log(e.stack);
 }
     
     function calculateHitCount(damage, currentHp){
+
+      if (damage <= 0) {
+    return {
+        hit: Infinity,
+        berryUsed: false
+    };
+}
 
     const defForm = getCurrentFormData(defender);
 const hp = getMaxHP(defender);
@@ -2487,11 +2950,13 @@ searchInput.oninput = () => {
         const specialAbilities = abilities.filter(ability =>
     specialIds.includes(ability.id) &&
     (
-        ability.category === category ||
-        (
-            ability.name === "ウィークアーマー"
-        )
-    ) &&
+    ability.category === category ||
+    ability.name === "ウィークアーマー" ||
+    (
+        ability.name === "血虹悪魔" &&
+        abilitySide === "defense"
+    )
+)&&
     ability.damage &&
     (
         ability.name.includes(keyword) ||
@@ -2504,10 +2969,14 @@ searchInput.oninput = () => {
 const otherAbilities = abilities.filter(ability =>
     !specialIds.includes(ability.id) &&
     (
-        ability.category === category ||
         (
-            ability.name === "ウィークアーマー"
-        )
+    ability.category === category ||
+    ability.name === "ウィークアーマー" ||
+    (
+        ability.name === "血虹悪魔" &&
+        abilitySide === "defense"
+    )
+)
     ) &&
     ability.damage &&
     (
@@ -2710,6 +3179,11 @@ document.getElementById("spikes").onchange = () => {
     updateScreen();
 };
 
+// フィールド
+document.getElementById("battleField").onchange = () => {
+    updateScreen();
+};
+
 //レインボーオーラ
 document.getElementById("rainbowAura").onchange = () => {
     updateScreen();
@@ -2740,6 +3214,17 @@ document.getElementById("rainbowAura3").onchange = () => {
     updateScreen();
 };
 
+
+ // 七色光衣・終：チェック時にダメージを更新
+document.getElementById("rainbowClothingEnd").addEventListener("change", () => {
+    updateScreen();
+});
+
+document.getElementById("bloodClothingEnd").addEventListener("change", () => {
+    updateScreen();
+});
+
+
 // 破滅の災い・改
 document.getElementById("ruinHoly").onchange = () => {
     updateScreen();
@@ -2767,6 +3252,11 @@ document.getElementById("shadowBurst").onchange = () => {
     updateScreen();
 };
 
+// サイクロンバースト・零
+document.getElementById("cycloneBurst").onchange = () => {
+    updateScreen();
+};
+
 // 零式・レインヴォイドアビス
 document.getElementById("voidAbyssPower").onchange = () => {
     updateScreen();
@@ -2789,6 +3279,9 @@ document.getElementById("hitCount").onchange = () => {
 
 //能力上昇火力
 document.getElementById("assistPower").onchange = updateScreen;
+
+document.getElementById("ruinRainbowBloodSwordPower").onchange =
+    updateScreen;
 
 document.getElementById("bleedCount").onchange = updateScreen;
 
@@ -2831,11 +3324,37 @@ damageModifiers.map(m => `
     document.getElementById("detailAttack").textContent =
         attackStatValue.textContent;
 
-    document.getElementById("detailType").innerHTML =
-    createTypeBadges(getCurrentFormData(attacker).attribute);
+    const attackerAttributes = getCurrentFormData(attacker).attribute;
 
-    document.getElementById("detailMoveType").innerHTML =
-    createTypeBadges(getEffectiveMoveType(selectedMove));
+document.getElementById("detailType").innerHTML =
+    createTypeBadges(attackerAttributes) +
+    (attackerTeraType
+        ? ' <span style="font-weight:bold;">➝</span> ' +
+          createTypeBadges([attackerTeraType])
+        : "");
+
+    
+const detailMoveType =
+    document.getElementById("detailMoveType");
+
+if (
+    selectedMove.name === "第零式・メタルシャイニングブレード" &&
+    Number(document.getElementById("hitCount").value) === 10
+) {
+    detailMoveType.innerHTML =
+        createTypeBadges(["鋼"]) +
+        ' <span style="font-weight:bold;">➝</span> ' +
+        createTypeBadges(["聖"]);
+} else if (
+    selectedMove.name === "第零式・メタルシャイニングブレード" &&
+    Number(document.getElementById("hitCount").value) >= 5
+) {
+    detailMoveType.innerHTML = createTypeBadges(["聖"]);
+} else {
+    detailMoveType.innerHTML =
+        createTypeBadges(getEffectiveMoveType(selectedMove));
+}
+
         
         document.getElementById("detailDefender").textContent =
     defender.character.name.replace(/[（(].*?[）)]/g, "");
@@ -2852,8 +3371,14 @@ document.getElementById("detailDefenderHP").textContent =
 document.getElementById("detailDefense").textContent =
     defenseStatValue.textContent;
 
+const defenderAttributes = getCurrentFormData(defender).attribute;
+
 document.getElementById("detailDefenderType").innerHTML =
-    createTypeBadges(getCurrentFormData(defender).attribute);
+    createTypeBadges(defenderAttributes) +
+    (defenderTeraType
+        ? ' <span style="font-weight:bold;">➝</span> ' +
+          createTypeBadges([defenderTeraType])
+        : "");
     
     const damages = calculateDamage();
 
@@ -2935,14 +3460,38 @@ document.getElementById("moonWeak").onchange = updateScreen;
 // 聖弱点追加
 document.getElementById("holyWeak").onchange = updateScreen;
 
+// 水弱点追加
+document.getElementById("waterWeak").onchange = updateScreen;
+
+// 毒弱点追加
+document.getElementById("poisonWeak").onchange = updateScreen;
+
 // 神撃
 document.getElementById("shingekiPower").onchange = updateScreen;
 
 //石像
 document.getElementById("stoneStatue").onchange = updateScreen;
 
-// テラスタル
-document.getElementById("terastal").onchange = updateScreen;
+document.getElementById("meikaiRinneCharge").oninput = () => {
+    const charge = Math.min(
+        500,
+        Math.max(
+            0,
+            Math.floor(
+                Number(
+                    document.getElementById("meikaiRinneCharge").value
+                ) || 0
+            )
+        )
+    );
+
+    const multiplier = charge <= 20 ? 0.2 : charge / 100;
+
+    document.getElementById("meikaiRinneMultiplier").textContent =
+        `ダメージ倍率：${multiplier.toFixed(1)}倍`;
+
+    updateScreen();
+};
 
 
 function changeForm(side) {
@@ -3002,3 +3551,161 @@ judgmentMaskRank.value = "0";
 
 judgmentMaskRank.onchange = updateScreen;
 
+document.getElementById("ruinMaskHP").onchange = updateScreen;
+
+const teraTypes = [
+    "おとこ",
+    "無",
+    "炎",
+    "雷",
+    "水",
+    "風",
+    "ブラッド",
+    "月",
+    "氷",
+    "ゴースト",
+    "聖",
+    "闇",
+    "鋼",
+    "毒",
+    "大地",
+    "虹",
+    "龍",
+    "幻"
+];
+
+function selectTeraType(side) {
+    const current =
+        side === "attacker" ? attackerTeraType : defenderTeraType;
+
+    const modal = document.createElement("div");
+    modal.className = "teraModal";
+
+    modal.innerHTML = `
+        <div class="teraModalContent">
+            <h3>テラスタイプを選択</h3>
+            <div class="teraTypeGrid"></div>
+            <button class="teraCancel">キャンセル</button>
+        </div>
+    `;
+
+    const grid = modal.querySelector(".teraTypeGrid");
+
+    const choices = ["なし", ...teraTypes];
+
+    choices.forEach(type => {
+    const button = document.createElement("button");
+    const value = type === "なし" ? "" : type;
+
+    button.className = "teraTypeOption";
+
+    if (value === "虹") {
+        button.innerHTML = `
+            <span class="attribute-虹-wrap">
+                <span class="attribute attribute-虹">虹</span>
+            </span>
+        `;
+    } else if (value) {
+        button.innerHTML =
+            `<span class="attribute attribute-${value}">${value}</span>`;
+    } else {
+        button.textContent = "なし";
+        button.classList.add("teraNone");
+    }
+
+    if (value === current) {
+        button.classList.add("selected");
+    }
+
+    button.onclick = () => {
+        if (side === "attacker") {
+            attackerTeraType = value;
+        } else {
+            defenderTeraType = value;
+        }
+
+        document.getElementById(
+            side === "attacker"
+                ? "attackerTeraButton"
+                : "defenderTeraButton"
+        ).textContent = `テラスタイプ：${value || "なし"}`;
+
+        modal.remove();
+document.body.style.overflow = "";
+        updateScreen();
+    };
+
+    grid.appendChild(button);
+    });
+
+    modal.querySelector(".teraCancel").onclick = () => {
+        modal.remove();
+document.body.style.overflow = "";
+    };
+
+    modal.onclick = event => {
+        if (event.target === modal) modal.remove();
+document.body.style.overflow = "";
+    };
+
+    document.body.appendChild(modal);
+document.body.style.overflow = "hidden";
+}
+
+document.getElementById("attackerTeraButton").onclick = function() {
+    selectTeraType("attacker");
+};
+
+document.getElementById("defenderTeraButton").onclick = function() {
+    selectTeraType("defender");
+};
+
+
+document.getElementById("swapSidesButton").addEventListener("click", () => {
+    // キャラクターと形態を入れ替え
+    [attacker.character, defender.character] =
+        [defender.character, attacker.character];
+
+    [attacker.formIndex, defender.formIndex] =
+        [defender.formIndex, attacker.formIndex];
+
+    // テラスタイプもキャラクターと一緒に入れ替え
+    [attackerTeraType, defenderTeraType] =
+        [defenderTeraType, attackerTeraType];
+
+    // 形態変化ボタンの表示を更新
+    const attackerFormButton =
+        document.getElementById("attackerFormButton");
+    const defenderFormButton =
+        document.getElementById("defenderFormButton");
+
+    attackerFormButton.style.display =
+        attacker.character.forms?.length > 0 ? "" : "none";
+    defenderFormButton.style.display =
+        defender.character.forms?.length > 0 ? "" : "none";
+
+    attackerFormButton.textContent =
+        attacker.formIndex >= 0
+            ? (attacker.character.forms[attacker.formIndex].name ||
+               attacker.character.name)
+            : (attacker.character.name.match(/[（(].*?[）)]/)
+                ? attacker.character.name
+                : "通常形態");
+
+    defenderFormButton.textContent =
+        defender.formIndex >= 0
+            ? (defender.character.forms[defender.formIndex].name ||
+               defender.character.name)
+            : (defender.character.name.match(/[（(].*?[）)]/)
+                ? defender.character.name
+                : "通常形態");
+
+    // テラスタイプの表示を更新
+    document.getElementById("attackerTeraButton").textContent =
+        `テラスタイプ：${attackerTeraType || "なし"}`;
+
+    document.getElementById("defenderTeraButton").textContent =
+        `テラスタイプ：${defenderTeraType || "なし"}`;
+
+    updateScreen();
+});
