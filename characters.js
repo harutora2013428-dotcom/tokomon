@@ -6,6 +6,7 @@ const characters = [
     name:"おとこ",
 kana:"おとこ",
 images: {
+    icon: "images/characters/otoko/icon.png",
     self: "images/characters/otoko/self.png",
     enemy: "images/characters/otoko/enemy.png"
 },

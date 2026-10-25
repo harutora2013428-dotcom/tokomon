@@ -188,8 +188,20 @@ function displayCharacters(list){
         <div class="character-card">
 
             <div class="character-header">
-                No.${String(c.id).padStart(3,"0")}　${c.name}
-            </div>
+    ${
+        c.images && c.images.icon
+        ? `<img
+            class="character-icon"
+            src="${c.images.icon}"
+            alt="${c.name}"
+        >`
+        : ""
+    }
+
+    <span>
+        No.${String(c.id).padStart(3,"0")}　${c.name}
+    </span>
+</div>
 
             <div class="character-body">
 
@@ -370,12 +382,36 @@ function displayBasicInfo(c, relation){
 
 return `
 
-<div class="status-title">
-    <h2>
-    ${c.name.replace(/（.*?）|\(.*?\)/g, match =>
-    `<span style="font-size:0.75em !important; font-weight:normal;">${match}</span>`
-)}
-</h2>
+<div class="character-profile">
+
+    ${
+        c.images && c.images.icon
+        ? `<img
+            class="character-detail-icon"
+            src="${c.images.icon}"
+            alt="${c.name}"
+        >`
+        : ""
+    }
+
+    <div class="status-title">
+        <h2>
+            ${c.name.replace(/（.*?）|\(.*?\)/g, match =>
+                `<span style="font-size:0.75em !important; font-weight:normal;">${match}</span>`
+            )}
+        </h2>
+
+        ${
+            c.forms && c.forms.length > 0
+            ? `<button id="formChangeButton"
+                class="form-change-button">
+                形態変化
+            </button>`
+            : ""
+        }
+    </div>
+
+</div>
 
     ${
         c.forms && c.forms.length > 0
