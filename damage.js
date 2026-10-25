@@ -293,15 +293,25 @@ function addMoveButton(move){
       
       selectedMove = move;
 
-      const hitCountLabel =
+      
+const hitCountLabel =
     document.querySelector('label[for="hitCount"]');
 
 if (hitCountLabel) {
-    hitCountLabel.textContent =
+    if (
         move.name === "ルシフェルフォースラジェーション・零"
-            ? "威力"
-            : "Lv";
+    ) {
+        hitCountLabel.textContent = "威力";
+    } else if (
+        move.name === "ブリリアントフォース・改" ||
+        move.name === "第零式・メタルシャイニングブレード"
+    ) {
+        hitCountLabel.textContent = "Lv";
+    } else {
+        hitCountLabel.textContent = "ヒット回数";
+    }
 }
+
 
         moveButton.textContent = move.name;
         
