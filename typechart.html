@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#d32f2f">
+  <title>属性相性表｜とこモンバトル攻略</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+  .typechart-page {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    margin: 6px auto;
+    padding: 4px;
+}
+
+.typechart-page .card {
+    padding: 6px 3px;
+    margin-bottom: 6px;
+}
+
+.typechart-page h2 {
+    font-size: 18px;
+    margin: 4px 2px 6px;
+}
+
+.typechart-note {
+    font-size: 10px;
+    margin: 4px 2px 6px;
+    line-height: 1.3;
+}
+
+.typechart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 7px;
+    margin: 5px 2px;
+    font-size: 9px;
+}
+
+.typechart-scroll {
+    width: 100%;
+    overflow: visible;
+}
+
+.typechart-table {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 10px;
+}
+
+.typechart-table th,
+.typechart-table td {
+    border: 1px solid #b8c6d0;
+    text-align: center;
+    padding: 0;
+    min-width: 0;
+    height: 24px;
+    overflow: visible;
+}
+
+/* 上側の属性欄 */
+.typechart-table thead th {
+    height: 52px;
+    padding: 0;
+    vertical-align: middle;
+}
+
+/* 上側の属性タグ */
+.typechart-table thead .attribute {
+    min-height: 46px !important;
+    height: auto;
+    font-size: 10px !important;
+    padding: 3px 2px !important;
+    line-height: 1.1;
+    letter-spacing: 0;
+}
+
+/* 左上 */
+.typechart-table .corner {
+    width: 24px;
+    min-width: 24px;
+    font-size: 7px;
+    line-height: 1.2;
+    background: #e9eef2;
+}
+
+/* 左側の属性タグ */
+.typechart-table .row-type {
+    width: 30px;
+    min-width: 30px;
+    background: #f2f4f6;
+    vertical-align: middle;
+}
+
+/* 属性タグを大きく表示 */
+.typechart-table .attribute {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 12px !important;
+    font-weight: bold;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    padding: 5px 3px !important;
+    margin: 0;
+    border-radius: 4px;
+}
+
+
+/* 左側のタグ */
+.typechart-table tbody .attribute {
+    min-height: 34px;
+    font-size: 11px !important;
+    padding: 3px 2px !important;
+}
+
+/* 虹属性 */
+.typechart-table .attribute-虹-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.typechart-table .attribute-虹-wrap::before {
+    inset: -2px;
+    filter: blur(3px);
+}
+
+.typechart-table .attribute-虹-wrap > .attribute-虹 {
+    padding: 5px 3px !important;
+}
+
+    /* 属性相性表：虹タグのサイズと発光を調整 */
+.typechart-table .attribute-虹-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    height: auto;
+}
+
+.typechart-table .attribute-虹-wrap::before {
+    inset: -1px;
+    filter: blur(2px);
+}
+
+.typechart-table .attribute-虹-wrap > .attribute-虹 {
+    min-height: 0 !important;
+    height: auto;
+    padding: 3px 2px !important;
+    border-radius: 5px;
+    font-size: 11px !important;
+    line-height: 1.2;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+/* 幻属性 */
+.typechart-table .attribute-幻 {
+    border-radius: 5px;
+    box-shadow:
+        0 0 4px #fff,
+        0 0 9px #9e8cff;
+}
+
+/* 相性 */
+.typechart-table .same {
+    background: #f3f3f3;
+    color: #888;
+}
+
+.typechart-table .super {
+    background: #ffe1d7;
+    color: #c43d1b;
+    font-weight: bold;
+}
+
+.typechart-table .resist {
+    background: #dcecff;
+    color: #1764b1;
+    font-weight: bold;
+}
+
+.typechart-table .immune {
+    background: #333;
+    color: white;
+    font-weight: bold;
+}
+
+.typechart-table .normal {
+    color: #bbb;
+}
+
+.typechart-back {
+    display: inline-block;
+    margin: 0 0 4px 2px;
+    font-size: 11px;
+}
+
+@media (max-width: 380px) {
+    .typechart-table thead th {
+        height: 90px;
+    }
+
+    .typechart-table .corner {
+        width: 21px;
+        min-width: 21px;
+    }
+
+    .typechart-table .row-type {
+        width: 26px;
+        min-width: 26px;
+    }
+
+    .typechart-table .attribute {
+        font-size: 10px !important;
+        padding: 3px 2px !important;
+    }
+
+    .typechart-table tbody .attribute {
+        font-size: 9px !important;
+    }
+}
+
+/* ===== 属性相性表：タグ位置とサイズの統一 ===== */
+
+/* 上側の属性欄 */
+.typechart-table thead th {
+    height: 54px !important;
+    padding: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* 上側の通常属性タグ */
+.typechart-table thead th > .attribute {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 auto !important;
+    padding: 2px !important;
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0 !important;
+    vertical-align: middle !important;
+}
+
+/* 左側の属性欄 */
+.typechart-table tbody .row-type {
+    width: 24px !important;
+    min-width: 24px !important;
+    padding: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* 左側の通常属性タグ */
+.typechart-table tbody .row-type > .attribute {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    margin: 0 auto !important;
+    padding: 1px !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+    vertical-align: middle !important;
+}
+
+/* 虹タグの外枠：上側 */
+.typechart-table thead th > .attribute-虹-wrap {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+/* 虹タグの外枠：左側 */
+.typechart-table tbody .row-type > .attribute-虹-wrap {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+/* 虹タグ本体：上側 */
+.typechart-table thead th .attribute-虹-wrap > .attribute-虹 {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 48px !important;
+    margin: 0 !important;
+    padding: 2px !important;
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    transform: none !important;
+}
+
+/* 虹タグ本体：左側 */
+.typechart-table tbody .row-type .attribute-虹-wrap > .attribute-虹 {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    margin: 0 !important;
+    padding: 1px !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    transform: none !important;
+}
+
+/* 虹の発光効果 */
+.typechart-table .attribute-虹-wrap::before {
+    inset: -1px !important;
+    filter: blur(2px) !important;
+}
+/* 属性タグの文字位置を微調整 */
+.typechart-table .attribute {
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding-left: 0 !important;
+    padding-right: 14px !important;
+}
+
+/* 虹は中央配置を維持 */
+.typechart-table .attribute-虹-wrap > .attribute-虹 {
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 2px !important;
+}
+    /* 属性タグの文字だけを左へ移動 */
+.typechart-table .attribute-label {
+    display: inline-block;
+    transform: translateX(-1px);
+}
+
+/* 虹の文字も同じように調整 */
+.typechart-table .attribute-虹 .attribute-label {
+    transform: translateX(-1px);
+}
+    </style>
+</head>
+<body>
+<header>とこモンバトル攻略</header>
+<nav>
+  <a href="index.html">🏠 ホーム</a>
+  <a href="character.html">👤 キャラクター一覧</a>
+  <a href="moves.html">⚔️ 技一覧</a>
+  <a href="abilities.html">✨ 特性一覧</a>
+  <a href="items.html">🎒 持ち物一覧</a>
+</nav>
+
+<main class="container typechart-page">
+  <a class="typechart-back" href="index.html">← ホームへ戻る</a>
+  <section class="card">
+    <h2>属性相性表</h2>
+    <p class="typechart-note">縦が攻撃する側、横が防御する側です。</p>
+    <div class="typechart-legend">
+      <span>🔴 ○：2倍（弱点）</span>
+      <span>🔵 △：0.5倍（耐性）</span>
+      <span>⚫ ×：0倍（無効）</span>
+      <span>・：等倍</span>
+    </div>
+    <div class="typechart-scroll">
+      <table class="typechart-table" id="typeChartTable">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="typeChart.js"></script>
+<script>
+(function () {
+  const types = [
+    "炎", "水", "雷", "風", "月", "氷", "ブラッド", "ゴースト",
+    "聖", "闇", "鋼", "毒", "大地", "虹", "おとこ", "無", "龍", "幻"
+  ];
+
+  const table = document.getElementById("typeChartTable");
+  const thead = table.querySelector("thead");
+  const tbody = table.querySelector("tbody");
+
+  // 表示名
+const displayNames = {
+    "ブラッド": "血",
+    "ゴースト": "霊",
+    "おとこ": "お",
+    "大地": "地"
+};
+
+// 属性タグを作成
+function typeTag(type) {
+    const label = displayNames[type] || type;
+
+    if (type === "虹") {
+        return `
+            <span class="attribute-虹-wrap">
+                <span class="attribute attribute-虹">
+                    <span class="attribute-label">${label}</span>
+                </span>
+            </span>
+        `;
+    }
+
+    return `
+        <span class="attribute attribute-${type}">
+            <span class="attribute-label">${label}</span>
+        </span>
+    `;
+}
+
+  const headRow = document.createElement("tr");
+  const corner = document.createElement("th");
+  corner.className = "corner";
+  corner.textContent = "攻↓防→";
+  headRow.appendChild(corner);
+
+  types.forEach(type => {
+    const th = document.createElement("th");
+    th.innerHTML = typeTag(type);
+    th.title = type;
+    headRow.appendChild(th);
+  });
+  thead.appendChild(headRow);
+
+  types.forEach(attackType => {
+    const tr = document.createElement("tr");
+    const rowHeader = document.createElement("th");
+    rowHeader.className = "row-type";
+    rowHeader.innerHTML = typeTag(attackType);
+    rowHeader.title = attackType;
+    tr.appendChild(rowHeader);
+
+    types.forEach(defenseType => {
+      const td = document.createElement("td");
+      const rate = (typeChart[attackType] &&
+        typeChart[attackType][defenseType] !== undefined)
+        ? typeChart[attackType][defenseType]
+        : 1;
+
+      if (rate === 2) {
+        td.className = "super";
+        td.textContent = "○";
+        td.title = "効果抜群：2倍";
+      } else if (rate === 0.5) {
+        td.className = "resist";
+        td.textContent = "△";
+        td.title = "いまひとつ：0.5倍";
+      } else if (rate === 0) {
+        td.className = "immune";
+        td.textContent = "×";
+        td.title = "効果なし：0倍";
+      } else {
+        td.className = attackType === defenseType ? "same" : "normal";
+        td.textContent = "・";
+        td.title = "等倍";
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>
