@@ -413,17 +413,7 @@ return `
 
 </div>
 
-    ${
-        c.forms && c.forms.length > 0
-        ? `
-        <button id="formChangeButton"
-        class="form-change-button">
-        形態変化
-        </button>
-        `
-        : ""
-    }
-</div>
+    
 
 <p><strong>No.</strong> ${String(c.id).padStart(3,"0")}</p>
 
@@ -493,55 +483,58 @@ i === "虹"
 
 function updateBasicInfo(currentForm, c){
 
-    const info = detail.querySelector(".status-title").parentElement;
+const relation = getTypeRelations(
+    currentForm.attribute || c.attribute
+);
 
-    const relation = getTypeRelations(
-        currentForm.attribute || c.attribute
+const html = displayBasicInfo(
+    {
+        ...c,
+        name: currentForm.name || c.name,
+        attribute: currentForm.attribute || c.attribute,
+        forms: c.forms
+    },
+    relation
+);
+
+const temp = document.createElement("div");
+temp.innerHTML = html;
+
+// 属性表示を更新
+const oldAttribute = [...detail.querySelectorAll("p")]
+    .find(p =>
+        p.querySelector("strong")?.textContent.trim() === "属性"
     );
 
-    const html = displayBasicInfo(
-        {
-            ...c,
-            name: currentForm.name || c.name,
-            attribute: currentForm.attribute || c.attribute,
-            forms: c.forms
-        },
-        relation
+const newAttribute = [...temp.querySelectorAll("p")]
+    .find(p =>
+        p.querySelector("strong")?.textContent.trim() === "属性"
     );
 
-    const temp = document.createElement("div");
-    temp.innerHTML = html;
+if(oldAttribute && newAttribute){
+    oldAttribute.replaceWith(newAttribute);
+}
 
-    // 属性・No.の表示を更新（タイトルとボタンは残す）
-    const oldParagraphs = info.querySelectorAll("p");
-    const newParagraphs = temp.querySelectorAll("p");
+// 弱点・耐性・無効を更新
+["弱点", "耐性", "無効"].forEach(label => {
 
-    oldParagraphs.forEach((p, i) => {
-        if(newParagraphs[i]){
-            p.replaceWith(newParagraphs[i]);
+    const oldHeading = [...detail.querySelectorAll("h3")]
+        .find(h => h.textContent.trim() === label);
+
+    const newHeading = [...temp.querySelectorAll("h3")]
+        .find(h => h.textContent.trim() === label);
+
+    if(oldHeading && newHeading){
+
+        const oldList = oldHeading.nextElementSibling;
+        const newList = newHeading.nextElementSibling;
+
+        if(oldList && newList){
+            oldList.replaceWith(newList);
         }
-    });
+    }
+});
 
-    // 弱点・耐性・無効を更新
-    ["弱点", "耐性", "無効"].forEach(label => {
-
-        const oldHeading = [...info.querySelectorAll("h3")]
-            .find(h => h.textContent.trim() === label);
-
-        const newHeading = [...temp.querySelectorAll("h3")]
-            .find(h => h.textContent.trim() === label);
-
-        if(oldHeading && newHeading){
-            const oldList = oldHeading.nextElementSibling;
-            const newList = newHeading.nextElementSibling;
-
-            oldHeading.textContent = label;
-
-            if(oldList && newList){
-                oldList.replaceWith(newList);
-            }
-        }
-    });
 }
 
 
