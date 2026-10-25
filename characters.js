@@ -72,6 +72,7 @@ zMove:3001,
     name:"はやぶさ",
     kana:"はやぶさ",
     images: {
+      icon: "images/characters/hayabusa/icon.png",
     self: "images/characters/hayabusa/self.png",
     enemy: "images/characters/hayabusa/enemy.png"
 },
@@ -141,6 +142,7 @@ zMove:3001,
     name:"こまち",
 kana:"こまち",
 images: {
+  icon: "images/characters/komachi/icon.png",
     self: "images/characters/komachi/self.png",
     enemy: "images/characters/komachi/enemy.png"
 },
@@ -229,6 +231,7 @@ images: {
     name:"東西",
 kana:"とうざい",
 images: {
+  icon: "images/characters/touzai/icon.png",
     self: "images/characters/touzai/self.png",
     enemy: "images/characters/touzai/enemy.png"
 },
@@ -326,6 +329,7 @@ images: {
     name:"山手",
     kana:"やまのて",
     images: {
+      icon: "images/characters/yamanote/icon.png",
     self: "images/characters/yamanote/self.png",
     enemy: "images/characters/yamanote/enemy.png"
 },
@@ -390,6 +394,7 @@ moves:[
     name:"丸ノ内XV",
 kana:"まるのうちえっくすぶい",
   images: {
+    icon: "images/characters/XV/icon.png",
     self: "images/characters/XV/self.png",
     enemy: "images/characters/XV/enemy.png"
 },
@@ -472,6 +477,7 @@ kana:"まるのうちえっくすぶい",
     name:"半蔵門",
     kana:"はんぞうもん",
     images: {
+      icon: "images/characters/hanzomon/icon.png",
         self: "images/characters/hanzomon/self.png",
         enemy: "images/characters/hanzomon/enemy.png"
     },
@@ -565,6 +571,7 @@ kana:"まるのうちえっくすぶい",
     name:"丸ノ内NI",
     kana:"まるのうちえぬあい",
   images: {
+    icon: "images/characters/NI/icon.png",
     self: "images/characters/NI/self.png",
     enemy: "images/characters/NI/enemy.png"
 },
@@ -647,6 +654,7 @@ kana:"まるのうちえっくすぶい",
     kana:"さいきょう",
 
     images:{
+      icon: "images/characters/saikyo/icon.png",
         self:"images/characters/saikyo/self.png",
         enemy:"images/characters/saikyo/enemy.png"
     },
@@ -665,6 +673,11 @@ kana:"まるのうちえっくすぶい",
     forms:[
   {
     name:"埼京(疾風龍形態)",
+    images:{
+      icon: "images/characters/saikyoS/icon.png",
+        self:"images/characters/saikyoS/self.png",
+        enemy:"images/characters/saikyoS/enemy.png"
+    },
     attribute:["龍","風"],
     status:{
       hp:181,
@@ -799,6 +812,7 @@ kana:"まるのうちえっくすぶい",
     kana:"すかいらいなー",
 
     images:{
+      icon: "images/characters/skyliner/icon.png",
         self:"images/characters/skyliner/self.png",
         enemy:"images/characters/skyliner/enemy.png"
     },
@@ -881,6 +895,7 @@ kana:"まるのうちえっくすぶい",
     kana:"そうぶ",
 
     images:{
+      icon: "images/characters/sobu/icon.png",
         self:"images/characters/sobu/self.png",
         enemy:"images/characters/sobu/enemy.png"
     },
@@ -955,6 +970,7 @@ kana:"まるのうちえっくすぶい",
     name:"東葉",
     kana:"とうよう",
   images: {
+    icon: "images/characters/touyou/icon.png",
     self: "images/characters/touyou/self.png",
     enemy: "images/characters/touyou/enemy.png"
 },
@@ -1040,6 +1056,7 @@ kana:"まるのうちえっくすぶい",
     name:"南武",
     kana:"なんぶ",
   images: {
+    icon: "images/characters/nanbu/icon.png",
     self: "images/characters/nanbu/self.png",
     enemy: "images/characters/nanbu/enemy.png"
 },
@@ -1112,6 +1129,7 @@ kana:"まるのうちえっくすぶい",
     name:"かもめ",
     kana:"かもめ",
   images: {
+    icon: "images/characters/kamome/icon.png",
     self: "images/characters/kamome/self.png",
     enemy: "images/characters/kamome/enemy.png"
 },
@@ -1196,6 +1214,7 @@ kana:"まるのうちえっくすぶい",
     name:"かがやき",
     kana:"かがやき",
   images: {
+    icon: "images/characters/kagayaki/icon.png",
     self: "images/characters/kagayaki/self.png",
     enemy: "images/characters/kagayaki/enemy.png"
 },

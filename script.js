@@ -500,6 +500,18 @@ const html = displayBasicInfo(
 const temp = document.createElement("div");
 temp.innerHTML = html;
 
+  // キャラアイコンを形態に合わせて変更
+const icon = detail.querySelector(".character-detail-icon");
+
+const iconPath =
+    currentForm.images?.icon ||
+    c.images?.icon;
+
+if (icon && iconPath) {
+    icon.src = iconPath;
+    icon.alt = currentForm.name || c.name;
+}
+
 // 属性表示を更新
 const oldAttribute = [...detail.querySelectorAll("p")]
     .find(p =>
