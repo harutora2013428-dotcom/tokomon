@@ -2278,6 +2278,149 @@ function generateItem(randomMoves){
 const randomButton = document.getElementById("randomGenerateButton");
 const randomResult = document.getElementById("randomResult");
 
+
+const randomHistoryKey = "randomGenerateHistory";
+
+
+// 履歴ボタンを作成
+const historyButton = document.createElement("button");
+historyButton.id = "randomHistoryButton";
+historyButton.textContent = "履歴";
+
+
+if (randomButton) {
+    const buttonRow = document.createElement("div");
+    buttonRow.id = "randomButtonRow";
+
+    randomButton.parentNode.insertBefore(
+        buttonRow,
+        randomButton
+    );
+
+    buttonRow.appendChild(historyButton);
+    buttonRow.appendChild(randomButton);
+}
+
+
+// モーダルを作成
+const historyModal = document.createElement("div");
+historyModal.id = "randomHistoryModal";
+historyModal.innerHTML = `
+    <div class="random-history-backdrop"></div>
+    <div class="random-history-dialog">
+        <div class="random-history-header">
+            <h2>ランダム生成履歴</h2>
+            <button id="closeRandomHistory">✕</button>
+        </div>
+        <p id="randomHistoryCount"></p>
+        <div id="randomHistoryList"></div>
+    </div>
+`;
+
+document.body.appendChild(historyModal);
+
+// 履歴を表示
+function renderRandomHistory() {
+    const history = JSON.parse(
+        localStorage.getItem(randomHistoryKey) || "[]"
+    );
+
+    document.getElementById("randomHistoryCount").textContent =
+        `${history.length}/10件`;
+
+    const list = document.getElementById("randomHistoryList");
+
+    if (history.length === 0) {
+        list.innerHTML = "<p>履歴はありません。</p>";
+        return;
+    }
+
+    list.innerHTML = history.map((item, index) => `
+        <div class="random-history-row">
+            <button class="random-history-open"
+                data-index="${index}">
+                <span>${index + 1}. ${item.name}</span>
+                <small>No.${String(item.id).padStart(3, "0")}</small>
+            </button>
+            <button class="random-history-delete"
+                data-index="${index}">削除</button>
+        </div>
+    `).join("");
+}
+
+
+ // モーダルを開く
+historyButton.addEventListener("click", () => {
+    renderRandomHistory();
+
+    // 現在のスクロール位置を保存
+    historyModal.dataset.scrollY = window.scrollY;
+
+    // 背景ページのスクロールを禁止
+    document.body.style.position = "fixed";
+    document.body.style.top =
+        `-${historyModal.dataset.scrollY}px`;
+    document.body.style.width = "100%";
+
+    historyModal.classList.add("show");
+});
+
+// モーダルを閉じる
+function closeRandomHistory() {
+    historyModal.classList.remove("show");
+
+    // 背景ページのスクロールを復元
+    const scrollY = Number(historyModal.dataset.scrollY || 0);
+
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+
+    window.scrollTo(0, scrollY);
+}
+
+
+document.getElementById("closeRandomHistory")
+    .addEventListener("click", closeRandomHistory);
+
+historyModal.querySelector(".random-history-backdrop")
+    .addEventListener("click", closeRandomHistory);
+
+// 履歴を選択・削除
+historyModal.addEventListener("click", event => {
+    const openButton = event.target.closest(".random-history-open");
+    const deleteButton = event.target.closest(".random-history-delete");
+
+    const history = JSON.parse(
+        localStorage.getItem(randomHistoryKey) || "[]"
+    );
+
+    if (openButton) {
+        const item = history[Number(openButton.dataset.index)];
+        if (!item) return;
+
+        randomResult.innerHTML = item.html;
+        randomResult.style.display = "block";
+        closeRandomHistory();
+
+        
+    }
+
+    if (deleteButton) {
+        history.splice(Number(deleteButton.dataset.index), 1);
+
+        localStorage.setItem(
+            randomHistoryKey,
+            JSON.stringify(history)
+        );
+
+        renderRandomHistory();
+    }
+});
+
+    
+
+
 if (randomButton && randomResult) {
 
     randomButton.addEventListener("click", function () {
@@ -2428,6 +2571,28 @@ randomResult.innerHTML = `
 
 </div>
 `;
+
+      
+ // 生成結果を履歴に保存
+const history = JSON.parse(
+    localStorage.getItem(randomHistoryKey) || "[]"
+);
+
+history.unshift({
+    name: randomCharacter.name,
+    id: randomCharacter.id,
+    html: randomResult.innerHTML,
+    date: new Date().toLocaleString("ja-JP")
+});
+
+// 最大10件まで保存
+history.splice(10);
+
+localStorage.setItem(
+    randomHistoryKey,
+    JSON.stringify(history)
+);
+
 
 randomResult.style.display = "block";
 

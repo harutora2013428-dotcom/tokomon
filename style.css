@@ -3498,3 +3498,137 @@ button:active{
     border-radius: 50%;
     flex-shrink: 0;
 }
+
+
+/* ランダム生成履歴モーダル */
+#randomHistoryModal {
+    display: none;
+}
+
+#randomHistoryModal.show {
+    display: block;
+}
+
+.random-history-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9998;
+}
+
+.random-history-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 32px);
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 18px;
+    border-radius: 16px;
+    background: #263238;
+    color: white;
+    z-index: 9999;
+}
+
+.random-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.random-history-header h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.random-history-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #455a64;
+}
+
+.random-history-open {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.random-history-open small {
+    opacity: 0.8;
+}
+
+.random-history-delete {
+    flex-shrink: 0;
+    width: auto;
+    padding: 10px 14px;
+}
+
+#closeRandomHistory {
+    width: auto;
+    flex-shrink: 0;
+    padding: 8px 12px;
+}
+
+
+/* ランダム生成ボタンと履歴を横並び */
+#randomButtonRow {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    margin: 20px 0;
+}
+
+#randomButtonRow #randomHistoryButton {
+    flex: 1;
+    min-width: 0;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 8px;
+    font-size: 18px;
+}
+
+#randomButtonRow #randomGenerateButton {
+    flex: 2;
+    min-width: 0;
+    margin: 0;
+}
+
+/* 履歴モーダルも青系にする */
+.random-history-dialog {
+    background: #102b46;
+    border: 1px solid #2879bd;
+}
+
+.random-history-row {
+    border-bottom-color: #285477;
+}
+
+.random-history-open {
+    background: #1c4f7a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.random-history-delete {
+    background: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
