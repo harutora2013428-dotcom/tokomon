@@ -3361,10 +3361,31 @@ if (
     Number(document.getElementById("hitCount").value) >= 5
 ) {
     detailMoveType.innerHTML = createTypeBadges(["聖"]);
+
 } else {
+    let detailTypes = getEffectiveMoveType(selectedMove);
+
+    if (
+        selectedAttackAbility?.name === "エレキスキン" &&
+        detailTypes.includes("無")
+    ) {
+        detailTypes = ["雷"];
+    } else if (
+        selectedAttackAbility?.name === "スカイスキン" &&
+        detailTypes.includes("無")
+    ) {
+        detailTypes = ["風"];
+    } else if (
+        selectedAttackAbility?.name === "フリーズスキン" &&
+        detailTypes.includes("無")
+    ) {
+        detailTypes = ["氷"];
+    }
+
     detailMoveType.innerHTML =
-        createTypeBadges(getEffectiveMoveType(selectedMove));
+        createTypeBadges(detailTypes);
 }
+
 
         
         document.getElementById("detailDefender").textContent =
