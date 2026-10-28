@@ -764,6 +764,18 @@ document.getElementById("judgmentMaskRank").value = "0";
       document.getElementById("ruinMaskBox").style.display = "none";
 document.getElementById("ruinMaskHP").value = "1";
 
+      
+const meikaiRinneBox =
+    document.getElementById("meikaiRinneBox");
+
+meikaiRinneBox.style.display = "none";
+
+document.getElementById("meikaiRinneCharge").value = "0";
+
+document.getElementById("meikaiRinneMultiplier").textContent =
+    "ダメージ倍率：0.2倍";
+
+
         searchModal.style.display = "none";
         document.body.style.overflow = "";
 
