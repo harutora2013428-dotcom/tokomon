@@ -1278,6 +1278,11 @@ kana:"まるのうちえっくすぶい",
 
     name:"おとこ・ミラー",
 kana:"おとこみらー",
+  images: {
+    icon: "images/characters/otoko-mirror/icon.png",
+    self: "images/characters/otoko-mirror/self.png",
+    enemy: "images/characters/otoko-mirror/enemy.png"
+},
     attribute:["おとこ"],
 
     status:{
@@ -1334,6 +1339,11 @@ kana:"おとこみらー",
     id: 17,
     name: "はやぶさ・ミラー",
     kana: "はやぶさみらー",
+    images: {
+    icon: "images/characters/hayabusa-mirror/icon.png",
+    self: "images/characters/hayabusa-mirror/self.png",
+    enemy: "images/characters/hayabusa-mirror/enemy.png"
+},
     attribute: ["聖"],
 
     status: {
@@ -1415,7 +1425,11 @@ kana:"おとこみらー",
     id:18,
     name:"こまち・ミラー",
     kana:"こまちみらー",
-
+images: {
+    icon: "images/characters/komachi-mirror/icon.png",
+    self: "images/characters/komachi-mirror/self.png",
+    enemy: "images/characters/komachi-mirror/enemy.png"
+},
     attribute:["炎","毒"],
 
     status:{
@@ -1508,6 +1522,11 @@ kana:"おとこみらー",
     id:19,
     name:"東西・ミラー",
     kana:"とうざいみらー",
+  images: {
+    icon: "images/characters/touzai-mirror/icon.png",
+    self: "images/characters/touzai-mirror/self.png",
+    enemy: "images/characters/touzai-mirror/enemy.png"
+},
     attribute:["虹","闇"],
 
     status:{
@@ -1601,7 +1620,11 @@ kana:"おとこみらー",
     id: 20,
     name: "山手・ミラー",
     kana: "やまのて・みらー",
-
+images: {
+    icon: "images/characters/yamanote-mirror/icon.png",
+    self: "images/characters/yamanote-mirror/self.png",
+    enemy: "images/characters/yamanote-mirror/enemy.png"
+},
     attribute: ["闇"],
 
     status: {
@@ -1658,7 +1681,11 @@ kana:"おとこみらー",
     id: 21,
     name: "丸ノ内XV・ミラー",
     kana: "まるのうちえっくすぶいみらー",
-
+images: {
+    icon: "images/characters/XV-mirror/icon.png",
+    self: "images/characters/XV-mirror/self.png",
+    enemy: "images/characters/XV-mirror/enemy.png"
+},
     attribute: ["ブラッド", "風"],
 
     status: {
@@ -1720,7 +1747,7 @@ kana:"おとこみらー",
         727, // 魔力吸収
 
         901, // ドラゴンクロー
-        903  // ドラゴンテール
+        902  // ドラゴンテール
     ],
 
     ultimate: 2021,
@@ -1731,7 +1758,11 @@ kana:"おとこみらー",
     id: 22,
     name: "半蔵門・ミラー",
     kana: "はんぞうもん・みらー",
-
+images: {
+    icon: "images/characters/hanzomon-mirror/icon.png",
+    self: "images/characters/hanzomon-mirror/self.png",
+    enemy: "images/characters/hanzomon-mirror/enemy.png"
+},
     attribute: ["闇", "大地"],
 
     status: {
@@ -1810,7 +1841,11 @@ kana:"おとこみらー",
     id: 23,
     name: "丸ノ内NI・ミラー",
     kana: "まるのうちえぬあいみらー",
-
+images: {
+    icon: "images/characters/NI-mirror/icon.png",
+    self: "images/characters/NI-mirror/self.png",
+    enemy: "images/characters/NI-mirror/enemy.png"
+},
     attribute: ["ブラッド", "鋼"],
 
     status: {
@@ -1888,7 +1923,11 @@ kana:"おとこみらー",
     id: 24,
     name: "埼京・ミラー",
     kana: "さいきょう・みらー",
-
+images: {
+    icon: "images/characters/saikyo-mirror/icon.png",
+    self: "images/characters/saikyo-mirror/self.png",
+    enemy: "images/characters/saikyo-mirror/enemy.png"
+},
     attribute: ["雷", "龍"],
 
     status: {
@@ -1955,7 +1994,11 @@ kana:"おとこみらー",
     forms: [
         {
             name: "埼京・ミラー(迅雷龍形態)",
-
+images: {
+    icon: "images/characters/saikyo-mirrorZ/icon.png",
+    self: "images/characters/saikyo-mirrorZ/self.png",
+    enemy: "images/characters/saikyo-mirrorZ/enemy.png"
+},
             attribute: ["龍", "雷"],
 
             status: {
@@ -2020,7 +2063,11 @@ kana:"おとこみらー",
     id: 25,
     name: "スカイライナー・ミラー",
     kana: "すかいらいなー・みらー",
-
+images: {
+    icon: "images/characters/skyliner-mirror/icon.png",
+    self: "images/characters/skyliner-mirror/self.png",
+    enemy: "images/characters/skyliner-mirror/enemy.png"
+},
     attribute: ["風"],
 
     status: {
@@ -2099,7 +2146,11 @@ kana:"おとこみらー",
     id: 26,
     name: "総武・ミラー",
     kana: "そうぶ・みらー",
-
+images: {
+    icon: "images/characters/sobu-mirror/icon.png",
+    self: "images/characters/sobu-mirror/self.png",
+    enemy: "images/characters/sobu-mirror/enemy.png"
+},
     attribute: ["大地", "鋼"],
 
     status: {
@@ -2176,7 +2227,11 @@ kana:"おとこみらー",
     id: 27,
     name: "東葉・ミラー",
     kana: "とうよう・みらー",
-
+images: {
+    icon: "images/characters/touyou-mirror/icon.png",
+    self: "images/characters/touyou-mirror/self.png",
+    enemy: "images/characters/touyou-mirror/enemy.png"
+},
     attribute: ["水", "毒"],
 
     status: {
@@ -2259,7 +2314,11 @@ kana:"おとこみらー",
     name: "南武・ミラー",
     kana: "なんぶ・みらー",
     attribute: ["ゴースト", "雷"],
-
+images: {
+    icon: "images/characters/nanbu-mirror/icon.png",
+    self: "images/characters/nanbu-mirror/self.png",
+    enemy: "images/characters/nanbu-mirror/enemy.png"
+},
     status: {
         hp: 143,
         attack: 100,
@@ -2321,7 +2380,11 @@ kana:"おとこみらー",
     id: 29,
     name: "かもめ・ミラー(新月形態)",
     kana: "かもめ・みらーしんげつけいたい",
-
+images: {
+    icon: "images/characters/kamome-mirrorS/icon.png",
+    self: "images/characters/kamome-mirrorS/self.png",
+    enemy: "images/characters/kamome-mirrorS/enemy.png"
+},
     attribute: ["月", "ゴースト"],
 
     // 新月形態
@@ -2338,7 +2401,11 @@ kana:"おとこみらー",
         {
             name: "かもめ・ミラー(月魄形態)",
             attribute: ["月", "ゴースト"],
-
+images: {
+    icon: "images/characters/kamome-mirrorG/icon.png",
+    self: "images/characters/kamome-mirrorG/self.png",
+    enemy: "images/characters/kamome-mirrorG/enemy.png"
+},
             status: {
                 hp: 185,
                 attack: 130,
@@ -2477,7 +2544,11 @@ kana:"おとこみらー",
     id: 30,
     name: "かがやき・ミラー",
     kana: "かがやき・みらー",
-
+images: {
+    icon: "images/characters/kagayaki-mirror/icon.png",
+    self: "images/characters/kagayaki-mirror/self.png",
+    enemy: "images/characters/kagayaki-mirror/enemy.png"
+},
     attribute: ["鋼", "聖"],
 
     status: {
@@ -2550,7 +2621,11 @@ kana:"おとこみらー",
     id:31,
     name:"おとこソウル",
     kana:"おとこそうる",
-
+images: {
+    icon: "images/characters/otoko-soul/icon.png",
+    self: "images/characters/otoko-soul/self.png",
+    enemy: "images/characters/otoko-soul/enemy.png"
+},
     attribute:["おとこ","鋼"],
 
     status:{
@@ -2603,7 +2678,11 @@ kana:"おとこみらー",
     name:"東西ソウル",
     kana:"とうざいそうる",
     attribute:["虹","ブラッド"],
-
+images: {
+    icon: "images/characters/touzai-soul/icon.png",
+    self: "images/characters/touzai-soul/self.png",
+    enemy: "images/characters/touzai-soul/enemy.png"
+},
     status:{
         hp:156,
         attack:200,
@@ -2616,6 +2695,11 @@ kana:"おとこみらー",
     forms:[
         {
             name:"東西ソウル(七色虹翼形態)",
+          images: {
+    icon: "images/characters/touzai-soulN/icon.png",
+    self: "images/characters/touzai-soulN/self.png",
+    enemy: "images/characters/touzai-soulN/enemy.png"
+},
             attribute:["虹"],
             status:{
                 hp:176,
@@ -2702,6 +2786,11 @@ kana:"おとこみらー",
         },
         {
             name:"東西ソウル(血剣悪魔形態)",
+          images: {
+    icon: "images/characters/touzai-soulC/icon.png",
+    self: "images/characters/touzai-soulC/self.png",
+    enemy: "images/characters/touzai-soulC/enemy.png"
+},
             attribute:["ブラッド"],
             status:{
                 hp:136,

@@ -194,7 +194,8 @@ function displayCharacters(list){
             class="character-icon"
             src="${c.images.icon}"
             alt="${c.name}"
-        >`
+onerror="this.remove()"
+>`
         : ""
     }
 
@@ -387,10 +388,11 @@ return `
     ${
         c.images && c.images.icon
         ? `<img
-            class="character-detail-icon"
-            src="${c.images.icon}"
-            alt="${c.name}"
-        >`
+    class="character-detail-icon"
+    src="${c.images.icon}"
+    alt="${c.name}"
+    onerror="this.remove()"
+>`
         : ""
     }
 
