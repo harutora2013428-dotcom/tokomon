@@ -800,5 +800,9 @@ document.getElementById("closeBoxSearch").onclick = () => {
     document.body.classList.remove("modal-open");
 
 };
+// 左上の戻るボタン
+document.querySelector(".back-button").onclick = () => {
+    history.back();
+};
 // 初回表示
 renderBox();
