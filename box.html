@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOX</title>
+
+    <link rel="stylesheet" href="style.css">
+  
+<style>
+/* =========================
+   BOX専用ダークテーマ
+========================= */
+
+body {
+    background: #080F1D !important;
+    color: #FFFFFF !important;
+}
+
+/* ヘッダー */
+
+.box-header {
+    background: #101D30 !important;
+    color: #FFFFFF !important;
+    border-bottom: 1px solid #245477;
+}
+
+.box-header h1 {
+    color: #FFFFFF !important;
+}
+
+.box-header button {
+    color: #70DFFF !important;
+}
+
+/* BOXカード */
+
+.box-card {
+    background: #14253A !important;
+    border: 1px solid #294866 !important;
+    color: #FFFFFF !important;
+    border-radius: 14px;
+}
+
+.box-card:active {
+    background: #1C3853 !important;
+}
+
+.box-card-name {
+    color: #FFFFFF !important;
+}
+
+/* 新規作成 */
+
+.new-card {
+    background: #101D30 !important;
+    border: 2px dashed #36B8ED !important;
+}
+
+.new-card .plus,
+.new-card span {
+    color: #70DFFF !important;
+}
+
+/* モーダル背景 */
+
+.modal {
+    background: rgba(0,0,0,0.8) !important;
+}
+
+/* キャラクター選択画面 */
+
+.modalBox {
+    background: #101D30 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #294866;
+}
+
+.modalHeader input {
+    background: #1B3048 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #365675 !important;
+}
+
+.modalHeader input::placeholder {
+    color: #91A7BD;
+}
+
+.modalHeader button {
+    background: #167BB5 !important;
+    color: #FFFFFF !important;
+}
+
+/* キャラクター一覧 */
+
+.selectList {
+    background: #101D30 !important;
+    box-shadow: none !important;
+}
+
+.selectItem {
+    color: #FFFFFF !important;
+    border-bottom: 1px solid #29415B;
+}
+
+.selectItem:hover {
+    background: #1D3853 !important;
+}
+
+/* 個体メニュー */
+
+.boxMenu {
+    background: #14253A !important;
+    border: 1px solid #315675;
+    color: #FFFFFF !important;
+}
+
+.boxMenu h2 {
+    color: #FFFFFF !important;
+}
+
+.boxMenu button {
+    background: #20364E !important;
+    color: #FFFFFF !important;
+}
+
+.boxMenu button:active {
+    background: #28547A !important;
+}
+
+/* 削除ボタンも青系に統一 */
+
+.boxMenu .delete-button {
+    background: #176FA5 !important;
+    color: #FFFFFF !important;
+}
+
+.boxMenu .cancel-button {
+    background: #26384D !important;
+    color: #FFFFFF !important;
+}
+  
+/* =========================
+   キャラクター選択画面
+========================= */
+
+.modalBox {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 検索欄と閉じるボタン */
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    flex-shrink: 0;
+}
+
+.modalHeader input {
+    flex: 1;
+    min-width: 0;
+    width: 0;
+    height: 54px;
+    padding: 0 14px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 12px;
+}
+
+/* ×ボタン */
+
+.modalHeader button {
+    flex: 0 0 54px;
+    width: 54px !important;
+    min-width: 54px;
+    height: 54px !important;
+    padding: 0 !important;
+    font-size: 22px !important;
+    border-radius: 12px;
+}
+
+/* 3列表示 */
+
+.selectList {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    align-content: start;
+}
+
+/* キャラクターカード */
+
+.selectItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 7px;
+    min-width: 0;
+    padding: 10px 4px;
+    border: 1px solid #294866;
+    border-radius: 12px;
+    background: #14253A;
+    box-sizing: border-box;
+}
+
+/* アイコン */
+
+.selectItem img {
+    display: block;
+    width: 100%;
+    max-width: 85px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+/* 名前 */
+
+.selectItem-name {
+    width: 100%;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+  
+/* 名前変更モーダル */
+
+.renameBox {
+    width: 90%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 25px 20px;
+    background: #101D30;
+    border: 1px solid #2878A8;
+    border-radius: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.renameBox h2 {
+    color: #70DFFF;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.renameBox input {
+    width: 100%;
+    height: 48px;
+    padding: 0 12px;
+    background: #1B3048;
+    border: 1px solid #365675;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.renameButtons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.renameButtons button {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 5px;
+    border: none;
+    border-radius: 8px;
+    background: #167BB5;
+    color: white;
+    font-size: 14px;
+}
+
+#cancelRenameButton {
+    background: #26384D;
+}
+/* =========================
+   BOXカードの配置固定
+========================= */
+
+.box-card:not(.new-card) {
+    justify-content: flex-start;
+    padding-top: 10px;
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* アイコンの位置とサイズを固定 */
+.box-card:not(.new-card) img {
+    display: block;
+    width: 70%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+/* 名前の表示位置を固定 */
+.box-card-name {
+    width: 100%;
+    height: 2.6em;
+    flex: 0 0 2.6em;
+    margin-top: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.3;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    box-sizing: border-box;
+}
+
+  /* タグ設定画面 */
+.tagBox {
+    width: 90%;
+    max-width: 380px;
+    max-height: 85vh;
+    overflow-y: auto;
+    margin: 0 auto;
+    padding: 20px;
+    background: #101D30;
+    border: 1px solid #2878A8;
+    border-radius: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.tagBox h2 {
+    color: #70DFFF;
+    margin-top: 0;
+}
+
+.tag-description {
+    color: #A9C3D9;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.tag-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+.tag-option {
+    padding: 12px 5px;
+    border: 1px solid #365675;
+    border-radius: 9px;
+    background: #1B3048;
+    color: white;
+    font-size: 14px;
+}
+
+.tag-option.selected {
+    background: #176FA5;
+    border: 2px solid #70DFFF;
+}
+
+.tag-option:disabled {
+    opacity: 0.4;
+}
+
+.tag-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.tag-buttons button {
+    flex: 1;
+    padding: 12px 5px;
+    border: none;
+    border-radius: 8px;
+    background: #167BB5;
+    color: white;
+    font-size: 14px;
+}
+
+#cancelTagButton {
+    background: #26384D;
+}
+
+/* BOXカードのタグ */
+.box-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    margin-top: 2px;
+}
+
+.box-tag.attacker {
+    color: #FF5555;
+}
+
+  .box-card-tags {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 3px;
+}
+
+.box-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 15px;
+    height: 15px;
+    padding: 0;
+
+    font-size: 16px;
+    line-height: 1;
+    box-sizing: border-box;
+}
+
+.box-tag.attacker,
+.box-tag.setup {
+    color: #FF5555;
+}
+
+  /* BOXカードのレイアウト */
+.box-card:not(.new-card) {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 7px 5px;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    gap: 1px;
+}
+
+/* アイコン */
+.box-card:not(.new-card) img {
+    display: block;
+    width: 48%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    flex: 0 0 auto;
+}
+
+/* キャラクター名 */
+.box-card-name {
+    width: 100%;
+    height: 2.6em;
+    flex: 0 0 2.6em;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.3;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    box-sizing: border-box;
+}
+
+/* タグ */
+.box-card-tags {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 24px;
+    flex: 0 0 24px;
+    margin-top: 2px;
+}
+
+.box-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    line-height: 1;
+    padding: 0;
+}
+
+.box-tag.attacker,
+.box-tag.setup {
+    color: #FF5555;
+}
+
+  /* タグの表示サイズを統一 */
+.box-tag {
+    width: 23px;
+    height: 23px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    box-sizing: border-box;
+    font-size: 17px;
+}
+
+/* 絵文字は少し小さく */
+.box-tag.tank,
+.box-tag.supporter,
+.box-tag.healer,
+.box-tag.speed,
+.box-tag.slow,
+.box-tag.romantic {
+    font-size: 14px;
+}
+
+/* 通常記号 */
+.box-tag.attacker,
+.box-tag.debuffer,
+.box-tag.joke,
+.box-tag.setup {
+    font-size: 17px;
+}
+
+  .box-tag.joke {
+    font-size: 12px;
+}
+
+  /* アタッカーと積み型の記号を赤色に */
+.tag-symbol.attacker,
+.tag-symbol.setup {
+    color: #FF5555;
+}
+
+  /* お気に入りマーク */
+.box-card:not(.new-card) {
+    position: relative;
+}
+
+.box-favorite-star {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    z-index: 2;
+    font-size: 18px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+  /* 削除確認画面 */
+.deleteConfirmBox {
+    width: 90%;
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 25px 20px;
+    background: #101D30;
+    border: 1px solid #2878A8;
+    border-radius: 15px;
+    color: white;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.deleteConfirmBox h2 {
+    color: #70DFFF;
+    font-size: 21px;
+    margin-top: 0;
+}
+
+#deleteConfirmName {
+    font-size: 18px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.delete-warning {
+    color: #A9C3D9;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.deleteConfirmButtons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.deleteConfirmButtons button {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 5px;
+    border: none;
+    border-radius: 9px;
+    color: white;
+    font-size: 15px;
+}
+
+#confirmDeleteButton {
+    background: #167BB5;
+}
+
+#cancelDeleteButton {
+    background: #26384D;
+}
+
+  /* 検索・絞り込み画面 */
+.boxSearchBox {
+    width: 90%;
+    max-width: 380px;
+    max-height: 85vh;
+    overflow-y: auto;
+    margin: 0 auto;
+    padding: 22px 18px;
+    background: #101D30;
+    border: 1px solid #2878A8;
+    border-radius: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.boxSearchBox h2 {
+    margin-top: 0;
+    color: #70DFFF;
+}
+
+.boxSearchBox h3 {
+    margin-bottom: 8px;
+}
+
+#boxSearchInput {
+    width: 100%;
+    height: 46px;
+    padding: 0 12px;
+    margin-bottom: 15px;
+    background: #1B3048;
+    border: 1px solid #365675;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.favorite-filter {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px;
+    background: #1B3048;
+    border-radius: 8px;
+    min-height: 70px;
+    box-sizing: border-box;
+}
+
+.favorite-filter input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex: 0 0 18px;
+    align-self: center;
+}
+
+.box-filter-tags {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.box-filter-tag {
+    padding: 11px 5px;
+    border: 1px solid #365675;
+    border-radius: 8px;
+    background: #1B3048;
+    color: white;
+    font-size: 13px;
+}
+
+.box-filter-tag.selected {
+    background: #176FA5;
+    border: 1px solid #70DFFF;
+    box-shadow: inset 0 0 0 1px #70DFFF;
+    box-sizing: border-box;
+}
+
+.box-search-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.box-search-buttons button {
+    flex: 1;
+    padding: 13px 5px;
+    border: none;
+    border-radius: 8px;
+    background: #167BB5;
+    color: white;
+    font-size: 15px;
+}
+
+#closeBoxSearch {
+    background: #26384D;
+}
+
+  /* 絞り込み画面のアタッカー・積み型を赤色に */
+.box-filter-tag .tag-symbol.attacker,
+.box-filter-tag .tag-symbol.setup {
+    color: #FF5555;
+}
+
+  /* 検索欄と×ボタンの高さ・位置を統一 */
+.modalHeader {
+    display: flex;
+    align-items: center !important;
+}
+
+#characterSearch {
+    height: 54px !important;
+    margin: 0 !important;
+    align-self: center !important;
+    box-sizing: border-box;
+}
+
+#closeCharacterModal {
+    height: 54px !important;
+    min-height: 54px !important;
+    margin: 0 !important;
+    align-self: center !important;
+    box-sizing: border-box;
+}
+
+  /* キャラクター選択モーダル */
+#characterModal {
+    overscroll-behavior: contain;
+}
+
+/* 下の大きな空白をなくす */
+#characterModal .modalBox {
+    height: auto !important;
+    max-height: 90vh;
+    bottom: 0;
+    overflow: hidden;
+}
+
+/* キャラクター一覧 */
+#characterModal .selectList {
+    flex: 0 1 auto !important;
+    min-height: 0;
+    max-height: calc(90vh - 130px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 10px;
+}
+
+  body.modal-open {
+    overflow: hidden !important;
+    touch-action: none;
+}
+
+#characterModal .selectList {
+    touch-action: pan-y;
+}
+
+  /* =========================
+   固定タグ
+========================= */
+
+.box-fixed-tags {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.box-fixed-tag {
+    font-size: 12px;
+    line-height: 1;
+    width: 17px;
+    height: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(8, 15, 29, 0.85);
+}
+
+  /* 検索・絞り込み画面のスクロール */
+#boxSearchModal {
+    overscroll-behavior: contain;
+}
+
+#boxSearchModal .boxSearchBox {
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+}
+</style>
+  
+</head>
+
+<body>
+
+<header class="box-header">
+
+    <button class="back-button">
+        ←
+    </button>
+
+    <h1>BOX</h1>
+
+    <button class="search-button">
+        🔍
+    </button>
+
+</header>
+
+  <!-- 検索・絞り込みモーダル -->
+<div id="boxSearchModal" class="modal">
+    <div class="boxSearchBox">
+
+        <h2>検索・絞り込み</h2>
+
+        <input
+            id="boxSearchInput"
+            type="text"
+            placeholder="名前・ニックネームで検索"
+        >
+
+        <label class="favorite-filter">
+            <input id="favoriteOnly" type="checkbox">
+            ⭐ お気に入りのみ表示
+        </label>
+
+        <h3>タグで絞り込み</h3>
+        <p class="tag-description">
+            複数選択できます。選んだタグをすべて持つキャラクターが表示されます。
+        </p>
+
+        <div id="boxFilterTags" class="box-filter-tags"></div>
+
+        <div class="box-search-buttons">
+            <button id="resetBoxFilter">リセット</button>
+            <button id="closeBoxSearch">閉じる</button>
+        </div>
+
+    </div>
+</div>
+
+<main>
+
+    <div id="boxGrid" class="box-grid"></div>
+    
+    <div id="characterModal" class="modal">
+
+    <div class="modalBox">
+
+        <div class="modalHeader">
+            <input
+                id="characterSearch"
+                type="text"
+                placeholder="キャラクターを検索">
+            <button id="closeCharacterModal">✕</button>
+        </div>
+
+        <div id="characterList" class="selectList"></div>
+
+    </div>
+
+</div>
+
+<!-- 個体メニュー -->
+<div id="boxMenuModal" class="modal">
+
+    <div class="boxMenu">
+
+        <h2 id="boxMenuName">キャラクター</h2>
+
+        <button id="trainingButton">育成</button>
+        <button id="renameButton">名前変更</button>
+        <button id="tagButton">タグ付け</button>
+        <button id="favoriteButton">お気に入り</button>
+
+        <button id="deleteButton" class="delete-button">
+            削除
+        </button>
+
+        <button id="closeBoxMenu" class="cancel-button">
+            キャンセル
+        </button>
+
+    </div>
+
+</div>
+
+  
+<!-- 名前変更モーダル -->
+<div id="renameModal" class="modal">
+
+    <div class="renameBox">
+
+        <h2>名前変更</h2>
+
+        <input
+    type="text"
+    id="renameInput"
+    maxlength="12"
+    placeholder="新しい名前を入力"
+>
+
+        <div class="renameButtons">
+            <button id="saveRenameButton">保存</button>
+            <button id="cancelRenameButton">キャンセル</button>
+        </div>
+
+    </div>
+
+</div>
+
+  <!-- タグ設定モーダル -->
+<div id="tagModal" class="modal">
+    <div class="tagBox">
+
+        <h2>タグ設定</h2>
+
+        <p class="tag-description">
+            最大3個まで選択できます
+        </p>
+
+        <div id="tagOptions" class="tag-options"></div>
+
+        <div class="tag-buttons">
+            <button id="saveTagButton">保存</button>
+            <button id="cancelTagButton">キャンセル</button>
+        </div>
+
+    </div>
+</div>
+
+  <!-- 削除最終確認モーダル -->
+<div id="deleteConfirmModal" class="modal">
+    <div class="deleteConfirmBox">
+
+        <h2>本当に削除しますか？</h2>
+
+        <p id="deleteConfirmName"></p>
+
+        <p id="deleteConfirmWarning" class="delete-warning">
+    このキャラクターをBOXから削除します。<br>
+    この操作は取り消せません。
+</p>
+
+        <div class="deleteConfirmButtons">
+            <button id="confirmDeleteButton">
+                削除する
+            </button>
+
+            <button id="cancelDeleteButton">
+                キャンセル
+            </button>
+        </div>
+
+    </div>
+</div>
+
+</main>
+
+<script src="characters.js"></script>
+<script src="box.js"></script>
+
+</body>
+
+</html>

@@ -2019,7 +2019,14 @@ if (sort) {
 
 list.innerHTML = data.length ? data.map(i => `
 
-<div class="move-card">
+<div class="move-card item-card">
+
+<img
+    class="item-list-icon"
+    src="images/items/とこモン${i.name}.png"
+    alt=""
+    onerror="this.remove()"
+>
 
 <div class="move-header">
     <div class="move-info">
@@ -2094,7 +2101,17 @@ function displayItemDetail(){
     }
 
     itemDetail.innerHTML = `
-<h2>${item.name}</h2>
+<div class="item-detail-header">
+
+    <h2>${item.name}</h2>
+
+    <img
+        src="images/items/とこモン${item.name}.png"
+        alt=""
+        onerror="this.remove()"
+    >
+
+</div>
 
 <div class="move-tags">
 
@@ -2283,6 +2300,8 @@ const randomResult = document.getElementById("randomResult");
 
 const randomHistoryKey = "randomGenerateHistory";
 
+// 現在表示しているランダム生成データ
+let displayedRandomBuild = null;
 
 // 履歴ボタンを作成
 const historyButton = document.createElement("button");
@@ -2402,6 +2421,7 @@ historyModal.addEventListener("click", event => {
         if (!item) return;
 
         randomResult.innerHTML = item.html;
+      displayedRandomBuild = item.build || null;
         randomResult.style.display = "block";
         closeRandomHistory();
 
@@ -2480,6 +2500,21 @@ const randomItem = generateItem(randomMoves);
 // 特性をランダムで1つ選ぶ
 const randomAbility = generateAbility(randomCharacter);
 
+      // テラスタイプを18属性からランダムに選ぶ
+const randomTeraType =
+    allTypes[Math.floor(Math.random() * allTypes.length)];
+
+// BOXに保存するデータ
+displayedRandomBuild = {
+    buildId: Date.now(),
+    characterId: randomCharacter.id,
+    moves: [...randomMoves],
+    ability: randomAbility?.name || null,
+    item: randomItem?.name || null,
+    trainingPoints: { ...evs },
+    teraType: randomTeraType
+};
+
 randomResult.innerHTML = `
 <div class="card randomCharacterCard">
 
@@ -2490,6 +2525,11 @@ randomResult.innerHTML = `
 
     <div>
         ${createTypeBadges(randomCharacter.attribute)}
+    </div>
+
+        <div class="random-tera-type">
+        テラスタイプ：
+        ${createTypeBadges(randomTeraType)}
     </div>
 
 </div>
@@ -2571,6 +2611,10 @@ randomResult.innerHTML = `
 
 </div>
 
+<button class="random-add-box-button" type="button">
+    BOXに追加
+</button>
+
 </div>
 `;
 
@@ -2584,6 +2628,7 @@ history.unshift({
     name: randomCharacter.name,
     id: randomCharacter.id,
     html: randomResult.innerHTML,
+    build: displayedRandomBuild,
     date: new Date().toLocaleString("ja-JP")
 });
 
@@ -2605,3 +2650,81 @@ randomResult.style.display = "block";
 });
 
 }
+
+// =========================
+// ランダム生成からBOXに追加
+// =========================
+
+randomResult.addEventListener("click", event => {
+
+    const button = event.target.closest(".random-add-box-button");
+
+    if (!button) return;
+
+    if (!displayedRandomBuild) {
+        alert("この履歴には追加できるデータがありません。");
+        return;
+    }
+
+    const box = JSON.parse(
+        localStorage.getItem("box") || "[]"
+    );
+
+    // 二重追加を防止
+    if (box.some(data =>
+        data.randomGeneratedId === displayedRandomBuild.buildId
+    )) {
+        alert("このキャラクターは既にBOXに追加されています。");
+        return;
+    }
+
+    const newCharacter = {
+
+        id: Date.now(),
+
+        characterId: displayedRandomBuild.characterId,
+
+        nickname: "",
+
+        moves: [...displayedRandomBuild.moves],
+
+        ability: displayedRandomBuild.ability,
+
+        item: displayedRandomBuild.item,
+
+        trainingPoints: {
+            ...displayedRandomBuild.trainingPoints
+        },
+
+        teraType: displayedRandomBuild.teraType,
+
+        crystal: {
+            hp: 0,
+            attack: 0,
+            defense: 0,
+            spAttack: 0,
+            spDefense: 0,
+            speed: 0
+        },
+
+        favorite: false,
+
+        tags: [],
+
+        // ランダム生成から追加された個体
+        randomGenerated: true,
+
+        randomGeneratedId: displayedRandomBuild.buildId
+
+    };
+
+    box.push(newCharacter);
+
+    localStorage.setItem("box", JSON.stringify(box));
+
+    button.textContent = "追加済み";
+    button.disabled = true;
+
+    alert("BOXに追加しました！");
+
+});

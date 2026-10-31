@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta name="robots" content="noindex, nofollow">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>構築編集</title>
+
+    <link rel="stylesheet" href="style.css">
+  <style>
+.character-create-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.character-create-card {
+    min-width: 0;
+    padding: 8px 5px;
+    border: 1px solid #344b65;
+    border-radius: 12px;
+    background: #192d44;
+    color: #f0f5fc;
+    text-align: center;
+    cursor: pointer;
+}
+
+.character-create-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 9px;
+}
+
+.character-create-name {
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.character-create-types {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 5px;
+}
+
+.character-create-types .attribute {
+    font-size: 10px;
+}
+    /* タップ時の青い光を消す */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+</style>
+</head>
+
+<body>
+
+<header class="party-edit-header">
+
+    <a href="party.html" class="back-button">←</a>
+
+    <span id="partySlot">構築1</span>
+
+    <button class="menu-button">⋮</button>
+
+</header>
+
+<main>
+
+<div class="party-editor">
+
+    <input
+        id="partyName"
+        class="party-name-input"
+        placeholder="構築名">
+
+    <div id="memberList"></div>
+
+</div>
+
+<div id="partyModal" class="party-modal hidden">
+    <div class="party-modal-content">
+
+       <div class="party-modal-header">
+
+            <h2>追加方法</h2>
+
+            <button id="closeModal">✕</button>
+
+        </div>
+
+        <div id="modalBody">
+
+<button
+    id="openBoxButton"
+    class="party-modal-button">
+    BOXから追加
+</button>
+
+  <button
+    id="openCharacterCreateButton"
+    class="party-modal-button">
+    新しく作成
+</button>
+
+         
+
+        </div>
+
+    </div>
+
+</div>
+
+  <!-- 新規キャラクター選択モーダル -->
+<div id="characterCreateModal" class="party-modal hidden">
+
+    <div class="party-modal-content">
+
+        <div class="party-modal-header">
+            <h2>キャラクター一覧</h2>
+            <button id="closeCharacterCreate" class="close-button">✕</button>
+        </div>
+
+        <div id="characterCreateList" class="character-create-grid"></div>
+
+    </div>
+
+</div>
+
+<!-- BOXモーダル -->
+<div id="boxModal" class="party-modal hidden">
+
+    <div class="party-modal-content">
+
+        <div class="party-modal-header">
+            <h2>BOX</h2>
+            <button id="closeBoxModal" class="close-button">✕</button>
+        </div>
+
+        <!-- 検索・タグ絞り込み -->
+<div class="party-box-search">
+
+    <input
+        type="text"
+        id="boxSearch"
+        class="party-input"
+        placeholder="名前・ニックネーム検索">
+
+    <button id="boxTagFilterButton">
+        <span>絞込</span>
+        <span>▼</span>
+    </button>
+
+</div>
+
+<!-- タグ絞り込みモーダル -->
+<div id="boxTagFilterModal" class="party-modal hidden">
+
+    <div class="party-modal-content">
+
+        <div class="party-modal-header">
+            <h2>タグ絞り込み</h2>
+            <button id="closeBoxTagFilter" class="close-button">✕</button>
+        </div>
+
+        <p>複数のタグを選択できます。</p>
+
+        <div id="boxTagFilterList"></div>
+
+        <button id="boxTagReset">リセット</button>
+
+        <button id="applyBoxTagFilter" class="party-modal-button">
+            適用
+        </button>
+
+    </div>
+
+</div>
+
+        <div id="boxList" class="box-list">
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="memberMenuModal" class="party-modal hidden">
+
+    <div class="party-modal-content">
+
+        <div class="party-modal-header">
+            <h2 id="memberMenuTitle">キャラクター</h2>
+
+            <button id="closeMemberMenu">✕</button>
+        </div>
+        
+                <button id="trainMemberButton"
+        class="party-modal-button">
+    育成
+</button>
+
+        <button id="changeMemberButton"
+                class="party-modal-button">
+            変更
+        </button>
+
+<button id="deleteMemberButton"
+        class="party-modal-button danger">
+    削除
+</button>
+        
+
+    </div>
+
+</div>
+
+  <!-- 構築メニュー -->
+<div id="partyMenuModal" class="party-modal hidden">
+
+    <div class="party-modal-content">
+
+        <div class="party-modal-header">
+            <h2>構築メニュー</h2>
+            <button id="closePartyMenu">✕</button>
+        </div>
+
+        <button
+            id="deletePartyButton"
+            class="party-modal-button danger">
+            構築を削除
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+<script src="characters.js"></script>
+<script src="partySystem.js"></script>
+
+</body>
+</html>

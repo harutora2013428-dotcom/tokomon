@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080F1D">
+<title>とこモン バトル</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #080F1D;
+    color: white;
+    font-family: sans-serif;
+    min-height: 100vh;
+}
+
+/* ヘッダー */
+
+.header {
+    padding: 25px 20px 20px;
+    background: linear-gradient(135deg, #102642, #091322);
+    border-bottom: 1px solid #16466C;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #70DFFF;
+}
+
+.subtitle {
+    font-size: 11px;
+    color: #829DB8;
+    margin-top: 5px;
+    letter-spacing: 2px;
+}
+
+/* メイン */
+
+main {
+    padding: 20px 15px 40px;
+    max-width: 650px;
+    margin: auto;
+}
+
+.section-title {
+    font-size: 14px;
+    color: #8EB4D2;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+/* メニュー */
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
+}
+
+.menu-card {
+    position: relative;
+    min-height: 125px;
+    padding: 18px 14px;
+    background: linear-gradient(145deg, #172B43, #101D30);
+    border: 1px solid #254664;
+    border-radius: 13px;
+    color: white;
+    text-decoration: none;
+    overflow: hidden;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.menu-card:active {
+    transform: scale(0.96);
+    background: #203D5B;
+}
+
+.menu-card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    right: -35px;
+    bottom: -40px;
+    border-radius: 50%;
+    background: #1689C5;
+    opacity: 0.10;
+    filter: blur(15px);
+}
+
+.menu-icon {
+    font-size: 29px;
+    margin-bottom: 10px;
+}
+
+.menu-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.menu-description {
+    font-size: 11px;
+    color: #91AFC9;
+    margin-top: 6px;
+}
+
+.menu-card.primary {
+    border-color: #258BC3;
+    background: linear-gradient(145deg, #173D5E, #11263F);
+}
+
+.menu-card.primary .menu-name {
+    color: #75DFFF;
+}
+
+/* 準備中 */
+
+.menu-card.disabled {
+    opacity: 0.55;
+}
+
+.status {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    font-size: 9px;
+    color: #86B6D7;
+    border: 1px solid #42627D;
+    padding: 3px 6px;
+    border-radius: 5px;
+}
+
+/* 下部 */
+
+.footer {
+    text-align: center;
+    padding: 25px 10px;
+    color: #48627D;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+/* モーダル */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 320px;
+    background: #14263C;
+    border: 1px solid #2878A8;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+}
+
+.modal-content h2 {
+    color: #70DFFF;
+    font-size: 18px;
+}
+
+.modal-content p {
+    color: #A5B9CC;
+    font-size: 13px;
+}
+
+.modal-content button {
+    margin-top: 15px;
+    padding: 10px 30px;
+    background: #167BB5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">TOKOMON BATTLE</div>
+    <div class="subtitle">BATTLE TERMINAL</div>
+</header>
+
+<main>
+
+    <div class="section-title">MAIN MENU</div>
+
+    <div class="menu-grid">
+
+        <a href="#" class="menu-card primary"
+           onclick="comingSoon('対戦'); return false;">
+            <div class="menu-icon">⚔️</div>
+            <div class="menu-name">対戦</div>
+            <div class="menu-description">バトルに挑戦する</div>
+            <span class="status">準備中</span>
+        </a>
+
+        <a href="party.html" class="menu-card">
+            <div class="menu-icon">👥</div>
+            <div class="menu-name">構築</div>
+            <div class="menu-description">パーティーを編集する</div>
+        </a>
+
+        <a href="box.html" class="menu-card">
+            <div class="menu-icon">📦</div>
+            <div class="menu-name">BOX</div>
+            <div class="menu-description">個体を管理する</div>
+        </a>
+
+        <a href="#" class="menu-card"
+           onclick="comingSoon('大会'); return false;">
+            <div class="menu-icon">🏆</div>
+            <div class="menu-name">大会</div>
+            <div class="menu-description">大会に参加する</div>
+            <span class="status">準備中</span>
+        </a>
+
+        <a href="#" class="menu-card"
+           onclick="comingSoon('戦績'); return false;">
+            <div class="menu-icon">📊</div>
+            <div class="menu-name">戦績</div>
+            <div class="menu-description">対戦記録を確認する</div>
+            <span class="status">準備中</span>
+        </a>
+
+    </div>
+
+</main>
+
+<div class="footer">
+    TOKOMON BATTLE SYSTEM
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">準備中</h2>
+        <p>この機能は現在準備中です。</p>
+        <button onclick="closeModal()">閉じる</button>
+    </div>
+</div>
+
+<script>
+function comingSoon(name) {
+    document.getElementById("modalTitle").textContent =
+        name + " は準備中です";
+
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>育成</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="training-page">
+
+<header class="training-header">
+
+    <button class="back-button" onclick="history.back()">
+        ←
+    </button>
+
+    <h1>育成</h1>
+
+</header>
+
+
+<main class="training-container">
+
+    <!-- キャラクター -->
+    <section class="training-character">
+
+        <img id="trainingImage"
+             src="images/noimage.png"
+             alt="キャラクター">
+
+        <h2 id="trainingName">
+            キャラクター
+        </h2>
+
+        <div id="trainingAttribute"></div>
+
+    </section>
+
+
+    <!-- ステータス -->
+    <section class="training-section">
+
+        <div class="training-status-title">
+    <h2>ステータス</h2>
+    <button id="trainingFormButton" style="display:none;">
+        形態変化
+    </button>
+</div>
+
+        <div id="statusCard"
+             class="training-card">
+
+            <div class="training-status">
+                <span>HP</span>
+                <b id="statusHP">0</b>
+            </div>
+
+            <div class="training-status">
+                <span>攻撃</span>
+                <b id="statusAttack">0</b>
+            </div>
+
+            <div class="training-status">
+                <span>防御</span>
+                <b id="statusDefense">0</b>
+            </div>
+
+            <div class="training-status">
+                <span>特攻</span>
+                <b id="statusSpAttack">0</b>
+            </div>
+
+            <div class="training-status">
+                <span>特防</span>
+                <b id="statusSpDefense">0</b>
+            </div>
+
+            <div class="training-status">
+                <span>速度</span>
+                <b id="statusSpeed">0</b>
+            </div>
+
+            <div class="training-points">
+    使用可能ポイント
+    <b id="remainingPoints">20</b>
+    / 20
+</div>
+
+<div class="training-controls">
+
+    <div class="training-control">
+        <span>HP</span>
+        <button class="minus-button" data-stat="hp"><span>−</span></button>
+        <b id="pointHP">0</b>
+        <button class="plus-button" data-stat="hp"><span>＋</span></button>
+    </div>
+
+    <div class="training-control">
+        <span>攻撃</span>
+        <button class="minus-button" data-stat="attack"><span>−</span></button>
+        <b id="pointAttack">0</b>
+        <button class="plus-button" data-stat="attack"><span>＋</span></button>
+    </div>
+
+    <div class="training-control">
+        <span>防御</span>
+        <button class="minus-button" data-stat="defense"><span>−</span></button>
+        <b id="pointDefense">0</b>
+        <button class="plus-button" data-stat="defense"><span>＋</span></button>
+    </div>
+
+    <div class="training-control">
+        <span>特攻</span>
+        <button class="minus-button" data-stat="spAttack"><span>−</span></button>
+        <b id="pointSpAttack">0</b>
+        <button class="plus-button" data-stat="spAttack"><span>＋</span></button>
+    </div>
+
+    <div class="training-control">
+        <span>特防</span>
+        <button class="minus-button" data-stat="spDefense"><span>−</span></button>
+        <b id="pointSpDefense">0</b>
+        <button class="plus-button" data-stat="spDefense"><span>＋</span></button>
+    </div>
+
+    <div class="training-control">
+        <span>速度</span>
+        <button class="minus-button" data-stat="speed"><span>−</span></button>
+        <b id="pointSpeed">0</b>
+        <button class="plus-button" data-stat="speed"><span>＋</span></button>
+    </div>
+
+</div>
+
+        </div>
+
+    </section>
+
+
+    <!-- 技 -->
+    <section class="training-section">
+
+        <h2>技</h2>
+
+        <div id="moveList">
+
+            <div class="training-card move-slot">
+                技を選択
+            </div>
+
+            <div class="training-card move-slot">
+                技を選択
+            </div>
+
+            <div class="training-card move-slot">
+                技を選択
+            </div>
+
+            <div class="training-card move-slot">
+                技を選択
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- 特性 -->
+    <section class="training-section">
+
+        <h2>特性</h2>
+
+        <div id="abilityCard"
+             class="training-card">
+            特性を選択
+        </div>
+
+    </section>
+
+
+    <!-- 持ち物 -->
+    <section class="training-section">
+
+        <h2>持ち物</h2>
+
+        <div id="itemCard"
+             class="training-card">
+            持ち物を選択
+        </div>
+
+    </section>
+
+  <!-- テラスタル -->
+<section class="training-section">
+
+    <h2>テラスタル</h2>
+
+    <div id="teraCard" class="training-card">
+        テラスタイプ：なし
+    </div>
+
+</section>
+
+
+    <!-- 保存 -->
+    <button id="saveTraining"
+            class="training-save">
+        保存
+    </button>
+
+  <div id="moveModal" class="move-modal">
+
+    <div class="move-modal-content">
+
+        <div class="move-modal-header">
+            <h2>技を選択</h2>
+            <button id="closeMoveModal">×</button>
+        </div>
+
+        <div id="learnedMoves" class="move-select-list">
+            <!-- 覚える技 -->
+        </div>
+
+        <button id="otherMovesButton" class="other-moves-button">
+            ▼ その他
+        </button>
+
+        <div id="otherMoves" class="move-select-list">
+            <!-- 覚えない技 -->
+        </div>
+
+    </div>
+
+</div>
+
+  <!-- 特性選択モーダル -->
+<div id="abilityModal" class="move-modal">
+
+    <div class="move-modal-content">
+
+        <div class="move-modal-header">
+            <h2>特性を選択</h2>
+            <button id="closeAbilityModal">×</button>
+        </div>
+
+        <div id="abilityList" class="move-select-list">
+        </div>
+
+    </div>
+
+</div>
+  
+<!-- 持ち物選択モーダル -->
+<div id="itemModal" class="move-modal">
+    <div class="move-modal-content">
+        <div class="move-modal-header">
+            <h2>持ち物を選択</h2>
+            <button id="closeItemModal">×</button>
+        </div>
+        <div id="itemList" class="move-select-list"></div>
+    </div>
+</div>
+
+  <!-- テラスタル選択モーダル -->
+<div id="teraModal" class="move-modal">
+
+    <div class="move-modal-content">
+
+        <div class="move-modal-header">
+            <h2>テラスタイプを選択</h2>
+            <button id="closeTeraModal">×</button>
+        </div>
+
+        <div id="teraTypeList" class="tera-type-list"></div>
+
+    </div>
+
+</div>
+  
+</main>
+
+
+<script src="characters.js"></script>
+<script src="moves.js"></script>
+<script src="abilities.js"></script>
+<script src="items.js"></script>
+<script src="training.js"></script>
+
+</body>
+
+</html>
