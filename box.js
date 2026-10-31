@@ -808,14 +808,10 @@ document.querySelector(".back-button").onclick = () => {
 renderBox();
 
 // ブラウザでBOX画面に戻ったときに最新データを読み込む
-window.addEventListener("pageshow", (event) => {
+window.addEventListener("pageshow", () => {
 
-    if (event.persisted) {
+    box = JSON.parse(localStorage.getItem("box")) || [];
 
-        box = JSON.parse(localStorage.getItem("box")) || [];
-
-        renderBox();
-
-    }
+    renderBox();
 
 });

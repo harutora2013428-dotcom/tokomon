@@ -94,24 +94,6 @@ if (!data) {
 
 const trainingAttribute =
     document.getElementById("trainingAttribute");
-
-const attributes = Array.isArray(character.attribute)
-    ? character.attribute
-    : [character.attribute];
-
-trainingAttribute.innerHTML = attributes.map(type => {
-
-    if (type === "虹") {
-        return `
-            <span class="attribute-虹-wrap">
-                <span class="attribute attribute-虹">虹</span>
-            </span>
-        `;
-    }
-
-    return `<span class="attribute attribute-${type}">${type}</span>`;
-
-}).join("");
       
         // =========================
         // ステータス
@@ -120,9 +102,31 @@ trainingAttribute.innerHTML = attributes.map(type => {
 // 現在選択されている形態のステータス
 updateTrainingFormStatus = function () {
 
+    // 現在選択されている形態を取得
     const currentForm = currentTrainingFormIndex === -1
         ? character
         : character.forms[currentTrainingFormIndex];
+
+    // 属性を更新
+    const formAttribute = currentForm.attribute ?? character.attribute;
+
+    const currentAttributes = Array.isArray(formAttribute)
+        ? formAttribute
+        : formAttribute ? [formAttribute] : [];
+
+    trainingAttribute.innerHTML = currentAttributes.map(type => {
+
+        if (type === "虹") {
+            return `
+                <span class="attribute-虹-wrap">
+                    <span class="attribute attribute-虹">虹</span>
+                </span>
+            `;
+        }
+
+        return `<span class="attribute attribute-${type}">${type}</span>`;
+
+    }).join("");
 
     baseStatus = currentForm.status || {};
 
@@ -480,7 +484,12 @@ itemCard.textContent = data.item || "持ち物なし";
       
         // 初期値はキャラクターの1個目の属性
 if (!Object.prototype.hasOwnProperty.call(data, "teraType")) {
-    data.teraType = attributes[0] || null;
+
+    const originalAttribute = Array.isArray(character.attribute)
+        ? character.attribute[0]
+        : character.attribute;
+
+    data.teraType = originalAttribute || null;
 }
 
         // 表示更新
