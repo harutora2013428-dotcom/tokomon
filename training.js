@@ -9,9 +9,19 @@ function createTypeBadges(types){
         types = [types];
     }
 
-    return types.map(type =>
-        `<span class="attribute attribute-${type}">${type}</span>`
-    ).join(" ");
+    return types.map(type => {
+
+        if(type === "虹"){
+            return `
+                <span class="attribute-虹-wrap">
+                    <span class="attribute attribute-虹">虹</span>
+                </span>
+            `;
+        }
+
+        return `<span class="attribute attribute-${type}">${type}</span>`;
+
+    }).join(" ");
 }
 
 // BOXの個体データ
@@ -575,8 +585,22 @@ if (!Object.prototype.hasOwnProperty.call(data, "teraType")) {
 
 document.getElementById("saveTraining").onclick = () => {
 
+    // 最新のBOXデータを取得
+    const latestBox =
+        JSON.parse(localStorage.getItem("box")) || [];
+
+    // 保存対象の個体を探す
+    const latestData = latestBox.find(
+        x => String(x.id) === String(boxId)
+    );
+
+    if (!latestData) {
+        alert("保存対象の個体が見つかりません。");
+        return;
+    }
+
     // 能力ポイントを保存
-    data.trainingPoints = {
+    latestData.trainingPoints = {
         hp: trainingPoints.hp,
         attack: trainingPoints.attack,
         defense: trainingPoints.defense,
@@ -586,21 +610,27 @@ document.getElementById("saveTraining").onclick = () => {
     };
 
     // 技の現在の並び順を保存
-    data.moves = [...document.querySelectorAll(".move-slot")]
-        .map(slot => slot.dataset.moveId || null);
+    latestData.moves = [
+        ...document.querySelectorAll(".move-slot")
+    ].map(slot => slot.dataset.moveId || null);
+
+    // 特性・持ち物・テラスタイプを保存
+    latestData.ability = data.ability ?? null;
+    latestData.item = data.item ?? null;
+    latestData.teraType = data.teraType ?? null;
 
     // BOXを保存
-    localStorage.setItem("box", JSON.stringify(box));
+    localStorage.setItem("box", JSON.stringify(latestBox));
 
     const saveName =
-        data.nickname ||
-        characters.find(c => c.id === data.characterId)?.name ||
+        latestData.nickname ||
+        characters.find(c => c.id === latestData.characterId)?.name ||
         "キャラクター";
 
     alert(`${saveName}の育成を保存しました！`);
 
-// 前の画面に戻る
-history.back();
+    // 前の画面に戻る
+    history.back();
 };
 
 

@@ -42,6 +42,25 @@ body {
     letter-spacing: 2px;
 }
 
+  /* 元のサイトに戻るボタン */
+.back-site {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 9px 16px;
+    background: #142D46;
+    border: 1px solid #2878A8;
+    border-radius: 8px;
+    color: #70DFFF;
+    font-size: 12px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.back-site:active {
+    background: #203D5B;
+    transform: scale(0.96);
+}
+
 /* メイン */
 
 main {
@@ -198,6 +217,10 @@ main {
 <header class="header">
     <div class="logo">TOKOMON BATTLE</div>
     <div class="subtitle">BATTLE TERMINAL</div>
+
+    <a href="../index.html" class="back-site">
+        ← 元のサイトに戻る
+    </a>
 </header>
 
 <main>

@@ -806,3 +806,16 @@ document.querySelector(".back-button").onclick = () => {
 };
 // 初回表示
 renderBox();
+
+// ブラウザでBOX画面に戻ったときに最新データを読み込む
+window.addEventListener("pageshow", (event) => {
+
+    if (event.persisted) {
+
+        box = JSON.parse(localStorage.getItem("box")) || [];
+
+        renderBox();
+
+    }
+
+});
