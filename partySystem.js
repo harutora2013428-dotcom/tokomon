@@ -1228,7 +1228,9 @@ if (trainMemberButton) {
         }
 
         // モーダルを閉じて育成画面へ
-        location.href = `training.html?id=${boxData.id}`;
+closeModal(memberMenuModal);
+
+location.href = `training.html?id=${boxData.id}`;
 
     };
 
@@ -1239,6 +1241,15 @@ if (memberList) {
     loadParty();
     renderParty();
 }
+
+// ブラウザで構築画面に戻ったときに表示を更新
+window.addEventListener("pageshow", (event) => {
+
+    if (event.persisted && memberList) {
+        renderParty();
+    }
+
+});
 
 // =========================
 // キャラクターのドラッグ入れ替え
