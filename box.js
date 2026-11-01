@@ -92,27 +92,548 @@ const manualTagList = [
 
 const boxGrid = document.getElementById("boxGrid");
 
+
+// =========================
+// BOX範囲入れ替え
+// =========================
+
+let boxReorderMode = false;
+
+let rangeStartIndex = null;
+let rangeEndIndex = null;
+
+let boxDragState = null;
+let suppressReorderClick = false;
+
+
+// 範囲選択
+function handleReorderCardTap(boxId) {
+
+    const index = box.findIndex(data =>
+        String(data.id) === String(boxId)
+    );
+
+    if (index === -1) return;
+
+    // 最初のカード
+    if (rangeStartIndex === null) {
+
+        rangeStartIndex = index;
+        rangeEndIndex = null;
+
+    }
+
+    // 最後のカード
+    else if (rangeEndIndex === null) {
+
+        rangeEndIndex = index;
+
+    }
+
+    // 選択済みなら、新しい範囲を選択
+    else {
+
+        const start = Math.min(
+            rangeStartIndex,
+            rangeEndIndex
+        );
+
+        const end = Math.max(
+            rangeStartIndex,
+            rangeEndIndex
+        );
+
+        if (index >= start && index <= end) {
+            return;
+        }
+
+        rangeStartIndex = index;
+        rangeEndIndex = null;
+
+    }
+
+    renderBox();
+}
+
+
+// =========================
+// ドラッグによる範囲交換
+// =========================
+
+
+// =========================
+// ドラッグ中のスクロール対応
+// =========================
+
+// スクロールできる親要素を取得
+function getBoxSwapScrollElement() {
+
+    let element = boxGrid.parentElement;
+
+    while (
+        element &&
+        element !== document.body &&
+        element !== document.documentElement
+    ) {
+
+        const style = getComputedStyle(element);
+
+        const canScroll =
+            /(auto|scroll)/.test(style.overflowY) &&
+            element.scrollHeight > element.clientHeight + 1;
+
+        if (canScroll) {
+            return element;
+        }
+
+        element = element.parentElement;
+
+    }
+
+    return document.scrollingElement ||
+        document.documentElement;
+}
+
+
+// ドラッグ位置にある交換先を更新
+function updateBoxSwapDropTarget(state) {
+
+    // 前の表示を解除
+    boxGrid.querySelectorAll(".box-swap-drop-target")
+        .forEach(card => {
+            card.classList.remove("box-swap-drop-target");
+        });
+
+    const target = document.elementFromPoint(
+        state.lastX,
+        state.lastY
+    );
+
+    const targetCard = target?.closest(
+        ".box-card[data-box-id]"
+    );
+
+    if (!targetCard) {
+        state.targetStart = null;
+        return;
+    }
+
+    const targetIndex = Number(
+        targetCard.dataset.boxIndex
+    );
+
+    // ドラッグ位置に対応する開始位置
+    const targetStart =
+        targetIndex - state.draggedOffset;
+
+    const sourceStart = state.sourceStart;
+    const count = state.count;
+
+    const sourceEnd = sourceStart + count - 1;
+    const targetEnd = targetStart + count - 1;
+
+    // BOXの範囲外
+    if (
+        targetStart < 0 ||
+        targetEnd >= box.length
+    ) {
+        state.targetStart = null;
+        return;
+    }
+
+    // 交換元と交換先が重なる場合
+    const overlaps =
+        targetStart <= sourceEnd &&
+        targetEnd >= sourceStart;
+
+    if (overlaps) {
+        state.targetStart = null;
+        return;
+    }
+
+    state.targetStart = targetStart;
+
+    targetCard.classList.add("box-swap-drop-target");
+
+}
+
+
+// =========================
+// 自動スクロール
+// =========================
+
+function startBoxSwapAutoScroll(state) {
+
+    if (state.scrollFrame) return;
+
+    function scrollLoop() {
+
+        if (boxDragState !== state || !state.moved) {
+            state.scrollFrame = null;
+            return;
+        }
+
+        const scroller = state.scrollElement;
+
+        const isPage =
+            scroller === document.scrollingElement ||
+            scroller === document.documentElement ||
+            scroller === document.body;
+
+        const rect = isPage
+            ? {
+                top: 0,
+                bottom: window.innerHeight
+            }
+            : scroller.getBoundingClientRect();
+
+        const edgeSize = 70;
+
+        let amount = 0;
+
+        // 上端に近い場合
+        if (state.lastY < rect.top + edgeSize) {
+
+            const distance =
+                rect.top + edgeSize - state.lastY;
+
+            amount = -Math.min(
+                12,
+                Math.max(2, Math.ceil(distance / 7))
+            );
+
+        }
+
+        // 下端に近い場合
+        else if (state.lastY > rect.bottom - edgeSize) {
+
+            const distance =
+                state.lastY - (rect.bottom - edgeSize);
+
+            amount = Math.min(
+                12,
+                Math.max(2, Math.ceil(distance / 7))
+            );
+
+        }
+
+        if (amount !== 0) {
+
+            const before = isPage
+                ? window.scrollY
+                : scroller.scrollTop;
+
+            if (isPage) {
+                window.scrollBy(0, amount);
+            } else {
+                scroller.scrollTop += amount;
+            }
+
+            const after = isPage
+                ? window.scrollY
+                : scroller.scrollTop;
+
+            // スクロールできたら交換先を再判定
+            if (before !== after) {
+                updateBoxSwapDropTarget(state);
+            }
+
+        }
+
+        state.scrollFrame =
+            requestAnimationFrame(scrollLoop);
+
+    }
+
+    state.scrollFrame =
+        requestAnimationFrame(scrollLoop);
+
+}
+
+
+// =========================
+// ドラッグ開始
+// =========================
+
+boxGrid.addEventListener("pointerdown", event => {
+
+    if (!boxReorderMode || rangeEndIndex === null) {
+        return;
+    }
+
+    const card = event.target.closest(
+        ".box-card[data-box-id]"
+    );
+
+    if (!card) return;
+
+    if (!card.classList.contains("range-selected")) {
+        return;
+    }
+
+    const sourceStart = Math.min(
+        rangeStartIndex,
+        rangeEndIndex
+    );
+
+    const sourceEnd = Math.max(
+        rangeStartIndex,
+        rangeEndIndex
+    );
+
+    const draggedIndex = Number(
+        card.dataset.boxIndex
+    );
+
+    boxDragState = {
+
+        pointerId: event.pointerId,
+
+        sourceStart: sourceStart,
+
+        count: sourceEnd - sourceStart + 1,
+
+        draggedOffset: draggedIndex - sourceStart,
+
+        startX: event.clientX,
+        startY: event.clientY,
+
+        lastX: event.clientX,
+        lastY: event.clientY,
+
+        moved: false,
+
+        targetStart: null,
+
+        scrollElement: getBoxSwapScrollElement(),
+
+        scrollFrame: null
+
+    };
+
+    card.setPointerCapture(event.pointerId);
+
+    event.preventDefault();
+
+});
+
+
+// =========================
+// ドラッグ中
+// =========================
+
+boxGrid.addEventListener("pointermove", event => {
+
+    if (!boxDragState) return;
+
+    if (event.pointerId !== boxDragState.pointerId) {
+        return;
+    }
+
+    const state = boxDragState;
+
+    state.lastX = event.clientX;
+    state.lastY = event.clientY;
+
+    const distance = Math.hypot(
+        event.clientX - state.startX,
+        event.clientY - state.startY
+    );
+
+    if (!state.moved && distance < 8) return;
+
+    state.moved = true;
+
+    event.preventDefault();
+
+    document.body.classList.add("box-swap-dragging");
+
+    // 交換先を更新
+    updateBoxSwapDropTarget(state);
+
+    // 自動スクロール開始
+    startBoxSwapAutoScroll(state);
+
+});
+
+
+// =========================
+// ドラッグ終了
+// =========================
+
+boxGrid.addEventListener("pointerup", event => {
+
+    if (!boxDragState) return;
+
+    if (event.pointerId !== boxDragState.pointerId) {
+        return;
+    }
+
+    const state = boxDragState;
+
+    boxDragState = null;
+
+    // 自動スクロール停止
+    if (state.scrollFrame) {
+        cancelAnimationFrame(state.scrollFrame);
+    }
+
+    document.body.classList.remove("box-swap-dragging");
+
+    boxGrid.querySelectorAll(".box-swap-drop-target")
+        .forEach(card => {
+            card.classList.remove("box-swap-drop-target");
+        });
+
+    if (!state.moved) return;
+
+    event.preventDefault();
+
+    suppressReorderClick = true;
+
+    setTimeout(() => {
+        suppressReorderClick = false;
+    }, 150);
+
+    if (state.targetStart === null) return;
+
+    const sourceStart = state.sourceStart;
+    const targetStart = state.targetStart;
+    const count = state.count;
+
+    if (sourceStart === targetStart) return;
+
+    // 同じ数のキャラクターを交換
+    for (let i = 0; i < count; i++) {
+
+        const temp = box[sourceStart + i];
+
+        box[sourceStart + i] = box[targetStart + i];
+
+        box[targetStart + i] = temp;
+
+    }
+
+    saveBox();
+
+    rangeStartIndex = null;
+    rangeEndIndex = null;
+
+    renderBox();
+
+});
+
+
+// =========================
+// ドラッグ中断
+// =========================
+
+boxGrid.addEventListener("pointercancel", event => {
+
+    if (!boxDragState) return;
+
+    if (event.pointerId !== boxDragState.pointerId) {
+        return;
+    }
+
+    const state = boxDragState;
+
+    boxDragState = null;
+
+    if (state.scrollFrame) {
+        cancelAnimationFrame(state.scrollFrame);
+    }
+
+    document.body.classList.remove("box-swap-dragging");
+
+    boxGrid.querySelectorAll(".box-swap-drop-target")
+        .forEach(card => {
+            card.classList.remove("box-swap-drop-target");
+        });
+
+});
+    
+
 function renderBox(){
 
-boxGrid.innerHTML = `
-<div class="box-card new-card">
-    <div class="plus">＋</div>
-    <span>新しく作成</span>
-</div>
-`;
+    const rangeReady =
+        rangeStartIndex !== null &&
+        rangeEndIndex !== null;
 
-        getFilteredBox().forEach(data => {
+    const rangeMin = rangeReady
+        ? Math.min(rangeStartIndex, rangeEndIndex)
+        : -1;
 
-        const character = characters.find(c => c.id === data.characterId);
+    const rangeMax = rangeReady
+        ? Math.max(rangeStartIndex, rangeEndIndex)
+        : -1;
 
-          const fixedTags = getFixedBoxTags(data, character);
+    let hintText = "";
+
+    if (rangeStartIndex === null) {
+
+        hintText = "①交換したい範囲の最初のカードをタップ";
+
+    } else if (rangeEndIndex === null) {
+
+        hintText = "②交換したい範囲の最後のカードをタップ";
+
+    } else {
+
+        const count = rangeMax - rangeMin + 1;
+
+        hintText =
+            `${count}体を選択中。カード全体をドラッグして交換してね。`;
+
+    }
+
+    boxGrid.innerHTML = boxReorderMode
+        ? `
+            <div class="box-sort-hint">
+                ${hintText}
+            </div>
+        `
+        : `
+            <div class="box-card new-card">
+                <div class="plus">＋</div>
+                <span>新しく作成</span>
+            </div>
+        `;
+
+    // 入れ替えモード中は全員表示
+    const displayBox = boxReorderMode
+        ? box
+        : getFilteredBox();
+
+    displayBox.forEach((data, index) => {
+
+        const character = characters.find(
+            c => c.id === data.characterId
+        );
+
+        const fixedTags = getFixedBoxTags(data, character);
+
+        const isRangeAnchor =
+            boxReorderMode &&
+            rangeEndIndex === null &&
+            index === rangeStartIndex;
+
+        const isRangeSelected =
+            boxReorderMode &&
+            rangeReady &&
+            index >= rangeMin &&
+            index <= rangeMax;
 
         boxGrid.innerHTML += `
-<div class="box-card" data-box-id="${data.id}">
+<div class="box-card
+    ${isRangeAnchor ? "range-anchor" : ""}
+    ${isRangeSelected ? "range-selected" : ""}"
+    data-box-id="${data.id}"
+    data-box-index="${index}">
 
 ${data.favorite ? '<span class="box-favorite-star">⭐</span>' : ""}
 
-          <div class="box-fixed-tags">
+<div class="box-fixed-tags">
     ${fixedTags.map(tag => `
         <span class="box-fixed-tag">${tag}</span>
     `).join("")}
@@ -126,7 +647,9 @@ ${data.favorite ? '<span class="box-favorite-star">⭐</span>' : ""}
 
 <div class="box-card-tags">
     ${(data.tags || []).map(tagId => {
+
         const tag = manualTagList.find(t => t.id === tagId);
+
         if (!tag) return "";
 
         return `
@@ -134,45 +657,84 @@ ${data.favorite ? '<span class="box-favorite-star">⭐</span>' : ""}
                 ${tag.symbol}
             </span>
         `;
+
     }).join("")}
 </div>
 
-
-        </div>
-        `;
+</div>
+`;
 
     });
-    
-    document.querySelectorAll(".box-card[data-box-id]").forEach(card => {
 
-    card.onclick = () => {
 
-        selectedBoxId = Number(card.dataset.boxId);
+    // カードのクリック処理
+    document.querySelectorAll(".box-card[data-box-id]")
+        .forEach(card => {
 
-        const data = box.find(x => x.id === selectedBoxId);
-        const character = characters.find(c => c.id === data.characterId);
+            card.onclick = () => {
 
-        boxMenuName.textContent =
-    data.nickname || character.name.replace(/[（(]新月形態[）)]$/, "");
+                if (suppressReorderClick) {
+                    suppressReorderClick = false;
+                    return;
+                }
 
-        boxMenuModal.style.display = "block";
-document.body.classList.add("modal-open");
-    };
+                // 入れ替えモード
+                if (boxReorderMode) {
 
-});
+                    handleReorderCardTap(
+                        Number(card.dataset.boxId)
+                    );
 
-    document.querySelector(".new-card").onclick = () => {
+                    return;
+                }
 
-    document.getElementById("characterSearch").value = "";
+                selectedBoxId = Number(card.dataset.boxId);
 
-    renderCharacterList();
+                const data = box.find(
+                    x => x.id === selectedBoxId
+                );
 
-    modal.style.display = "block";
-document.body.classList.add("modal-open");
+                const character = characters.find(
+                    c => c.id === data.characterId
+                );
 
-};
+                boxMenuName.textContent =
+                    data.nickname ||
+                    character.name.replace(/[（(]新月形態[）)]$/, "");
+
+                boxMenuModal.style.display = "block";
+
+                document.body.classList.add("modal-open");
+
+            };
+
+        });
+
+
+    // 新規作成カード
+    const newCard = boxGrid.querySelector(".new-card");
+
+    if (newCard) {
+
+        newCard.onclick = () => {
+
+            document.getElementById("characterSearch").value = "";
+
+            renderCharacterList();
+
+            modal.style.display = "block";
+
+            document.body.classList.add("modal-open");
+
+        };
+
+    }
 
 }
+
+
+
+ 
 
 const modal = document.getElementById("characterModal");
 
@@ -803,6 +1365,32 @@ document.getElementById("closeBoxSearch").onclick = () => {
     boxSearchModal.style.display = "none";
 
     document.body.classList.remove("modal-open");
+
+};
+
+// =========================
+// 入れ替えモード切り替え
+// =========================
+
+const boxSortButton = document.getElementById("boxSortButton");
+
+boxSortButton.onclick = () => {
+
+    boxReorderMode = !boxReorderMode;
+
+    // 選択をリセット
+    rangeStartIndex = null;
+    rangeEndIndex = null;
+
+    boxSortButton.textContent =
+        boxReorderMode ? "完了" : "入れ替え";
+
+    // 検索モーダルを閉じる
+    boxSearchModal.style.display = "none";
+
+    document.body.classList.remove("modal-open");
+
+    renderBox();
 
 };
 // 左上の戻るボタン

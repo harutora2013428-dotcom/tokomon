@@ -842,6 +842,63 @@ body {
 .box-card-tags {
     transform: translateY(-3px);
 }
+  /* =========================
+   BOX範囲入れ替え
+========================= */
+
+#boxSortButton {
+    width: auto !important;
+    min-width: 0;
+    max-width: 100%;
+    height: 40px;
+
+    background: #176FA5;
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+
+    padding: 0 8px;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    box-sizing: border-box;
+    justify-self: center;
+}
+
+.box-sort-hint {
+    grid-column: 1 / -1;
+    padding: 12px;
+    margin-bottom: 5px;
+    background: #142B43;
+    border: 1px solid #2878A8;
+    border-radius: 10px;
+    color: #70DFFF;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.box-card.range-anchor {
+    outline: 3px solid #FFD166;
+    outline-offset: -3px;
+}
+
+.box-card.range-selected {
+    outline: 3px solid #70DFFF;
+    outline-offset: -3px;
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+}
+
+.box-card.box-swap-drop-target {
+    outline: 4px dashed #FFD166 !important;
+    outline-offset: -4px;
+}
+
+body.box-swap-dragging {
+    user-select: none;
+}
 </style>
   
 </head>
@@ -855,6 +912,8 @@ body {
     </button>
 
     <h1>BOX</h1>
+
+      <button id="boxSortButton">入れ替え</button>
 
     <button class="search-button">
         🔍
