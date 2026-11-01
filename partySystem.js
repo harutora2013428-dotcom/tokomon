@@ -2,18 +2,89 @@
 // パーティーメーカー
 // ======================
 
+// BOXデータのキャッシュ
+let partyBoxCache = null;
+
+// キャラクター検索用のキャッシュ
+const partyCharacterMap = new Map(
+    characters.map(character => [
+        String(character.id),
+        character
+    ])
+);
+
+// 通常習得技のキャッシュ
+const partyNormalMoveCache = new WeakMap();
+
+
+// BOXデータを取得
+function getPartyBoxData(forceRefresh = false) {
+
+    if (forceRefresh || partyBoxCache === null) {
+
+        try {
+
+            const saved = JSON.parse(
+                localStorage.getItem("box") || "[]"
+            );
+
+            partyBoxCache = Array.isArray(saved) ? saved : [];
+
+        } catch (error) {
+
+            console.error("BOXデータの読み込みに失敗:", error);
+
+            partyBoxCache = [];
+
+        }
+
+    }
+
+    return partyBoxCache;
+}
+
+
+// キャラクターを高速検索
+function getPartyCharacter(characterId) {
+
+    return partyCharacterMap.get(String(characterId));
+
+}
+
+
+// 通常習得技をキャッシュ
+function getPartyNormalMoves(character) {
+
+    let moves = partyNormalMoveCache.get(character);
+
+    if (!moves) {
+
+        moves = new Set([
+            ...(character.moves || []),
+            ...(character.forms || []).flatMap(form =>
+                form.moves || []
+            )
+        ].map(move => String(move)));
+
+        partyNormalMoveCache.set(character, moves);
+
+    }
+
+    return moves;
+
+}
+
+
 const partyList = document.getElementById("party-list");
 
-// 構築メンバーの表示名を取得
 function getPartyMemberDisplayName(member, character) {
 
-    const box = JSON.parse(localStorage.getItem("box")) || [];
+    const box = getPartyBoxData();
 
     const boxData = member.boxId
         ? box.find(x => x.id === member.boxId)
         : null;
 
-    // ニックネームが設定されている場合は、その名前を優先
     if (boxData?.nickname?.trim()) {
         return boxData.nickname.trim();
     }
@@ -22,14 +93,13 @@ function getPartyMemberDisplayName(member, character) {
         return member.nickname.trim();
     }
 
-    // 通常のキャラクター名から「(新月形態)」だけを除去
     return character.name.replace(/[（(]新月形態[）)]$/, "");
 }
 
 // 構築メンバーの持ち物名を取得
 function getPartyMemberItemName(member) {
 
-    const box = JSON.parse(localStorage.getItem("box")) || [];
+    const box = getPartyBoxData();
 
     const boxData = member.boxId
         ? box.find(x => x.id === member.boxId)
@@ -102,9 +172,7 @@ if (partyList) {
                     ${
                         p.members.filter(member => member)
                             .map(member => {
-                                const character = characters.find(
-                                    c => c.id === member.characterId
-                                );
+                            const character = getPartyCharacter(member.characterId);
 
                                 return character
                                     ? getPartyMemberDisplayName(member, character)
@@ -425,6 +493,9 @@ const boxModal = document.getElementById("boxModal");
 
 function openBox(){
 
+    // BOXを開くタイミングで最新データを取得
+    getPartyBoxData(true);
+
     openModal(boxModal);
 
     createBoxList();
@@ -477,11 +548,14 @@ const manualTagList = [
 
 // 固定タグの判定
 function getFixedBoxTags(data, character) {
+
     const tags = [];
 
     const currentMoves = Array.isArray(data.moves)
         ? data.moves.filter(move =>
-            move !== null && move !== undefined && move !== ""
+            move !== null &&
+            move !== undefined &&
+            move !== ""
         )
         : [];
 
@@ -491,13 +565,10 @@ function getFixedBoxTags(data, character) {
     }
 
     // 🔺 通常習得できない技を所持
-    const normalMoves = [
-        ...(character.moves || []),
-        ...(character.forms || []).flatMap(form => form.moves || [])
-    ].map(move => String(move));
+    const normalMoves = getPartyNormalMoves(character);
 
     const hasUnusualMove = currentMoves.some(move =>
-        !normalMoves.includes(String(move))
+        !normalMoves.has(String(move))
     );
 
     if (hasUnusualMove) {
@@ -526,14 +597,13 @@ const applyBoxTagFilter = document.getElementById("applyBoxTagFilter");
 
 function getFilteredPartyBox() {
 
-    const box = JSON.parse(localStorage.getItem("box")) || [];
+    const box = getPartyBoxData();
+
     const keyword = boxSearch.value.trim();
 
     return box.filter(data => {
 
-        const character = characters.find(
-            c => c.id === data.characterId
-        );
+        const character = getPartyCharacter(data.characterId);
 
         if (!character) return false;
 
@@ -548,24 +618,24 @@ function getFilteredPartyBox() {
         if (!nameMatch) return false;
 
         // 手動タグ
-const tags = data.tags || [];
+        const tags = data.tags || [];
 
-const manualMatch = selectedFilterTags.every(
-    tagId => tags.includes(tagId)
-);
+        const manualMatch = selectedFilterTags.every(
+            tagId => tags.includes(tagId)
+        );
 
-if (!manualMatch) return false;
+        if (!manualMatch) return false;
 
-// 固定タグ
-const fixedTags = getFixedBoxTags(data, character);
+        // 固定タグ
+        const fixedTags = getFixedBoxTags(data, character);
 
-const fixedMatch = selectedFixedFilterTags.every(
-    tag => fixedTags.includes(tag)
-);
+        const fixedMatch = selectedFixedFilterTags.every(
+            tag => fixedTags.includes(tag)
+        );
 
-if (!fixedMatch) return false;
+        if (!fixedMatch) return false;
 
-return true;
+        return true;
 
     });
 }
@@ -719,27 +789,30 @@ function createBoxList(){
 
     const list = document.getElementById("boxList");
 
-    list.innerHTML = "";
-
     const box = getFilteredPartyBox();
 
+    // 表示するものがない場合
     if (box.length === 0) {
-        list.innerHTML = "<p>該当するキャラクターがいません。</p>";
+
+        list.innerHTML =
+            "<p>該当するキャラクターがいません。</p>";
+
         return;
     }
 
+    // 一度にDOMへ追加するための領域
+    const fragment = document.createDocumentFragment();
+
     box.forEach(data => {
 
-        const character = characters.find(
-            c => c.id === data.characterId
-        );
+        const character = getPartyCharacter(data.characterId);
 
         if (!character) return;
 
         const displayName = data.nickname ||
             character.name.replace(/[（(]新月形態[）)]$/, "");
 
-        // この個体が現在の構築に登録されているか
+        // 登録済みか確認
         const alreadyAdded = partyData.members.some(member =>
             member &&
             member.boxId != null &&
@@ -755,6 +828,8 @@ function createBoxList(){
             <div class="box-icon">
                 <img
                     src="${character.images?.icon || 'images/noimage.png'}"
+                    loading="lazy"
+                    decoding="async"
                     onerror="this.src='images/noimage.png'"
                 >
             </div>
@@ -788,15 +863,19 @@ function createBoxList(){
             card.onclick = () => selectCharacter(data.id);
         }
 
-        list.appendChild(card);
+        fragment.appendChild(card);
 
     });
 
+    // まとめて画面に反映
+    list.replaceChildren(fragment);
+
 }
 
+            
 function selectCharacter(boxId){
 
-    const box = JSON.parse(localStorage.getItem("box")) || [];
+    const box = getPartyBoxData();
 
     const boxData = box.find(
         x => String(x.id) === String(boxId)
@@ -827,9 +906,7 @@ function selectCharacter(boxId){
         return;
     }
 
-    const character = characters.find(
-        c => c.id === boxData.characterId
-    );
+    const character = getPartyCharacter(boxData.characterId);
 
     if (!character) return;
 
@@ -914,9 +991,7 @@ function renderParty(){
 
         }
 
-        const character = characters.find(
-            c => c.id === member.characterId
-        );
+        const character = getPartyCharacter(member.characterId);
 
         if(!character) return;
 
@@ -975,9 +1050,7 @@ function openMemberMenu(index){
 
     const member = partyData.members[index];
 
-    const character = characters.find(
-        c => c.id === member.characterId
-    );
+    const character = getPartyCharacter(member.characterId);
 
     document.getElementById("memberMenuTitle")
     .textContent = getPartyMemberDisplayName(member, character);
@@ -1014,12 +1087,19 @@ const closeCharacterCreate =
     document.getElementById("closeCharacterCreate");
 
 
+// キャラクター一覧を生成済みか
+let characterCreateListRendered = false;
+
+
 // キャラクター一覧を生成
 function renderCharacterCreateList() {
 
     if (!characterCreateList) return;
 
-    characterCreateList.innerHTML = "";
+    // すでに生成済みなら作り直さない
+    if (characterCreateListRendered) return;
+
+    const fragment = document.createDocumentFragment();
 
     characters.forEach(character => {
 
@@ -1027,11 +1107,14 @@ function renderCharacterCreateList() {
 
         card.className = "character-create-card";
 
-        const icon = character.images?.icon || "images/noimage.png";
+        const icon =
+            character.images?.icon || "images/noimage.png";
 
         card.innerHTML = `
             <img
                 src="${icon}"
+                loading="lazy"
+                decoding="async"
                 onerror="this.src='images/noimage.png'"
                 alt=""
             >
@@ -1049,7 +1132,6 @@ function renderCharacterCreateList() {
 
             if (selectedMemberIndex < 0) return;
 
-            // BOXを使わず直接キャラクターを登録
             partyData.members[selectedMemberIndex] = {
 
                 characterId: character.id,
@@ -1068,11 +1150,19 @@ function renderCharacterCreateList() {
 
         };
 
-        characterCreateList.appendChild(card);
+        fragment.appendChild(card);
 
     });
 
+    // 一度に画面へ追加
+    characterCreateList.replaceChildren(fragment);
+
+    characterCreateListRendered = true;
+
 }
+
+        
+            
 
 
 // 新しく作成を開く
@@ -1186,7 +1276,7 @@ if (trainMemberButton) {
         if (!member) return;
 
         // BOXを取得
-        const box = JSON.parse(localStorage.getItem("box")) || [];
+        const box = getPartyBoxData(true);
 
         // 既存の育成データを探す
         let boxData = member.boxId
@@ -1246,7 +1336,12 @@ if (memberList) {
 window.addEventListener("pageshow", (event) => {
 
     if (event.persisted && memberList) {
+
+        // BOXの最新データを取得
+        getPartyBoxData(true);
+
         renderParty();
+
     }
 
 });

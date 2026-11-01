@@ -746,102 +746,119 @@ document.getElementById("closeCharacterModal").onclick = () => {
 const list = document.getElementById("characterList");
 
 
+// =========================
+// キャラクター一覧表示
+// =========================
+
 function renderCharacterList(){
 
     const keyword = document
         .getElementById("characterSearch")
         .value.trim();
 
+    // 検索
     const filteredCharacters = characters.filter(character =>
         character.name.includes(keyword) ||
         (character.kana || "").includes(keyword)
     );
 
-    list.innerHTML = "";
+    // HTMLを一度に生成
+    const html = filteredCharacters.map(character => {
 
-    filteredCharacters.forEach(character => {
+        const displayName = character.name.replace(
+            /[（(]新月形態[）)]$/,
+            ""
+        );
 
-        list.innerHTML += `
-        <div class="selectItem" data-id="${character.id}">
+        return `
+            <div class="selectItem" data-id="${character.id}">
 
-            <img
-                src="${character.images?.icon || "images/noimage.png"}"
-                alt="${character.name.replace(/[（(]新月形態[）)]$/, "")}"
-            >
+                <img
+                    src="${escapeHTML(character.images?.icon || "images/noimage.png")}"
+                    alt="${escapeHTML(displayName)}"
+                    loading="lazy"
+                    decoding="async"
+                    width="85"
+                    height="85"
+                >
 
-            <div class="selectItem-name">
-                ${character.name.replace(/[（(]新月形態[）)]$/, "")}
+                <div class="selectItem-name">
+                    ${escapeHTML(displayName)}
+                </div>
+
             </div>
-
-        </div>
         `;
 
-    });
+    }).join("");
 
-    document.querySelectorAll(".selectItem").forEach(item => {
-
-        item.onclick = () => {
-
-            const characterId = Number(item.dataset.id);
-
-            const newCharacter = {
-
-                id: Date.now(),
-
-                characterId,
-
-                nickname: "",
-
-                moves: [],
-
-                ability: null,
-
-                item: null,
-
-                crystal: {
-                    hp: 0,
-                    attack: 0,
-                    defense: 0,
-                    spAttack: 0,
-                    spDefense: 0,
-                    speed: 0
-                },
-
-                favorite: false,
-
-                tags: []
-
-            };
-
-            box.push(newCharacter);
-
-            saveBox();
-
-            modal.style.display = "none";
-document.body.classList.remove("modal-open");
-
-            renderBox();
-
-        };
-
-    });
+    list.innerHTML = html;
 
 }
+
+
+// =========================
+// キャラクター選択
+// =========================
+
+list.addEventListener("click", event => {
+
+    const item = event.target.closest(".selectItem");
+
+    if (!item || !list.contains(item)) return;
+
+    const characterId = Number(item.dataset.id);
+
+    const newCharacter = {
+
+        id: Date.now(),
+
+        characterId,
+
+        nickname: "",
+
+        moves: [],
+
+        ability: null,
+
+        item: null,
+
+        crystal: {
+            hp: 0,
+            attack: 0,
+            defense: 0,
+            spAttack: 0,
+            spDefense: 0,
+            speed: 0
+        },
+
+        favorite: false,
+
+        tags: []
+
+    };
+
+    box.push(newCharacter);
+
+    saveBox();
+
+    modal.style.display = "none";
+
+    document.body.classList.remove("modal-open");
+
+    renderBox();
+
+});
 
 // 検索入力時に一覧を更新
 document.getElementById("characterSearch").oninput = () => {
     renderCharacterList();
 };
 
-renderCharacterList();
-
 
 document.getElementById("closeBoxMenu").onclick = () => {
     boxMenuModal.style.display = "none";
     document.body.classList.remove("modal-open");
 };
-
-renderCharacterList();
 
 document.getElementById("trainingButton").onclick = () => {
 
