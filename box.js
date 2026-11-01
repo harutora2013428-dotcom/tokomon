@@ -276,6 +276,7 @@ renderCharacterList();
 
 document.getElementById("closeBoxMenu").onclick = () => {
     boxMenuModal.style.display = "none";
+    document.body.classList.remove("modal-open");
 };
 
 renderCharacterList();
