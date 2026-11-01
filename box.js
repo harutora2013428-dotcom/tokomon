@@ -583,7 +583,7 @@ function renderBox(){
         const count = rangeMax - rangeMin + 1;
 
         hintText =
-            `${count}体を選択中。カード全体をドラッグして交換してね。`;
+            `${count}体を選択中。カード全体をドラッグして交換。`;
 
     }
 
