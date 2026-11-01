@@ -284,6 +284,10 @@ document.getElementById("trainingButton").onclick = () => {
 
     if (selectedBoxId === null) return;
 
+    // モーダル状態を解除
+    boxMenuModal.style.display = "none";
+    document.body.classList.remove("modal-open");
+
     location.href = `training.html?id=${selectedBoxId}`;
 
 };
