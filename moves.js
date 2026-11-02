@@ -5658,7 +5658,7 @@ drain:0,
 
     kind:"Z技",
     name:"滅亡龍嵐波",
-    kana:"めつぼうりゅうらんぱ",
+    kana:"めつぼうりゅうらんは",
     type:["龍"],
     category:"特殊",
     power:150,
