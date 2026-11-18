@@ -16,6 +16,15 @@ const moves = [
     contact:false,
     protect:true,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 身代わりを貫通する。
 `
@@ -37,6 +46,15 @@ const moves = [
     contact:true,
     protect:true,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 ランダムな相手2体に攻撃する。身代わりを貫通する。
 `
@@ -58,9 +76,20 @@ const moves = [
     contact:true,
     protect:true,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 63%の確率で攻撃が2段階上がる。身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 2}, "chance": 63, "requiresDamage": true}],
 },
 
 {
@@ -79,9 +108,20 @@ const moves = [
     contact:false,
     protect:true,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 相手単体の防御を3段階下げる。身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"defense": -3}}],
 },
 
 {
@@ -101,6 +141,15 @@ const moves = [
     contact:true,
     protect:true,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 相手単体に3回連続で攻撃する。
 `
@@ -122,9 +171,20 @@ const moves = [
     contact:false,
     protect:true,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 自身のHPを最大HPの40%分回復する。身代わりを貫通する。
 `
+,
+    effects: [{"type": "heal", "target": "self", "fraction": 0.4, "requiresDamage": true}],
 },
 
 {
@@ -379,6 +439,8 @@ const moves = [
 30%の確率で自身の攻撃を1段階上げる。
 10%の確率で相手を炎上状態にする。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 1}, "chance": 30, "requiresDamage": true}],
 },
 
 {
@@ -400,6 +462,8 @@ const moves = [
     effect:`
 自身の攻撃と防御を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 1, "defense": 1}}],
 },
 
 {
@@ -644,6 +708,8 @@ const moves = [
 自身がゴースト属性なら交代できる。
 2回目以降は失敗する。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 1, "spAttack": 1, "defense": 1, "spDefense": 1, "speed": 1}}],
 },
 
 {
@@ -798,6 +864,8 @@ const moves = [
     effect:`
 10%の確率で攻撃を1段階下げる。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"attack": -1}, "chance": 10, "requiresDamage": true}],
 },
 
   {
@@ -841,6 +909,8 @@ const moves = [
 自身の攻撃、特攻、速度が1段階上昇する。
 自身の最大HPの1/8ダメージを受ける。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 1, "spAttack": 1, "speed": 1}}, {"type": "recoil", "target": "self", "fraction": 0.125}],
 },
 
   {
@@ -1019,6 +1089,8 @@ const moves = [
 そのターン相手の技を受けない。
 連続使用不可。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"defense": 1}}],
 },
 
 {
@@ -1194,6 +1266,8 @@ const moves = [
     effect:`
 味方1人の防御と特攻を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "ally", "changes": {"defense": 1, "spAttack": 1}}],
 },
 
 {
@@ -1305,6 +1379,8 @@ HP5%以下で威力200。
     effect:`
 30%の確率で相手の特防を1段階下げる。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"spDefense": -1}, "chance": 30, "requiresDamage": true}],
 },
 
 {
@@ -1347,6 +1423,8 @@ HP5%以下で威力200。
     effect:`
 相手の防御と速度を1段階下げる。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"defense": -1, "speed": -1}}],
 },
 
 {
@@ -1416,6 +1494,8 @@ HP5%以下で威力200。
 選択した味方の攻撃と特攻を1段階上昇させる。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "ally", "changes": {"attack": 1, "spAttack": 1}}],
 },
 
 {
@@ -1460,6 +1540,8 @@ HP5%以下で威力200。
 63%の確率で自分以外の味方の特攻が1段階上がる。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "otherAllies", "changes": {"spAttack": 1}, "chance": 63}],
 },
 
 {
@@ -1482,6 +1564,8 @@ HP5%以下で威力200。
 選択した味方の防御を3段階上げる。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "ally", "changes": {"defense": 3}}],
 },
 
 {
@@ -1527,6 +1611,8 @@ HP5%以下で威力200。
 自身のHPを最大HPの63%分回復する。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "heal", "target": "self", "fraction": 0.63, "requiresDamage": true}],
 },
 
   {
@@ -2563,7 +2649,7 @@ HP5%以下で威力200。
     contact: false,
     protect: null,
     drain: 0,
-    effect: "自身の最大HPの1/4のダメージを受ける。連続使用不可。月魄形態では優先度が+4になり、そのターン相手の技を受けず、相手が接触技を使用した場合は相手の特防を1段階下げる。新月形態では最大HPの1/3相当の加護を得る。この加護は1度に最大HPの1/3以上のダメージを受けると消滅する。"
+    effect: "自身の最大HPの1/4のダメージを受ける。連続使用不可。月魄形態では優先度が+4になり、そのターン相手の技を受けず、相手が接触技を使用した場合は相手の特防を1段階下げる。新月形態では最大HPの1/4相当の加護を得る。この加護は1度に最大HPの1/4以上のダメージを受けると消滅する。"
 },
 
 {
@@ -2681,6 +2767,8 @@ HP5%以下で威力200。
 選択した味方の防御と特防を1段階上昇させる。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "ally", "changes": {"defense": 1, "spDefense": 1}}],
 },
 
 {
@@ -2724,6 +2812,8 @@ HP5%以下で威力200。
 63%の確率で自身の防御が2段階上昇する。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"defense": 2}, "chance": 63, "requiresDamage": true}],
 },
 
 {
@@ -2746,6 +2836,8 @@ HP5%以下で威力200。
 相手の攻撃を3段階下げる。
 身代わりを貫通する。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"attack": -3}}],
 },
 
 {
@@ -2790,6 +2882,8 @@ HP5%以下で威力200。
     effect:`
 自身の最大HPの88%分回復する。
 `
+,
+    effects: [{"type": "heal", "target": "self", "fraction": 0.88}],
 },
 
   
@@ -4792,6 +4886,15 @@ id: 252,
     contact:false,
     protect:false,
     drain:0,
+    visual: {
+      id: "green-lightning",
+      target: "opponent",
+      flash: "subtle"
+    },
+    sound: {
+      id: "thunder",
+      timing: "impact"
+    },
     effect:`
 通常攻撃。
 `
@@ -4860,6 +4963,8 @@ id: 252,
 次使う虹技の威力が2倍になる。
 仲間全体の特防を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "allAllies", "changes": {"spDefense": 1}}],
 },
 
 {
@@ -4905,6 +5010,8 @@ id: 252,
 自身の最大HPの1/4回復し、
 相手全体を必ず出血させる。
 `
+,
+    effects: [{"type": "heal", "target": "self", "fraction": 0.25}],
 },
 
   {
@@ -4951,6 +5058,8 @@ id: 252,
     effect:`
 相手の速度を1段階下げる。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"speed": -1}}],
 },
 
   {
@@ -5059,6 +5168,8 @@ id: 252,
     effect:`
 味方全員の攻撃と特攻を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "allAllies", "changes": {"attack": 1, "spAttack": 1}}],
 },
 
 {
@@ -5149,6 +5260,8 @@ PPが0になると封じ状態は解除される。
     effect:`
 仲間全体のHPを186回復する。
 `
+,
+    effects: [{"type": "heal", "target": "allAllies", "amount": 186}],
 },
 
   {
@@ -5248,6 +5361,8 @@ PPが0になると封じ状態は解除される。
     effect: `
 相手全員の特防を1段階下げ、必ず出血させる。
 `
+,
+    effects: [{"type": "stat", "target": "allOpponents", "changes": {"spDefense": -1}}],
 },
 
 {
@@ -5459,6 +5574,8 @@ PPが0になると封じ状態は解除される。
     effect:`
 自身の防御と特防が1段階上昇する。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"defense": 1, "spDefense": 1}}],
 },
 
 
@@ -5498,9 +5615,17 @@ PPが0になると封じ状態は解除される。
     contact:false,
     protect:false,
     drain:0,
+    visual: {
+      id: "potato-chip-throw",
+      target: "opponent",
+      flight: "arc",
+      spin: 3
+    },
     effect:`
 使用者の攻撃、特攻を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 1, "spAttack": 1}}],
 },
 
   
@@ -5524,6 +5649,8 @@ PPが0になると封じ状態は解除される。
     effect:`
 自身の速度を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"speed": 1}}],
 },
 
 {
@@ -5566,6 +5693,8 @@ PPが0になると封じ状態は解除される。
     effect:`
 使用者の防御、特防を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"defense": 1, "spDefense": 1}}],
 },
 
 {
@@ -5742,6 +5871,8 @@ drain:0,
 自身の防御と特防を2段階上げる。
 自身のHPを最大HPの半分回復する。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"defense": 2, "spDefense": 2}}, {"type": "heal", "target": "self", "fraction": 0.5}],
 },
 
 {
@@ -5764,6 +5895,8 @@ drain:0,
 相手の特攻と特防を1段階下げる。
 自身の特攻を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "opponent", "changes": {"spAttack": -1, "spDefense": -1}}, {"type": "stat", "target": "self", "changes": {"spAttack": 1}}],
 },
 
 {
@@ -5827,6 +5960,8 @@ drain:0,
     effect:`
 使用者の特攻と特防を1段階上げる。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"spAttack": 1, "spDefense": 1}}],
 },
 
   {
@@ -6117,6 +6252,8 @@ drain:0,
     effect:`
 使用者の攻撃と防御が1段階上昇する。
 `
+,
+    effects: [{"type": "stat", "target": "self", "changes": {"attack": 1, "defense": 1}}],
 },
 
   
