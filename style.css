@@ -1,3 +1,5 @@
+@import url("attributes.css");
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
@@ -72,22 +74,6 @@ button:hover{
     background:#b71c1c;
 }
    
-/* 属性カラー */
-.attribute {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 15px;
-    color: white;
-    font-weight: bold;
-}
-
-
-/* おとこ属性 */
-.attribute-おとこ {
-    background-color: #008863;
-}
-
-
 /* ステータスバー */
 .status-bar {
     width: 100%;
@@ -212,229 +198,6 @@ button:hover{
 .status-row b{
     text-align:right;
     font-size:18px;
-}
-
-/* ===== 属性カラー ===== */
-
-.attribute-おとこ{
-    background:#008863;
-}
-
-.attribute-炎{
-    background:linear-gradient(135deg,#5a0000,#d72600,#ff8c00);
-    color:#fff7e6;
-    border:1px solid #ffb347;
-    text-shadow:0 0 5px rgba(255,220,120,.8);
-}
-
-.attribute-水{
-    background:linear-gradient(135deg,#00d4ff,#008cff,#004d99);
-    color:white;
-    border:1px solid #66d9ff;
-}
-
-.attribute-雷{
-    background:linear-gradient(135deg,#fff176,#ffd600,#ffb300);
-    color:#4a3600;
-    border:1px solid #fff59d;
-    text-shadow:0 0 6px rgba(255,255,255,.9);
-}
-
-.attribute-風{
-    background:linear-gradient(135deg,#7fffd4,#00c853,#009688);
-    color:#ffffff;
-    border:1px solid #7fffd4;
-    text-shadow:0 0 6px rgba(200,255,240,.9);
-}
-
-.attribute-大地{
-    background:linear-gradient(135deg,#5d4037,#8d6e63,#c9a227);
-    color:#fff8e1;
-    border:1px solid #d7b56d;
-    text-shadow:0 0 5px rgba(255,245,200,.8);
-}
-
-.attribute-聖{
-    background: linear-gradient(135deg,
-        #fffef2 0%,
-        #ffe87a 35%,
-        #ffd700 70%,
-        #ffb300 100%);
-    color: #5a4300;
-    border: 1px solid #ffd700;
-    box-shadow:
-        0 0 8px rgba(255,215,0,.7),
-        0 0 16px rgba(255,240,150,.5);
-    text-shadow: 0 0 6px rgba(255,255,255,.9);
-}
-
-.attribute-闇{
-    background: linear-gradient(135deg,#120018,#3a005c,#7b00c9);
-    color:#fff;
-    border:1px solid #c86cff;
-    text-shadow:0 0 6px rgba(210,120,255,.9);
-}
-
-.attribute-氷{
-    background:linear-gradient(135deg,#ffffff,#b9f3ff,#59cfff);
-    color:#00334d;
-    border:1px solid #d7fbff;
-}
-
-.attribute-毒{
-    background:linear-gradient(135deg,#2b0038,#6a1b9a,#ba68c8);
-    color:#ffffff;
-    border:1px solid #ce93d8;
-    text-shadow:0 0 6px rgba(240,200,255,.8);
-}
-
-.attribute-鋼{
-    background:linear-gradient(135deg,#eceff1,#9ea7ad,#5f6b75);
-    color:#ffffff;
-    border:1px solid #d5dde3;
-}
-
-.attribute-ブラッド{
-    background:linear-gradient(135deg,#180000,#5c0000,#c00000);
-    color:#ffe6e6;
-    border:1px solid #ff4d4d;
-    text-shadow:0 0 6px rgba(255,120,120,.7);
-}
-
-.attribute-月{
-    background: linear-gradient(135deg, #FFE066, #FFD700, #D4AF37);
-    color: #3a2a00;
-    border: 1px solid #B8860B;
-}
-
-.attribute-ゴースト{
-    background:linear-gradient(135deg,#1a1a2e,#4a148c,#673ab7);
-    color:#f3e5f5;
-    border:1px solid #9575cd;
-    text-shadow:0 0 6px rgba(220,200,255,.8);
-}
-
-
-
-/* 虹属性：光を包む外側 */
-.attribute-虹-wrap {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    isolation: isolate;
-    vertical-align: middle;
-    margin: 0;
-}
-
-/* 虹色の光：タグ本体の後ろ */
-.attribute-虹-wrap::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: 22px;
-
-    background: conic-gradient(
-        #ff1744,
-        #ff9100,
-        #ffee58,
-        #00e676,
-        #00b0ff,
-        #536dfe,
-        #d500f9,
-        #ff1744
-    );
-
-    filter: blur(5px);
-    opacity: 0.9;
-    z-index: 0;
-    pointer-events: none;
-}
-
-/* 虹属性：タグ本体を光より手前に */
-.attribute-虹-wrap > .attribute-虹 {
-    position: relative;
-    z-index: 1;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 3px 6px;
-border: 1px solid #fff;
-    border-radius: 18px;
-
-    background: linear-gradient(
-        135deg,
-        #ff1744,
-        #ff9100,
-        #ffee58,
-        #00e676,
-        #00b0ff,
-        #536dfe,
-        #d500f9
-    );
-
-    color: #fff !important;
-    text-shadow: none !important;
-    filter: none !important;
-    opacity: 1 !important;
-    box-shadow: none;
-}
-
-
-
-/* 幻属性：巨大な黒い太陽 */
-.attribute-幻 {
-    position: relative;
-    display: inline-block;
-    isolation: isolate;
-    overflow: visible;
-
-    
-background:
-    radial-gradient(
-        ellipse 62% 65% at center,
-        #000000 0%,
-        #000000 48%,
-        #020106 53%,
-        #090615 57%,
-        #514477 61%,
-        #ffffff 65%,
-        #b8adff 69%,
-        #6750b5 76%,
-        #1b1035 88%,
-        #000000 100%
-    );
-
-
-    color: #ffffff;
-    border: 1px solid #ffffff;
-    border-radius: 15px;
-
-    box-shadow:
-        0 0 5px #ffffff,
-        0 0 12px #ffffff,
-        0 0 24px #c6bbff,
-        0 0 38px rgba(140, 110, 255, 0.95),
-        0 0 55px rgba(100, 70, 255, 0.75);
-
-    text-shadow:
-        0 0 4px #ffffff,
-        0 0 9px #d9d4ff,
-        0 0 14px #9e8cff;
-}
-
-
-.attribute-無{
-    background:linear-gradient(135deg,#BDBDBD,#757575);
-}
-
-.attribute-龍{
-    background:linear-gradient(135deg,#1a237e,#3949ab,#7986cb);
-    color:#ffffff;
-    border:1px solid #9fa8da;
-    text-shadow:0 0 6px rgba(180,190,255,.8);
 }
 
 .ability-list{
@@ -1783,19 +1546,7 @@ border:1px solid #31456d;
     flex:1;
 }
 
-.attribute{
-  color:#fff !important;
-    text-shadow:none !important;
-    filter:none !important;
-    opacity:1 !important;
-}
 
-.attribute-雷,
-.attribute-月,
-.attribute-氷,
-.attribute-聖{
-    color:#222 !important;
-}
 
 .random-box{
 
@@ -4727,4 +4478,18 @@ body:has(.party-header) .party-header .back-button {
     opacity: 1 !important;
     cursor: default;
     transform: none !important;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+#detail {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+#detail img,
+#detail table {
+  max-width: 100%;
 }
